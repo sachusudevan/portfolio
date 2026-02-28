@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const cursorOutline = document.querySelector('.cursor-outline');
     
     // Check if device supports hover
-    if (window.matchMedia("(pointer: fine)").matches) {
-        window.addEventListener('mousemove', (e) => {
+    if (globalThis.matchMedia("(pointer: fine)").matches) {
+        globalThis.addEventListener('mousemove', (e) => {
             const posX = e.clientX;
             const posY = e.clientY;
             
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             el.addEventListener('mouseenter', () => {
                 cursorOutline.style.width = '60px';
                 cursorOutline.style.height = '60px';
-                cursorOutline.style.backgroundColor = 'rgba(56, 189, 248, 0.1)';
+                cursorOutline.style.backgroundColor = 'rgba(91, 179, 126, 0.1)';
             });
             el.addEventListener('mouseleave', () => {
                 cursorOutline.style.width = '40px';
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Add active class to clicked button
             btn.classList.add('active');
             
-            const filterValue = btn.getAttribute('data-filter');
+            const filterValue = btn.dataset.filter;
             
             projectCards.forEach(card => {
                 if (filterValue === 'all' || card.classList.contains(filterValue)) {

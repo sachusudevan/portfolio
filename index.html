@@ -60,40 +60,49 @@
       </div>
     </nav>
 
-    <header id="hero" class="hero-section text-center">
-      <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
-        <p class="greeting">Hello, I am</p>
-        <h1 class="hero-title">Sachu S</h1>
-        <h2 class="hero-subtitle">
-          <span class="typing-text"></span><span class="cursor">&nbsp;</span>
-        </h2>
-        <p class="hero-desc">
-          Results-driven Software Engineer with 5+ years of experience in
-          designing and leading scalable web applications, specialized in
-          HIPAA-compliant healthcare solutions.
-        </p>
-        <div class="hero-cta">
-          <a href="#contact" class="btn btn-primary"
-            >Get In Touch <i class="fa-solid fa-arrow-right"></i
-          ></a>
-          <a href="#projects" class="btn btn-secondary">View Work</a>
+    <header id="hero" class="hero-section">
+      <div class="container hero-container">
+        <div class="hero-content" data-aos="fade-right" data-aos-duration="1200">
+          <p class="greeting">Hello, I am</p>
+          <h1 class="hero-title">Sachu S</h1>
+          <h2 class="hero-subtitle">
+            <span class="typing-text"></span><span class="cursor">&nbsp;</span>
+          </h2>
+          <p class="hero-desc">
+            Results-driven Software Engineer with 5+ years of experience in
+            designing and leading scalable web applications, specialized in
+            HIPAA-compliant healthcare solutions.
+          </p>
+          <div class="hero-cta">
+            <a href="#contact" class="btn btn-primary"
+              >Get In Touch <i class="fa-solid fa-arrow-right"></i
+            ></a>
+            <a href="#projects" class="btn btn-secondary">View Work</a>
+          </div>
+          <div class="social-links-hero">
+            <a
+              href="https://linkedin.com/in/sachu-s-705813179"
+              target="_blank"
+              class="social-icon"
+              ><i class="fa-brands fa-linkedin-in"></i
+            ></a>
+            <a
+              href="https://github.com/sachusudevan"
+              target="_blank"
+              class="social-icon"
+              ><i class="fa-brands fa-github"></i
+            ></a>
+            <a href="mailto:sachusudeve8690@gmail.com" class="social-icon"
+              ><i class="fa-solid fa-envelope"></i
+            ></a>
+          </div>
         </div>
-        <div class="social-links-hero">
-          <a
-            href="https://linkedin.com/in/sachu-s-705813179"
-            target="_blank"
-            class="social-icon"
-            ><i class="fa-brands fa-linkedin-in"></i
-          ></a>
-          <a
-            href="https://github.com/sachusudevan"
-            target="_blank"
-            class="social-icon"
-            ><i class="fa-brands fa-github"></i
-          ></a>
-          <a href="mailto:sachusudeve8690@gmail.com" class="social-icon"
-            ><i class="fa-solid fa-envelope"></i
-          ></a>
+
+        <div class="hero-image-wrapper" data-aos="fade-left" data-aos-duration="1200">
+          <div class="hero-image-container tilt-effect">
+            <div class="hero-image-glow"></div>
+            <img src="images/profile/Gemini_Generated_Image_nbi5c4nbi5c4nbi5.png" alt="Sachu S" class="hero-profile-img" />
+          </div>
         </div>
       </div>
       <div class="scroll-indicator">
@@ -114,16 +123,19 @@
             data-aos="fade-right"
             data-aos-duration="1000"
           >
-            <div class="img-wrapper glass-panel">
-              <img
-                src="images/profile.jpg"
-                alt="Sachu S"
-                onerror="
-                  this.src =
-                    'https://ui-avatars.com/api/?name=Sachu+S&size=500&background=1e293b&color=38bdf8'
-                "
-              />
-              <div class="img-border"></div>
+            <div class="img-stack">
+              <div class="img-wrapper glass-panel layer-1 tilt-effect">
+                <img src="images/profile/Gemini_Generated_Image_nbi5c4nbi5c4nbi5.png" alt="Sachu S Profile 1" />
+                <div class="img-border"></div>
+              </div>
+              <div class="img-wrapper glass-panel layer-2 tilt-effect">
+                <img src="images/profile/Gemini_Generated_Image_th6fr5th6fr5th6f.png" alt="Sachu S Profile 2" />
+                <div class="img-border"></div>
+              </div>
+              <div class="img-wrapper glass-panel layer-3 tilt-effect">
+                <img src="images/profile/Gemini_Generated_Image_zhqv6xzhqv6xzhqv.png" alt="Sachu S Profile 3" />
+                <div class="img-border"></div>
+              </div>
             </div>
           </div>
           <div
@@ -691,6 +703,23 @@
 
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Vanilla Tilt JS for 3D mouse move effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script>
+      VanillaTilt.init(document.querySelectorAll(".tilt-effect"), {
+        max: 15,
+        speed: 400,
+        glare: true,
+        "max-glare": 0.2,
+      });
+      // Optionally apply to project cards
+      VanillaTilt.init(document.querySelectorAll(".project-card"), {
+        max: 5,
+        speed: 1000,
+        glare: true,
+        "max-glare": 0.1,
+      });
+    </script>
     <!-- Custom JS -->
     <script src="js/script.js"></script>
   </body>
