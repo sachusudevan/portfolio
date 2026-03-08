@@ -38,9 +38,13 @@
       </div>
     </div>
 
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
     <!-- Animated Background Gradients -->
     <div class="bg-shape bg-shape-1"></div>
     <div class="bg-shape bg-shape-2"></div>
+    <div class="bg-shape bg-shape-3"></div>
 
     <nav class="navbar">
       <div class="nav-container">
@@ -62,7 +66,11 @@
 
     <header id="hero" class="hero-section">
       <div class="container hero-container">
-        <div class="hero-content" data-aos="fade-right" data-aos-duration="1200">
+        <div
+          class="hero-content"
+          data-aos="fade-right"
+          data-aos-duration="1200"
+        >
           <p class="greeting">Hello, I am</p>
           <h1 class="hero-title">Sachu S</h1>
           <h2 class="hero-subtitle">
@@ -98,10 +106,18 @@
           </div>
         </div>
 
-        <div class="hero-image-wrapper" data-aos="fade-left" data-aos-duration="1200">
+        <div
+          class="hero-image-wrapper"
+          data-aos="fade-left"
+          data-aos-duration="1200"
+        >
           <div class="hero-image-container tilt-effect">
             <div class="hero-image-glow"></div>
-            <img src="images/profile/Gemini_Generated_Image_nbi5c4nbi5c4nbi5.png" alt="Sachu S" class="hero-profile-img" />
+            <img
+              src="images/profile/1 (1).jpeg"
+              alt="Sachu S"
+              class="hero-profile-img"
+            />
           </div>
         </div>
       </div>
@@ -123,18 +139,52 @@
             data-aos="fade-right"
             data-aos-duration="1000"
           >
-            <div class="img-stack">
-              <div class="img-wrapper glass-panel layer-1 tilt-effect">
-                <img src="images/profile/Gemini_Generated_Image_nbi5c4nbi5c4nbi5.png" alt="Sachu S Profile 1" />
-                <div class="img-border"></div>
+            <div class="img-gallery-container">
+              <div class="gallery-main tilt-effect">
+                <img
+                  src="images/profile/1 (2).jpeg"
+                  alt="Sachu S Profile Main"
+                  class="active-img"
+                />
+                <div class="img-glow"></div>
               </div>
-              <div class="img-wrapper glass-panel layer-2 tilt-effect">
-                <img src="images/profile/Gemini_Generated_Image_th6fr5th6fr5th6f.png" alt="Sachu S Profile 2" />
-                <div class="img-border"></div>
-              </div>
-              <div class="img-wrapper glass-panel layer-3 tilt-effect">
-                <img src="images/profile/Gemini_Generated_Image_zhqv6xzhqv6xzhqv.png" alt="Sachu S Profile 3" />
-                <div class="img-border"></div>
+              <div class="gallery-thumbs">
+                <div
+                  class="thumb glass-panel tilt-effect"
+                  data-src="images/profile/1 (1).jpeg"
+                >
+                  <img src="images/profile/1 (1).jpeg" alt="Profile 1" />
+                </div>
+                <div
+                  class="thumb glass-panel active tilt-effect"
+                  data-src="images/profile/1 (2).jpeg"
+                >
+                  <img src="images/profile/1 (2).jpeg" alt="Profile 2" />
+                </div>
+                <div
+                  class="thumb glass-panel tilt-effect"
+                  data-src="images/profile/1 (3).jpeg"
+                >
+                  <img src="images/profile/1 (3).jpeg" alt="Profile 3" />
+                </div>
+                <div
+                  class="thumb glass-panel tilt-effect"
+                  data-src="images/profile/1 (4).jpeg"
+                >
+                  <img src="images/profile/1 (4).jpeg" alt="Profile 4" />
+                </div>
+                <div
+                  class="thumb glass-panel tilt-effect"
+                  data-src="images/profile/1 (5).jpeg"
+                >
+                  <img src="images/profile/1 (5).jpeg" alt="Profile 5" />
+                </div>
+                <div
+                  class="thumb glass-panel tilt-effect"
+                  data-src="images/profile/1 (6).jpeg"
+                >
+                  <img src="images/profile/1 (6).jpeg" alt="Profile 6" />
+                </div>
               </div>
             </div>
           </div>
