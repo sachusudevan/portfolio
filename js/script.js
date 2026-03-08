@@ -33,17 +33,16 @@ document.addEventListener("DOMContentLoaded", () => {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2 + 0.5;
-            this.speedX = Math.random() * 0.5 - 0.25;
-            this.speedY = Math.random() * 0.5 - 0.25;
-            this.color = Math.random() > 0.5 ? '#00ffa3' : '#00d1ff';
-            this.opacity = Math.random() * 0.5 + 0.1;
+            this.size = Math.random() * 1.5 + 0.5;
+            this.speedX = Math.random() * 0.3 - 0.15;
+            this.speedY = Math.random() * 0.3 - 0.15;
+            this.color = Math.random() > 0.7 ? '#00ffa3' : 'rgba(255, 255, 255, 0.2)';
+            this.opacity = Math.random() * 0.4 + 0.05;
         }
         
         update() {
             this.x += this.speedX;
             this.y += this.speedY;
-            
             if (this.x > canvas.width) this.x = 0;
             if (this.x < 0) this.x = canvas.width;
             if (this.y > canvas.height) this.y = 0;
@@ -58,21 +57,125 @@ document.addEventListener("DOMContentLoaded", () => {
             ctx.fill();
         }
     }
+
+    class TechNode {
+        constructor() { this.init(); }
+        init() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.opacity = 0;
+            this.maxOpacity = Math.random() * 0.4 + 0.1;
+            this.life = 0;
+            this.maxLife = Math.random() * 400 + 200;
+            this.pinging = false;
+        }
+        update() {
+            this.life++;
+            if (this.life < 100) this.opacity += 0.005;
+            else if (this.life > this.maxLife - 100) this.opacity -= 0.005;
+
+            if (Math.random() > 0.99 && !this.pinging) {
+                this.pinging = true;
+                this.pingRadius = 0;
+            }
+            if (this.pinging) {
+                this.pingRadius += 1;
+                if (this.pingRadius > 30) this.pinging = false;
+            }
+
+            if (this.life >= this.maxLife) this.init();
+        }
+        draw() {
+            ctx.fillStyle = '#00ffa3';
+            ctx.globalAlpha = Math.max(0, this.opacity);
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (this.pinging) {
+                ctx.strokeStyle = '#00ffa3';
+                ctx.lineWidth = 1;
+                ctx.globalAlpha = (1 - (this.pingRadius / 30)) * 0.5;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.pingRadius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+    }
+
+    class ScanLine {
+        constructor() { this.init(); }
+        init() {
+            this.vertical = Math.random() > 0.5;
+            if (this.vertical) {
+                this.x = Math.random() * canvas.width;
+                this.y = -200;
+                this.speed = Math.random() * 3 + 2;
+            } else {
+                this.x = -200;
+                this.y = Math.random() * canvas.height;
+                this.speed = Math.random() * 3 + 2;
+            }
+            this.length = Math.random() * 300 + 200;
+            this.color = '#00ffa3';
+        }
+        update() {
+            if (this.vertical) this.y += this.speed;
+            else this.x += this.speed;
+
+            if (this.x > canvas.width + 200 || this.y > canvas.height + 200) this.init();
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = 0.2;
+            const gradient = this.vertical 
+                ? ctx.createLinearGradient(0, this.y - this.length, 0, this.y)
+                : ctx.createLinearGradient(this.x - this.length, 0, this.x, 0);
+            
+            gradient.addColorStop(0, 'transparent');
+            gradient.addColorStop(1, this.color);
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            if (this.vertical) {
+                ctx.moveTo(this.x, this.y - this.length);
+                ctx.lineTo(this.x, this.y);
+            } else {
+                ctx.moveTo(this.x - this.length, this.y);
+                ctx.lineTo(this.x, this.y);
+            }
+            ctx.stroke();
+
+            // Leading pulse head
+            ctx.globalAlpha = 0.6;
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
     
+    let techNodes = [];
+    let scanLines = [];
     function initParticles() {
         particles = [];
-        const numberOfParticles = (canvas.width * canvas.height) / 15000;
+        techNodes = [];
+        scanLines = [];
+        const numberOfParticles = (canvas.width * canvas.height) / 40000;
         for (let i = 0; i < numberOfParticles; i++) {
             particles.push(new Particle());
         }
+        for (let i = 0; i < 40; i++) techNodes.push(new TechNode());
+        for (let i = 0; i < 8; i++) scanLines.push(new ScanLine());
     }
     
     function animateParticles() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
+        particles.forEach(p => { p.update(); p.draw(); });
+        techNodes.forEach(n => { n.update(); n.draw(); });
+        scanLines.forEach(l => { l.update(); l.draw(); });
         requestAnimationFrame(animateParticles);
     }
     

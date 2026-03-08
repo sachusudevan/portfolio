@@ -480,22 +480,34 @@ a {
   align-items: center;
   position: relative;
   padding-top: 80px;
-  background:
-    linear-gradient(to bottom, rgba(10, 17, 15, 0.75), var(--bg-main)),
-    url("../images/hero_bg.png") center/cover no-repeat;
+  background: 
+    linear-gradient(to bottom, rgba(5, 10, 9, 0.5), var(--bg-main) 95%),
+    url("../images/hero_bg_v2.png") center/cover no-repeat;
   background-attachment: fixed;
+  overflow: hidden;
+  animation: bgPulse 15s infinite alternate ease-in-out;
 }
+
+@keyframes bgPulse {
+  0% { transform: scale(1); filter: contrast(100%) brightness(1); }
+  50% { transform: scale(1.05); filter: contrast(110%) brightness(1.15); }
+  100% { transform: scale(1); filter: contrast(100%) brightness(1); }
+}
+
 .hero-section::before {
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(
     circle at center,
-    transparent 0%,
-    rgba(10, 17, 15, 0.8) 100%
+    transparent 10%,
+    rgba(5, 10, 9, 0.8) 90%
   );
   pointer-events: none;
+  z-index: 2;
 }
+
+
 
 .hero-content {
   flex: 1;
@@ -508,7 +520,7 @@ a {
   font-weight: 700;
   letter-spacing: 4px;
   text-transform: uppercase;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-size: 0.9rem;
   opacity: 0.9;
   display: flex;
@@ -518,9 +530,10 @@ a {
 
 .greeting::after {
   content: "";
-  height: 2px;
-  width: 50px;
-  background: var(--accent-gradient);
+  height: 1px;
+  width: 40px;
+  background: var(--primary-color);
+  opacity: 0.5;
 }
 
 .hero-title {
@@ -600,8 +613,7 @@ a {
   margin-bottom: 3.5rem;
   line-height: 1.8;
   color: var(--text-muted);
-  border-left: 2px solid var(--primary-color-alpha);
-  padding-left: 2rem;
+  text-align: left;
 }
 
 .hero-cta {
@@ -618,9 +630,9 @@ a {
 .hero-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Centered layout for better cohesion */
   width: 100%;
-  gap: 4rem;
+  gap: 6rem; /* Comfortable gap between text and image */
 }
 
 .hero-image-wrapper {
@@ -1391,7 +1403,7 @@ footer {
     flex-direction: column;
     text-align: center;
     gap: 3rem;
-    padding-top: 2rem;
+    padding-top: 4rem;
   }
 
   .hero-content {
@@ -1399,9 +1411,21 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+  }
+
+  .greeting {
+    justify-content: center;
+  }
+
+  .hero-desc {
+    text-align: center;
   }
 
   .hero-cta,
+  .social-links-hero {
+    justify-content: center;
+  }
   .social-links-hero {
     justify-content: center;
   }
