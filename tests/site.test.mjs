@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { html, tags, attr, exists, read, cssText } from './helpers.mjs';
+import { join } from 'node:path';
+import sharp from 'sharp';
+import { html, tags, attr, exists, read, cssText, root } from './helpers.mjs';
 
 const src = html();
 const isLocal = (u) => u && !/^(https?:|mailto:|tel:|#|data:)/.test(u);
@@ -78,4 +80,30 @@ test('nav, menu and loader contract exists', () => {
   assert.equal((src.match(/class="loader__line"/g) || []).length, 3);
   assert.match(src, /class="skip-link" href="#main"/);
   assert.match(read('assets/svg/logo.svg'), /@keyframes/);
+});
+
+test('exactly one h1, inside the hero', () => {
+  assert.equal((src.match(/<h1\b/g) || []).length, 1);
+  assert.match(src, /<section id="hero"[\s\S]*?<h1\b[\s\S]*?<\/section>/);
+});
+
+test('images have alt, width, height and lazy-loading except the hero', async () => {
+  for (const t of tags(src, 'img')) {
+    assert.ok(attr(t, 'alt') !== null, `alt missing: ${t}`);
+    const w = Number(attr(t, 'width')), h = Number(attr(t, 'height'));
+    assert.ok(w > 0 && h > 0, `size missing: ${t}`);
+    const file = attr(t, 'src');
+    if (file.startsWith('assets/img/')) {
+      const meta = await sharp(join(root, file)).metadata();
+      assert.ok(Math.abs(w / h - meta.width / meta.height) < 0.01, `aspect mismatch: ${file}`);
+    }
+    if (!/fetchpriority="high"/.test(t)) assert.match(t, /loading="lazy"/);
+  }
+});
+
+test('hero uses the noir portrait and about carries the three stats', () => {
+  assert.match(src, /<section id="hero"[\s\S]*?portrait-noir\.jpg[\s\S]*?<\/section>/);
+  assert.match(src, /data-count="5" data-suffix="\+"/);
+  assert.match(src, /data-count="20" data-suffix="\+"/);
+  assert.match(src, /data-count="100" data-suffix="%"/);
 });

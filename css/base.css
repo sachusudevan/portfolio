@@ -141,6 +141,7 @@ main:focus { outline: none; }
 
 /* Photos: monochrome with lime corner brackets, colour on hover */
 .photo { position: relative; overflow: hidden; background: var(--bg-3); }
+.photo picture { display: block; width: 100%; height: 100%; }
 .photo img {
   width: 100%;
   height: 100%;
