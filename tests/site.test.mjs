@@ -204,3 +204,7 @@ test('confidential project names never appear in published files', () => {
   const banned = new RegExp(Buffer.from('eHRyYWN0fHJldmFyY3x6YXBhcmU=', 'base64').toString(), 'i');
   for (const f of files) assert.ok(!banned.test(read(f)), f + ' mentions a confidential project name');
 });
+
+test('site does not advertise job-seeking status', () => {
+  assert.ok(!/open to (new )?(opportunities|work)|hire me|looking for (new )?(opportunities|a job)/i.test(src), 'job-seeking wording found');
+});
