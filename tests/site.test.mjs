@@ -103,7 +103,8 @@ test('images have alt, width, height and lazy-loading except the hero', async ()
 
 test('hero uses the noir portrait and about carries the three stats', () => {
   assert.match(src, /<section id="hero"[\s\S]*?portrait-noir\.jpg[\s\S]*?<\/section>/);
-  assert.match(src, /data-count="5" data-suffix="\+"/);
+  assert.match(src, /data-count="6" data-suffix="\+"/);
+  assert.ok(!/5\+ (yrs|years)/.test(src), 'stale 5+ years');
   assert.match(src, /data-count="20" data-suffix="\+"/);
   assert.match(src, /data-count="100" data-suffix="%"/);
 });
