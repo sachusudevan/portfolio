@@ -209,4 +209,6 @@ test('contact connects straight to WhatsApp with a prefilled enquiry and collect
   assert.match(attr(cta[0], 'rel'), /noopener/);
   assert.match(attr(cta[0], 'aria-label'), /WhatsApp/);
   assert.match(section, /class="wa-cta__icon"/);
+  // the enquiry text lives only in the link; it is shown inside WhatsApp, not on the page
+  assert.ok(!/came across your portfolio/.test(section.replace(/href="[^"]*"/g, '')), 'message preview is shown on the page');
 });
