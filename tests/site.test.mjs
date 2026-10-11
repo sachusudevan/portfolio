@@ -107,3 +107,26 @@ test('hero uses the noir portrait and about carries the three stats', () => {
   assert.match(src, /data-count="20" data-suffix="\+"/);
   assert.match(src, /data-count="100" data-suffix="%"/);
 });
+
+test('pipeline section has an accessible SVG, five steps and a matching log', () => {
+  const section = src.match(/<section id="pipeline"[\s\S]*?<\/section>/)[0];
+  assert.match(section, /<svg[^>]*role="img"[^>]*aria-labelledby="pl-title pl-desc"/);
+  assert.match(section, /<title id="pl-title">/);
+  assert.match(section, /<desc id="pl-desc">/);
+  const order = ['ingest', 'split', 'validate', 'transform', 'deliver'];
+  assert.deepEqual([...section.matchAll(/data-step="(\w+)"/g)].map((m) => m[1]), order);
+  assert.deepEqual([...section.matchAll(/data-log="(\w+)"/g)].map((m) => m[1]), order);
+  assert.equal((section.match(/class="pl-log__msg"/g) || []).length, 5);
+  for (const cls of ['pl-doc', 'pl-page', 'pl-check-mark', 'pl-wire-in', 'pl-core-ring', 'pl-packet', 'pl-wire-out', 'pl-out', 'pl-sync', 'pl-bar']) {
+    assert.match(section, new RegExp(`class="${cls}\\b`), `missing .${cls}`);
+  }
+});
+
+test('standalone pipeline.svg is dark, animates itself and respects reduced motion', () => {
+  const svg = read('assets/svg/pipeline.svg');
+  assert.match(svg, /@keyframes/);
+  assert.match(svg, /prefers-reduced-motion/);
+  assert.match(svg, /EDI ENGINE/);
+  assert.match(svg, /#C6F432/i);
+  assert.match(svg, /#0B0B0B/i);
+});

@@ -147,7 +147,74 @@
         </div>
       </div>
     </section>
-    <section id="pipeline"></section>
+    <section id="pipeline" class="section pipeline">
+      <div class="pipeline__inner container">
+        <div class="pipeline__copy">
+          <p class="section-label"><span>02</span> // pipeline</p>
+          <h2 class="display pipeline__title" data-anim="lines">From claim files to <span class="hl">clean</span> data.</h2>
+          <ol class="pipeline__steps">
+            <li class="pipeline__step" data-step="ingest"><span class="mono">01</span><h3>Ingest</h3><p>EOBs, 837 claims and self-pay documents arrive in every shape a client can produce.</p></li>
+            <li class="pipeline__step" data-step="split"><span class="mono">02</span><h3>Split</h3><p>An automated splitting engine breaks huge batches into indexed, traceable pages.</p></li>
+            <li class="pipeline__step" data-step="validate"><span class="mono">03</span><h3>Validate</h3><p>Index-based schema validation catches bad data before anyone downstream sees it.</p></li>
+            <li class="pipeline__step" data-step="transform"><span class="mono">04</span><h3>Transform</h3><p>EDI ENGINE maps every record into one consistent, HIPAA-compliant model.</p></li>
+            <li class="pipeline__step" data-step="deliver"><span class="mono">05</span><h3>Deliver &amp; sync</h3><p>A customisable output engine writes 835, CSV or TXT and syncs results live into Client Portal.</p></li>
+          </ol>
+        </div>
+        <div class="pipeline__stage">
+          <svg class="pipeline__svg" viewBox="0 0 1100 560" role="img" aria-labelledby="pl-title pl-desc">
+            <title id="pl-title">The EDI ENGINE claims pipeline</title>
+            <desc id="pl-desc">EOB, 837 and self-pay files are ingested, split into pages, validated, transformed by EDI ENGINE, output as 835, CSV and TXT, and synced to a Client Portal dashboard.</desc>
+            <g class="pl-doc" transform="translate(40 100)"><path class="pl-sheet" d="M0 0H82L100 18V64H0Z"/><path class="pl-fold" d="M82 0V18H100"/><rect class="pl-ln" x="12" y="14" width="44" height="4"/><rect class="pl-ln" x="12" y="24" width="60" height="4"/><text class="pl-label pl-label--doc" x="12" y="52">EOB</text></g>
+            <g class="pl-doc" transform="translate(40 248)"><path class="pl-sheet" d="M0 0H82L100 18V64H0Z"/><path class="pl-fold" d="M82 0V18H100"/><rect class="pl-ln" x="12" y="14" width="44" height="4"/><rect class="pl-ln" x="12" y="24" width="60" height="4"/><text class="pl-label pl-label--doc" x="12" y="52">837</text></g>
+            <g class="pl-doc" transform="translate(40 396)"><path class="pl-sheet" d="M0 0H82L100 18V64H0Z"/><path class="pl-fold" d="M82 0V18H100"/><rect class="pl-ln" x="12" y="14" width="44" height="4"/><rect class="pl-ln" x="12" y="24" width="60" height="4"/><text class="pl-label pl-label--doc" x="12" y="52">SELF-PAY</text></g>
+            <rect class="pl-page" x="200" y="94" width="34" height="44"/>
+            <rect class="pl-page" x="214" y="114" width="34" height="44"/>
+            <rect class="pl-page" x="200" y="242" width="34" height="44"/>
+            <rect class="pl-page" x="214" y="262" width="34" height="44"/>
+            <rect class="pl-page" x="200" y="390" width="34" height="44"/>
+            <rect class="pl-page" x="214" y="410" width="34" height="44"/>
+            <line class="pl-gate" x1="330" y1="70" x2="330" y2="490"/>
+            <g transform="translate(330 132)"><rect class="pl-check-ring" x="-14" y="-14" width="28" height="28"/><path class="pl-check-mark" d="M-6 0l4 4 8-8"/></g>
+            <g transform="translate(330 280)"><rect class="pl-check-ring" x="-14" y="-14" width="28" height="28"/><path class="pl-check-mark" d="M-6 0l4 4 8-8"/></g>
+            <g transform="translate(330 428)"><rect class="pl-check-ring" x="-14" y="-14" width="28" height="28"/><path class="pl-check-mark" d="M-6 0l4 4 8-8"/></g>
+            <path class="pl-wire-in" d="M344 132 C 430 132, 440 280, 500 280"/>
+            <path class="pl-wire-in" d="M344 280 L 500 280"/>
+            <path class="pl-wire-in" d="M344 428 C 430 428, 440 280, 500 280"/>
+            <circle class="pl-core-ring" cx="580" cy="280" r="118"/>
+            <g class="pl-core"><rect class="pl-core__box" x="505" y="205" width="150" height="150"/><text class="pl-core__text" x="580" y="288" text-anchor="middle">EDI ENGINE</text></g>
+            <path class="pl-wire-out" d="M660 280 C 710 280, 710 150, 760 150"/>
+            <path class="pl-wire-out" d="M660 280 L 760 280"/>
+            <path class="pl-wire-out" d="M660 280 C 710 280, 710 410, 760 410"/>
+            <g class="pl-out"><rect class="pl-chip" x="760" y="128" width="96" height="44"/><text class="pl-label pl-label--chip" x="808" y="156" text-anchor="middle">835</text></g>
+            <g class="pl-out"><rect class="pl-chip" x="760" y="258" width="96" height="44"/><text class="pl-label pl-label--chip" x="808" y="286" text-anchor="middle">CSV</text></g>
+            <g class="pl-out"><rect class="pl-chip" x="760" y="388" width="96" height="44"/><text class="pl-label pl-label--chip" x="808" y="416" text-anchor="middle">TXT</text></g>
+            <path class="pl-sync" d="M856 280 L 900 280"/>
+            <g class="pl-dash"><rect class="pl-chip" x="900" y="190" width="180" height="180"/><text class="pl-label" x="916" y="216">PORTAL</text><rect class="pl-bar" x="920" y="290" width="26" height="60"/><rect class="pl-bar" x="960" y="250" width="26" height="100"/><rect class="pl-bar" x="1000" y="270" width="26" height="80"/><rect class="pl-bar" x="1040" y="220" width="26" height="130"/></g>
+            <rect class="pl-packet" width="10" height="10" opacity="0"/>
+            <rect class="pl-packet" width="10" height="10" opacity="0"/>
+            <rect class="pl-packet" width="10" height="10" opacity="0"/>
+            <rect class="pl-packet" width="10" height="10" opacity="0"/>
+            <rect class="pl-packet" width="10" height="10" opacity="0"/>
+            <rect class="pl-packet" width="10" height="10" opacity="0"/>
+            <text class="pl-label" x="40" y="530">01 INGEST</text>
+            <text class="pl-label" x="200" y="530">02 SPLIT</text>
+            <text class="pl-label" x="330" y="530" text-anchor="middle">03 VALIDATE</text>
+            <text class="pl-label" x="580" y="530" text-anchor="middle">04 TRANSFORM</text>
+            <text class="pl-label" x="760" y="530">05 DELIVER</text>
+          </svg>
+          <div class="term pipeline__log">
+            <div class="term__bar"><span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term__title">edi-engine.log</span></div>
+            <ol class="term__body pl-log" aria-label="Pipeline log">
+              <li data-log="ingest"><span class="lime">[ingest]</span> <span class="pl-log__msg">3 files received (EOB, 837, SELF-PAY)</span></li>
+              <li data-log="split"><span class="lime">[split]</span> <span class="pl-log__msg">3 → 12 pages, indexed</span></li>
+              <li data-log="validate"><span class="lime">[validate]</span> <span class="pl-log__msg">schema ok ✓ 12/12</span></li>
+              <li data-log="transform"><span class="lime">[transform]</span> <span class="pl-log__msg">edi-engine → canonical model</span></li>
+              <li data-log="deliver"><span class="lime">[deliver]</span> <span class="pl-log__msg">835 · csv · txt → client-portal ✓ synced</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
     <section id="experience"></section>
     <section id="work"></section>
     <section id="toolkit"></section>
@@ -167,5 +234,6 @@
   <script defer src="js/lib.js"></script>
   <script defer src="js/main.js"></script>
   <script defer src="js/motion.js"></script>
+  <script defer src="js/pipeline.js"></script>
 </body>
 </html>
