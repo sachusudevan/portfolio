@@ -13,17 +13,6 @@
     return String(value == null ? '' : value).trim();
   }
 
-  function encodePart(text) {
-    return encodeURIComponent(String(text).replace(/\r\n|\r|\n/g, '\r\n'));
-  }
-
-  function buildMailto(to, fields) {
-    var name = clean(fields.name);
-    var subject = clean(fields.subject) || 'Portfolio enquiry from ' + name;
-    var body = clean(fields.message) + '\n\n— ' + name + '\n' + clean(fields.email);
-    return 'mailto:' + to + '?subject=' + encodePart(subject) + '&body=' + encodePart(body);
-  }
-
   function buildWhatsApp(number, fields) {
     var lines = ['New website enquiry', '', 'Name: ' + clean(fields.name), 'Email: ' + clean(fields.email)];
     if (clean(fields.phone)) lines.push('Phone: ' + clean(fields.phone));
@@ -69,7 +58,6 @@
   }
 
   return {
-    buildMailto: buildMailto,
     buildWhatsApp: buildWhatsApp,
     validateContact: validateContact,
     formatClock: formatClock,

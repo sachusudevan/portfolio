@@ -217,5 +217,6 @@ test('contact offers WhatsApp: link, optional phone field and a WhatsApp send bu
   assert.match(form, /aria-describedby="phone-error"/);
   assert.match(form, /id="phone-error"/);
   assert.match(form, /<button[^>]*type="submit"[^>]*data-channel="whatsapp"/);
-  assert.match(form, /<button[^>]*type="submit"[^>]*data-channel="email"/);
+  assert.equal((form.match(/type="submit"/g) || []).length, 1, 'WhatsApp is the only send option');
+  assert.ok(!/data-channel="email"|email instead/i.test(form), 'no email send option');
 });

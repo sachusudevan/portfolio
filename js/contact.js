@@ -1,8 +1,7 @@
-/* Terminal contact form (mailto), copy-to-clipboard, toast, live IST clocks and footer year. */
+/* Terminal contact form (WhatsApp click-to-chat), copy-to-clipboard, toast, live IST clocks and footer year. */
 (function () {
   'use strict';
   var lib = window.PortfolioLib;
-  var EMAIL = 'sachusudeve8690@gmail.com';
   var WHATSAPP = '918157864536';
   var toastEl = document.querySelector('.toast'), toastTimer;
 
@@ -19,7 +18,6 @@
     e.preventDefault();
     var get = function (n) { return form.elements.namedItem(n).value; };
     var fields = { name: get('name'), email: get('email'), phone: get('phone'), subject: get('subject'), message: get('message') };
-    var channel = (e.submitter && e.submitter.dataset.channel) || 'whatsapp';
     var result = lib.validateContact(fields);
     ['name', 'email', 'phone', 'message'].forEach(function (key) {
       var msg = result.errors[key] || '';
@@ -30,11 +28,6 @@
     if (!result.valid) {
       status.textContent = '';
       form.elements.namedItem(Object.keys(result.errors)[0]).focus();
-      return;
-    }
-    if (channel === 'email') {
-      status.textContent = '> opening your mail client … ok';
-      window.location.href = lib.buildMailto(EMAIL, fields);
       return;
     }
     // Click-to-chat: WhatsApp opens with the enquiry prefilled; the visitor presses Send

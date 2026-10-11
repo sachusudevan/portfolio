@@ -7,21 +7,6 @@ const lib = require('../js/lib.js');
 
 const fields = { name: 'Ana & Co', email: 'ana@co.io', subject: 'Hi #1?', message: 'Line 1\nLine 2 — ünïcode' };
 
-test('buildMailto encodes subject/body and uses CRLF newlines', () => {
-  const url = lib.buildMailto('me@x.com', fields);
-  assert.ok(url.startsWith('mailto:me@x.com?subject='));
-  assert.ok(!/\s/.test(url), 'no raw whitespace');
-  const params = new URLSearchParams(url.slice(url.indexOf('?') + 1));
-  assert.equal(params.get('subject'), 'Hi #1?');
-  assert.equal(params.get('body'), 'Line 1\r\nLine 2 — ünïcode\r\n\r\n— Ana & Co\r\nana@co.io');
-});
-
-test('buildMailto falls back to a default subject and tolerates missing fields', () => {
-  const url = lib.buildMailto('me@x.com', { name: ' Ana ', email: 'a@b.co', message: 'Hello there friend' });
-  const params = new URLSearchParams(url.slice(url.indexOf('?') + 1));
-  assert.equal(params.get('subject'), 'Portfolio enquiry from Ana');
-});
-
 test('validateContact flags each invalid field', () => {
   const r = lib.validateContact({ name: 'A', email: 'nope', subject: '', message: 'short' });
   assert.equal(r.valid, false);
