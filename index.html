@@ -157,13 +157,13 @@
             <li class="pipeline__step" data-step="split"><span class="mono">02</span><h3>Split</h3><p>An automated splitting engine breaks huge batches into indexed, traceable pages.</p></li>
             <li class="pipeline__step" data-step="validate"><span class="mono">03</span><h3>Validate</h3><p>Index-based schema validation catches bad data before anyone downstream sees it.</p></li>
             <li class="pipeline__step" data-step="transform"><span class="mono">04</span><h3>Transform</h3><p>The EDI engine maps every record into one consistent, HIPAA-compliant model.</p></li>
-            <li class="pipeline__step" data-step="deliver"><span class="mono">05</span><h3>Deliver &amp; sync</h3><p>A customisable output engine writes 835, CSV or TXT and syncs results live into Client Portal.</p></li>
+            <li class="pipeline__step" data-step="deliver"><span class="mono">05</span><h3>Deliver &amp; sync</h3><p>A customisable output engine writes 835, CSV or TXT and syncs results live into the client portal.</p></li>
           </ol>
         </div>
         <div class="pipeline__stage">
           <svg class="pipeline__svg" viewBox="0 0 1100 560" role="img" aria-labelledby="pl-title pl-desc">
             <title id="pl-title">The EDI claims pipeline</title>
-            <desc id="pl-desc">EOB, 837 and self-pay files are ingested, split into pages, validated, transformed by the EDI engine, output as 835, CSV and TXT, and synced to a Client Portal dashboard.</desc>
+            <desc id="pl-desc">EOB, 837 and self-pay files are ingested, split into pages, validated, transformed by the EDI engine, output as 835, CSV and TXT, and synced to a client-portal dashboard.</desc>
             <g class="pl-doc" transform="translate(40 100)"><path class="pl-sheet" d="M0 0H82L100 18V64H0Z"/><path class="pl-fold" d="M82 0V18H100"/><rect class="pl-ln" x="12" y="14" width="44" height="4"/><rect class="pl-ln" x="12" y="24" width="60" height="4"/><text class="pl-label pl-label--doc" x="12" y="52">EOB</text></g>
             <g class="pl-doc" transform="translate(40 248)"><path class="pl-sheet" d="M0 0H82L100 18V64H0Z"/><path class="pl-fold" d="M82 0V18H100"/><rect class="pl-ln" x="12" y="14" width="44" height="4"/><rect class="pl-ln" x="12" y="24" width="60" height="4"/><text class="pl-label pl-label--doc" x="12" y="52">837</text></g>
             <g class="pl-doc" transform="translate(40 396)"><path class="pl-sheet" d="M0 0H82L100 18V64H0Z"/><path class="pl-fold" d="M82 0V18H100"/><rect class="pl-ln" x="12" y="14" width="44" height="4"/><rect class="pl-ln" x="12" y="24" width="60" height="4"/><text class="pl-label pl-label--doc" x="12" y="52">SELF-PAY</text></g>
@@ -209,7 +209,7 @@
               <li data-log="split"><span class="lime">[split]</span> <span class="pl-log__msg">3 → 12 pages, indexed</span></li>
               <li data-log="validate"><span class="lime">[validate]</span> <span class="pl-log__msg">schema ok ✓ 12/12</span></li>
               <li data-log="transform"><span class="lime">[transform]</span> <span class="pl-log__msg">engine → canonical model</span></li>
-              <li data-log="deliver"><span class="lime">[deliver]</span> <span class="pl-log__msg">835 · csv · txt → client-portal ✓ synced</span></li>
+              <li data-log="deliver"><span class="lime">[deliver]</span> <span class="pl-log__msg">835 · csv · txt → portal ✓ synced</span></li>
             </ol>
           </div>
         </div>
@@ -303,7 +303,7 @@
                 <div class="md">
                   <p class="mono muted"><span class="lime">$</span> cat client-portal/README.md</p>
                   <ul class="md__list">
-                    <li>Real-time data synchronisation from the EDI engine to Client Portal.</li>
+                    <li>Real-time data synchronisation from the EDI engine to the client portal.</li>
                     <li>Client dashboards for processed records, output management and file tracking.</li>
                     <li>Client-level access control and operational reporting.</li>
                   </ul>

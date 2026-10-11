@@ -14,7 +14,7 @@ not a template.
 Two assets carry the design:
 
 1. **The engineering story** — healthcare claim files (EOB, 837, self-pay) flowing through the EDI engine
-   and emerging as 835 / CSV / TXT, synced into Client Portal. This becomes the signature animation.
+   and emerging as 835 / CSV / TXT, synced into the client portal. This becomes the signature animation.
 2. **Professional photography** — shown monochrome by default (fits the black/lime palette) and
    revealing colour on hover.
 
@@ -187,8 +187,8 @@ black on lime for buttons.
    2. **Split** — files split into indexed pages. Log: `[split] 3 → 12 pages, indexed`
    3. **Validate** — gate draws, checks tick. Log: `[validate] schema ok ✓ 12/12`
    4. **Transform** — wires draw, EDI ENGINE core spins, packets travel. Log: `[transform] engine → canonical model`
-   5. **Deliver & sync** — 835/CSV/TXT chips appear, sync line to Client Portal dashboard, bars grow.
-      Log: `[deliver] 835 · csv · txt → client-portal ✓ synced`
+   5. **Deliver & sync** — 835/CSV/TXT chips appear, sync line to client-portal dashboard, bars grow.
+      Log: `[deliver] 835 · csv · txt → portal ✓ synced`
    Step list on the left highlights the active step (lime). Mobile: no pin; same SVG + log loop
    while visible. Reduced motion: final frame + full log.
 6. **Experience** (`03 // experience`) — styled as `git log --graph`: a lime branch graph line
@@ -199,7 +199,7 @@ black on lime for buttons.
    `name`, `tags`. Filters are CLI flags `--all --healthcare --enterprise --commerce`. Rows expand
    (accordion) to `cat README.md` details + an animated lime line-art SVG cover. Desktop hover: a
    floating terminal-framed preview of the cover follows the cursor. Six projects:
-   EDI ENGINE (files), Client Portal (bars), Ticketing & Analytics (SLA ring), School Management (grid),
+   EDI ENGINE (files), Client portal (bars), Ticketing & Analytics (SLA ring), School Management (grid),
    VLURB & E-commerce (sound wave), Clinic & Project Management (ECG pulse).
 8. **Stack** (`05 // stack`) — bento grid of terminal panes, each titled like a config file
    (`languages.json`, `frameworks.toml`, `databases.yml`, `healthcare.edi`, `tools.sh`,
