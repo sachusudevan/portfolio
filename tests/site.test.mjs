@@ -154,3 +154,31 @@ test('work rows, flags and accordions are wired consistently', () => {
     assert.match(chunk, /class="cover cover--\w+"/);
   }
 });
+
+test('stack has six terminal panes', () => {
+  const section = src.match(/<section id="toolkit"[\s\S]*?<\/section>/)[0];
+  assert.equal((section.match(/class="term tool-card\b/g) || []).length, 6);
+});
+
+test('contact form is labelled, novalidate and wired to error messages', () => {
+  const form = src.match(/<form class="contact-form[^"]*"[\s\S]*?<\/form>/)[0];
+  assert.match(form, /novalidate/);
+  for (const f of ['name', 'email', 'subject', 'message']) {
+    assert.match(form, new RegExp(`<label[^>]*for="${f}"`));
+    assert.match(form, new RegExp(`id="${f}"[^>]*name="${f}"`));
+  }
+  for (const f of ['name', 'email', 'message']) {
+    assert.match(form, new RegExp(`aria-describedby="${f}-error"`));
+    assert.match(form, new RegExp(`id="${f}-error"`));
+  }
+});
+
+test('contact details, clocks, year and copy button exist', () => {
+  assert.match(src, /href="mailto:sachusudeve8690@gmail\.com"/);
+  assert.match(src, /href="tel:\+918157864536"/);
+  assert.match(src, /data-copy="sachusudeve8690@gmail\.com"/);
+  assert.match(src, /data-clock>/);
+  assert.match(src, /data-clock="short"/);
+  assert.match(src, /data-year/);
+  assert.match(src, /<section id="beyond"/);
+});

@@ -125,7 +125,7 @@
     if (!track) return;
     var distance = function () { return Math.max(0, track.scrollWidth - window.innerWidth); };
     gsap.to(track, { x: function () { return -distance(); }, ease: 'none',
-      scrollTrigger: { trigger: section, start: 'top top', end: function () { return '+=' + distance(); }, pin: true, scrub: 1, invalidateOnRefresh: true } });
+      scrollTrigger: { trigger: section, start: 'top top', end: function () { return '+=' + distance(); }, pin: true, scrub: 1, invalidateOnRefresh: true, refreshPriority: 1 } });
   });
 
   /* Mobile: photos turn to colour while centred (no hover on touch) */

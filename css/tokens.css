@@ -12,8 +12,8 @@
   --step-0: clamp(1rem, .96rem + .2vw, 1.0625rem);
   --step-1: clamp(1.2rem, 1.05rem + .6vw, 1.5rem);
   --step-2: clamp(1.6rem, 1.2rem + 1.6vw, 2.5rem);
-  --step-3: clamp(2.2rem, 1.4rem + 3.6vw, 4.8rem);
-  --step-4: clamp(2.8rem, 1.2rem + 7vw, 8.5rem);
+  --step-3: clamp(1.9rem, 1rem + 4vw, 4.8rem);
+  --step-4: clamp(2.2rem, .6rem + 7vw, 8rem);
   --space-section: clamp(6rem, 4rem + 8vw, 10rem);
   --gutter: clamp(1rem, .5rem + 2.5vw, 3rem);
   --max: 1360px;

@@ -179,7 +179,7 @@
 .commit.is-active::before { background: var(--lime); }
 .commit__meta { font-size: var(--step--1); color: var(--muted); }
 .commit__hash { color: var(--warn); }
-.commit__subject { font: 800 var(--step-2)/1.05 var(--font-display); text-transform: uppercase; margin: .5rem 0 .4rem; }
+.commit__subject { font: 800 clamp(1.25rem, .9rem + 1.6vw, 2.5rem)/1.05 var(--font-display); text-transform: uppercase; margin: .5rem 0 .4rem; }
 .commit__body { margin-top: .9rem; max-width: 60ch; color: var(--muted); }
 .commit--root .commit__subject { color: var(--muted); }
 
@@ -261,4 +261,103 @@
   .work-row__perm, .work-row__type, .work-row__tags { display: none; }
   .work-row__title .muted { display: block; margin: .35rem 0 0; }
   .work-row__body { grid-template-columns: minmax(0, 1fr); padding-inline: .25rem; }
+}
+
+/* ---------- Stack ---------- */
+.bento { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.tool-card--wide { grid-column: span 2; }
+.tool-card { transition: translate .25s var(--ease-out), box-shadow .25s var(--ease-out), border-color .2s; }
+.tool-card:hover { translate: -4px -4px; box-shadow: 8px 8px 0 var(--lime); border-color: var(--lime); }
+.tool-card h3 { font: 800 var(--step-1)/1 var(--font-display); text-transform: uppercase; margin: 1rem 0; }
+.tags { display: flex; flex-wrap: wrap; gap: .3rem .6rem; font: 500 12px var(--font-mono); color: var(--muted); }
+.tags li { transition: color .2s; }
+.tags li:hover { color: var(--lime); }
+.ico { width: 64px; height: 48px; }
+.ico-line { fill: none; stroke: var(--text); stroke-width: 2.5; }
+.ico-fill { fill: var(--lime); }
+.ico-caret { fill: var(--lime); animation: blink 1s steps(1) infinite; }
+.ico-layer { animation: layer 2.4s var(--ease-in-out) infinite alternate; }
+.ico-layer:nth-of-type(2) { animation-delay: -.8s; }
+.ico-layer:nth-of-type(3) { animation-delay: -1.6s; }
+@keyframes layer { from { transform: translateX(-4px); } to { transform: translateX(4px); } }
+.ico-pulse { animation: db-pulse 1.8s ease-in-out infinite; }
+@keyframes db-pulse { 50% { opacity: .35; } }
+.ico-draw { fill: none; stroke: var(--lime); stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 1; animation: ico-draw 2.6s var(--ease-out) infinite; }
+@keyframes ico-draw { 0% { stroke-dashoffset: 1; } 45%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -1; } }
+.ico-travel { animation: travel 2.4s var(--ease-in-out) infinite; }
+@keyframes travel { 0% { transform: translateX(0); } 100% { transform: translateX(44px); } }
+.ico-flow { fill: none; stroke: var(--lime); stroke-width: 2; stroke-dasharray: 4 4; animation: flow .8s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -8; } }
+.strengths__list { display: grid; gap: .4rem; font-size: 13px; }
+.strengths__list > div { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; }
+.strengths__list dt { color: var(--lime); }
+.strengths__list dd { color: var(--muted); }
+
+/* ---------- Offline strip ---------- */
+.beyond { overflow: hidden; min-height: 100svh; display: grid; align-items: center; padding-block: 4rem; }
+.beyond__track { display: flex; gap: 2rem; padding-inline: var(--gutter); width: max-content; align-items: center; }
+.beyond__card { width: min(80vw, 26rem); display: grid; gap: 1rem; align-content: center; }
+.beyond__title { font-size: var(--step-3); }
+.beyond__photo { height: 72vh; aspect-ratio: 2 / 3; flex: none; }
+.beyond__next { border: 1px solid var(--line); padding: 2rem; aspect-ratio: 1; transition: border-color .2s, background-color .2s; }
+.beyond__next .display { font-size: var(--step-2); }
+.beyond__next:hover { border-color: var(--lime); background: var(--bg-2); }
+
+/* ---------- Contact ---------- */
+.contact__title { font-size: var(--step-4); max-width: 14ch; margin-bottom: 3rem; }
+.contact__grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: var(--gutter); align-items: start; }
+.yml > div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1rem; padding: .4rem 0; font: 500 14px var(--font-mono); }
+.yml dt { color: var(--lime); }
+.yml dd { overflow-wrap: anywhere; }
+.yml a { transition: color .2s; }
+.yml a:hover { color: var(--lime); }
+.copy-btn { font-size: 12px; color: var(--muted); margin-left: .4rem; }
+.copy-btn:hover { color: var(--lime); }
+.contact__photo { margin-top: 1rem; aspect-ratio: 4 / 3; }
+.contact__photo img { object-position: 50% 20%; }
+.field { display: grid; gap: .4rem; margin-bottom: 1.25rem; }
+.field label { font: 500 13px var(--font-mono); }
+.field input, .field textarea {
+  width: 100%;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font: 400 15px var(--font-mono);
+  padding: .8rem .9rem;
+  caret-color: var(--lime);
+  transition: border-color .2s, box-shadow .2s;
+  resize: vertical;
+}
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--lime); box-shadow: 4px 4px 0 var(--lime); }
+.field__error { font: 500 12px var(--font-mono); color: var(--danger); min-height: 1em; }
+.field [aria-invalid="true"] { border-color: var(--danger); }
+.contact-form__status { margin-top: 1rem; color: var(--lime); font-size: 13px; min-height: 1.4em; }
+
+/* ---------- Footer ---------- */
+.footer { border-top: 1px solid var(--line); padding-top: 3rem; overflow: hidden; }
+.footer__grid { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem 2rem; font-size: 13px; }
+.footer__logo { font-weight: 700; }
+.footer__nav { display: flex; gap: 1rem; color: var(--muted); }
+.footer__nav a:hover, .footer__top:hover { color: var(--lime); }
+.footer__wordmark {
+  font-size: clamp(4rem, 19vw, 17rem);
+  line-height: .8;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line-strong);
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 3rem;
+  transition: -webkit-text-stroke-color .5s;
+}
+.footer:hover .footer__wordmark { -webkit-text-stroke-color: var(--lime); }
+
+@media (max-width: 899px) {
+  .bento { grid-template-columns: minmax(0, 1fr); }
+  .tool-card--wide { grid-column: auto; }
+  .beyond { min-height: 0; }
+  .beyond__track { width: auto; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1rem; }
+  .beyond__track > * { scroll-snap-align: center; flex: none; }
+  .beyond__photo { height: 60svh; }
+  .contact__grid { grid-template-columns: minmax(0, 1fr); }
+  .footer__grid { flex-direction: column; align-items: flex-start; }
 }

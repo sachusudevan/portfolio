@@ -65,7 +65,8 @@
     lastIdx = -1;
     var tl = build();
     if (ctx.conditions.desktop) {
-      ScrollTrigger.create({ animation: tl, trigger: section, start: 'top top', end: '+=2400', pin: true, scrub: 1 });
+      // refreshPriority: pins must be measured before every trigger below them (they were created earlier in motion.js)
+      ScrollTrigger.create({ animation: tl, trigger: section, start: 'top top', end: '+=2400', pin: true, scrub: 1, refreshPriority: 2 });
     } else {
       tl.to(svg.querySelectorAll('g, path, rect, circle, line'), { autoAlpha: 0, duration: 0.4 }, '+=1.4')
         .call(function () { lastIdx = -1; });
