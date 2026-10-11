@@ -340,7 +340,7 @@
 .footer__nav { display: flex; gap: 1rem; color: var(--muted); }
 .footer__nav a:hover, .footer__top:hover { color: var(--lime); }
 .footer__wordmark {
-  font-size: clamp(4rem, 19vw, 17rem);
+  font-size: clamp(3rem, 13vw, 14rem);
   line-height: .8;
   color: transparent;
   -webkit-text-stroke: 1px var(--line-strong);

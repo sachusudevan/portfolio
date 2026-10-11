@@ -182,3 +182,11 @@ test('contact details, clocks, year and copy button exist', () => {
   assert.match(src, /data-year/);
   assert.match(src, /<section id="beyond"/);
 });
+
+test('old image folder is gone and README showcases generated media', () => {
+  assert.ok(!exists('images'));
+  const readme = read('README.md');
+  assert.match(readme, /assets\/pipeline\.gif/);
+  assert.match(readme, /assets\/svg\/logo\.svg/);
+  assert.match(readme, /npm test/);
+});
