@@ -1,21 +1,23 @@
-# Portfolio Redesign ("Editorial × Engineering") Implementation Plan
+# Portfolio Redesign ("Neo Terminal") Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the template-style portfolio with an editorial, fully animated static site for Sachu S, including a signature scroll-driven EDI pipeline SVG, animated SVG covers, a generated GIF and an OG image.
+**Goal:** Replace the template-style portfolio with a black-and-lime "Neo Terminal" static site for Sachu S — fully animated, with a signature scroll-driven EDI pipeline SVG + synced terminal log, animated SVG covers, a generated GIF and an OG image.
 
 **Architecture:** Plain HTML + three CSS files + classic deferred scripts, deployed as-is to GitHub Pages. Pure logic lives in a UMD file (`js/lib.js`) that Node tests import; DOM/motion scripts read `window.Portfolio` (set up by `main.js`). Motion is progressive enhancement: hidden start states exist only under `html.motion-ready`, which is removed whenever GSAP is missing or motion is reduced.
 
-**Tech Stack:** HTML5, CSS (custom properties, grid, `clamp()`), GSAP 3.13.0 (+ ScrollTrigger, SplitText, DrawSVGPlugin, MotionPathPlugin), Lenis 1.3.23, Google Fonts (Fraunces, Inter, JetBrains Mono). Dev only: Node 20 `node:test`, sharp 0.34.5, @resvg/resvg-js 2.6.2, gifenc 1.0.3, http-server 14.1.1.
+**Tech Stack:** HTML5, CSS (custom properties, grid, `clamp()`), GSAP 3.13.0 (+ ScrollTrigger, SplitText, ScrambleTextPlugin, DrawSVGPlugin, MotionPathPlugin), Lenis 1.3.23, Google Fonts (Syne, Geist, JetBrains Mono). Dev only: Node 20 `node:test`, sharp 0.34.5, @resvg/resvg-js 2.6.2, gifenc 1.0.3, http-server 14.1.1.
 
-**Spec:** `docs/superpowers/specs/2026-10-11-portfolio-redesign-design.md`
+**Spec:** `docs/superpowers/specs/2026-10-11-portfolio-redesign-design.md` (revision 2 — Neo Terminal)
 
 ## Global Constraints
 
 - No build step; `index.html` must work from GitHub Pages **and** `file://` → no `type="module"` scripts.
-- CDN URLs pinned exactly: `https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/{gsap,ScrollTrigger,SplitText,DrawSVGPlugin,MotionPathPlugin}.min.js`, `https://cdn.jsdelivr.net/npm/lenis@1.3.23/dist/lenis.min.js`.
-- Fonts URL: `https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap`
-- Colour tokens (light / dark): paper `#F4F1EA`/`#0F120F`, paper-2 `#EAE5DA`/`#171B17`, ink `#141614`/`#ECE8DF`, ink-soft `#5B605A`/`#A3A89F`, sage `#6E8F72`/`#8FB393`, moss `#2F4A3A`/`#C9DCC8`, sand `#C8A97E`/`#D6BA8F`, rule `rgb(20 22 20 / .14)`/`rgb(236 232 223 / .14)`.
+- CDN URLs pinned exactly: `https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/{gsap,ScrollTrigger,SplitText,ScrambleTextPlugin,DrawSVGPlugin,MotionPathPlugin}.min.js`, `https://cdn.jsdelivr.net/npm/lenis@1.3.23/dist/lenis.min.js`.
+- Fonts URL: `https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Geist:wght@400;500&display=swap`
+- Single dark theme, no toggle. Colour tokens: bg `#0B0B0B`, bg-2 `#121212`, bg-3 `#1A1A1A`, line `#2A2A2A`, line-strong `#3A3A3A`, text `#EDEDED`, muted `#8A8A8A`, lime `#C6F432`, lime-dim `#9DC21F`, on-lime `#0B0B0B`, danger `#FF5F56`, warn `#FFBD2E`.
+- `border-radius: 0` everywhere; display type Syne uppercase; UI/labels JetBrains Mono; body Geist.
+- Scrambled/typed text: the final text is always present in the HTML; JS only animates it (screen readers read the real text).
 - Any CSS rule that hides an element tagged `[data-anim…]` (opacity 0, visibility hidden, clip-path) must have a selector starting with `.motion-ready`.
 - Content facts: "835/837" (never "827"), "CGPA 6.6" (never "CCPA"), email `sachusudeve8690@gmail.com`, phone `+91 8157864536`, LinkedIn `https://linkedin.com/in/sachu-s-705813179`, GitHub `https://github.com/sachusudevan`.
 - Reduced motion (or `?motion=off` for QA): no Lenis, no pin/scrub, no marquee, no intro loader, no grain animation.
@@ -40,28 +42,29 @@
 | `.gitignore` | `node_modules/` |
 | `.claude/launch.json` | preview server config (http-server on 5173) |
 | `index.html` | all content + inline SVGs + head boot script |
-| `css/tokens.css` | design tokens, light/dark themes, font stacks |
-| `css/base.css` | reset, typography, utilities, grain, progress, cursor, loader, nav, menu, buttons, toast |
+| `css/tokens.css` | design tokens (single dark theme), font stacks, type scale |
+| `css/base.css` | reset, typography, grid bg, scanlines, progress, cursor, boot loader, nav, menu, buttons, terminal window chrome, toast |
 | `css/sections.css` | hero → footer section layouts + responsive rules + SVG animation keyframes |
 | `js/lib.js` | pure helpers (UMD): `buildMailto`, `validateContact`, `formatClock`, `matchesFilter`, `createSafeStorage` |
-| `js/main.js` | boot: motion detection, plugin registration, Lenis, theme toggle, nav, menu, progress, anchors, intro loader → `window.Portfolio` |
-| `js/motion.js` | generic reveals: hero intro, split headings, fades, wipes, parallax, counters, marquee, timeline, horizontal strip |
-| `js/pipeline.js` | pipeline timeline (pinned scrub on desktop, loop on mobile) |
-| `js/work.js` | project filters, accordion, cursor-following preview |
-| `js/cursor.js` | custom cursor + magnetic elements |
-| `js/contact.js` | form validation + mailto, copy email, toast, IST clock, year |
+| `js/main.js` | boot: motion detection, plugin registration, Lenis, nav (+ scramble hover), menu, progress, anchors, boot loader → `window.Portfolio` |
+| `js/motion.js` | generic reveals: hero intro + typed prompt, split/scramble headings, fades, wipes, parallax, counters, tape marquee, git graph, horizontal strip |
+| `js/pipeline.js` | pipeline timeline + synced terminal log (pinned scrub on desktop, loop on mobile) |
+| `js/work.js` | project flag filters, accordion rows, cursor-following preview |
+| `js/cursor.js` | block cursor + magnetic elements |
+| `js/contact.js` | terminal form validation + mailto, copy email, toast, IST clocks, year |
 | `assets/img/*.{webp,jpg}` | optimised photos |
-| `assets/favicon.svg`, `assets/svg/monogram.svg`, `assets/svg/pipeline.svg` | SVG assets |
+| `assets/favicon.svg`, `assets/svg/logo.svg`, `assets/svg/pipeline.svg` | SVG assets |
 | `assets/pipeline.gif`, `assets/og-image.png` | generated media |
 | `tools/optimize-images.mjs`, `tools/pipeline-frames.mjs`, `tools/render-gif.mjs`, `tools/render-og.mjs` | asset generators |
 | `tests/helpers.mjs`, `tests/lib.test.mjs`, `tests/assets.test.mjs`, `tests/site.test.mjs`, `tests/media.test.mjs` | node:test suites |
 
 ### Shared DOM contract (used across tasks)
 
-- `html` classes: `motion-ready`, `show-intro`, `menu-open`, `has-cursor`; attribute `data-theme="light|dark"`.
+- `html` classes: `motion-ready`, `show-intro`, `menu-open`, `has-cursor`.
 - `window.Portfolio = { motion: boolean, lenis: Lenis|null, storage: SafeStorage, introDone: Promise<void> }`.
-- `data-anim` values: `hero-title`, `hero-fade`, `hero-media`, `lines`, `fade`, `stagger`, `wipe`. `data-speed="<number>"` = parallax. `data-count="<n>" data-suffix="+"` = counter. `data-magnetic="<strength>"`. `data-cursor="view" data-cursor-label="Open"`. `data-copy="<text>"`. `data-clock`. `data-year`.
-- Section ids in order: `hero`, `about`, `pipeline`, `experience`, `work`, `toolkit`, `beyond`, `contact`; `<main id="main" tabindex="-1">`.
+- `data-anim` values: `hero-title`, `hero-fade`, `hero-media`, `lines`, `fade`, `stagger`, `wipe`. `data-scramble` = scramble the element's text on hover (nav links, labels). `data-type` = type the element's text when revealed (prompt lines). `data-speed="<number>"` = parallax. `data-count="<n>" data-suffix="+"` = counter. `data-magnetic="<strength>"`. `data-cursor="view" data-cursor-label="[open]"`. `data-copy="<text>"`. `data-clock` (HH:MM:SS) and `data-clock="short"` (HH:MM). `data-year`.
+- Terminal window chrome (reused everywhere): `<div class="term"><div class="term__bar"><span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term__title">README.md</span></div><div class="term__body">…</div></div>`.
+- Section ids in order: `hero`, `about`, `pipeline`, `experience`, `work`, `toolkit`, `beyond`, `contact`; `<main id="main" tabindex="-1">`. (Ids are kept stable; visible labels are `about`, `pipeline`, `experience`, `projects`, `stack`, `offline`, `contact`.)
 
 ---
 
@@ -375,16 +378,16 @@ git commit -m "feat: add pure helper library for mailto, validation, clock, filt
 
 ---
 
-### Task 3: Document shell — head, tokens, base styles, nav, menu, loader, boot script
+### Task 3: Document shell — head, tokens, base styles, nav, menu, boot loader, boot script
 
 **Files:**
 - Replace: `index.html` (new document; sections added in later tasks)
-- Create: `css/tokens.css`, `css/base.css`, `css/sections.css` (empty header comment for now), `js/main.js`, `assets/favicon.svg`, `assets/svg/monogram.svg`, `tests/site.test.mjs`
+- Create: `css/tokens.css`, `css/base.css`, `css/sections.css` (header comment only for now), `js/main.js`, `assets/favicon.svg`, `assets/svg/logo.svg`, `tests/site.test.mjs`
 - Delete: `css/style.css`, `js/script.js`
 
 **Interfaces:**
 - Consumes: `PortfolioLib.createSafeStorage`.
-- Produces: `window.Portfolio` (see contract), `html.motion-ready/show-intro/menu-open`, nav markup `.nav`, `.nav__burger[aria-controls=menu]`, `#menu.menu[inert]`, `.theme-toggle`, `.progress__bar`, `.loader` with `.loader__count` and `.monogram path`, `.cursor` markup, `.toast[role=status]`, `.work-preview`.
+- Produces: `window.Portfolio` (see contract); `html.motion-ready/show-intro/menu-open`; nav markup `.nav`, `.nav__links a[data-scramble]`, `.nav__status [data-clock="short"]`, `.nav__burger[aria-controls=menu]`, `#menu.menu[inert]`; `.progress__bar`; `.loader` with `.loader__half--top/--bottom`, `.loader__term`, `.loader__line`, `.loader__bar`, `.loader__pct`; `.cursor > .cursor__block > .cursor__label`; `.toast[role=status]`; `.work-preview`; utility classes `.display`, `.hl`, `.mono`, `.muted`, `.lime`, `.section-label`, `.caret`, `.btn`, `.btn--lime`, `.term*`, `.photo`, `.photo__cap`.
 
 - [ ] **Step 1: Write the failing site tests**
 
@@ -399,7 +402,7 @@ const isLocal = (u) => u && !/^(https?:|mailto:|tel:|#|data:)/.test(u);
 
 test('head has title, description, social and theme meta', () => {
   assert.match(src, /<title>Sachu S[^<]*<\/title>/);
-  for (const re of [/name="description"/, /property="og:title"/, /property="og:description"/, /property="og:image"/, /name="twitter:card"/, /name="theme-color"/]) {
+  for (const re of [/name="description"/, /property="og:title"/, /property="og:description"/, /property="og:image"/, /name="twitter:card"/, /name="theme-color" content="#0B0B0B"/]) {
     assert.match(src, re);
   }
   assert.match(src, /<link rel="icon" href="assets\/favicon\.svg" type="image\/svg\+xml"/);
@@ -430,6 +433,7 @@ test('scripts are classic and CDN versions are pinned', () => {
     const s = attr(t, 'src');
     if (s && s.startsWith('http')) assert.match(s, /@\d+\.\d+\.\d+\//, `unpinned ${s}`);
   }
+  assert.match(src, /gsap@3\.13\.0\/dist\/ScrambleTextPlugin\.min\.js/);
 });
 
 test('head boot script sets motion classes with a safety timeout', () => {
@@ -450,6 +454,13 @@ test('hidden states for [data-anim] are scoped to .motion-ready', () => {
   }
 });
 
+test('design tokens match the Neo Terminal palette and stay sharp', () => {
+  const tokens = read('css/tokens.css');
+  for (const hex of ['#0B0B0B', '#121212', '#EDEDED', '#8A8A8A', '#C6F432']) assert.ok(tokens.includes(hex), `token ${hex}`);
+  assert.ok(!/data-theme/.test(src + cssText()), 'no theme switching');
+  assert.ok(!/border-radius:\s*(?!0[;\s}]|50%)[\d.]+(px|rem|em)/.test(cssText()), 'rounded corners found');
+});
+
 test('legacy assets are no longer referenced', () => {
   assert.ok(!/css\/style\.css|js\/script\.js|images\//.test(src));
   assert.ok(!exists('css/style.css') && !exists('js/script.js'));
@@ -459,88 +470,100 @@ test('nav, menu and loader contract exists', () => {
   assert.match(src, /class="nav__burger"[^>]*aria-controls="menu"[^>]*aria-expanded="false"/);
   assert.match(src, /<div id="menu" class="menu"[^>]*inert/);
   assert.match(src, /class="loader"/);
+  assert.equal((src.match(/class="loader__line"/g) || []).length, 3);
   assert.match(src, /class="skip-link" href="#main"/);
-  assert.match(read('assets/svg/monogram.svg'), /@keyframes/);
+  assert.match(read('assets/svg/logo.svg'), /@keyframes/);
 });
 ```
+(The border-radius rule allows `0` and `50%` — the latter only for the round terminal dots and status dot.)
 
 - [ ] **Step 2: Run tests to verify they fail**
 
-Run: `npm test` — Expected: site tests FAIL (old `index.html` has no og meta, references `css/style.css`, etc.).
+Run: `npm test` — Expected: site tests FAIL (old `index.html`, no tokens file, etc.).
 
-- [ ] **Step 3: Create the SVG monogram and favicon**
+- [ ] **Step 3: Create the logo and favicon SVGs**
 
-`assets/svg/monogram.svg` — two interlocking serif-like "S" strokes inside a circle, self-animating:
+`assets/svg/logo.svg` — self-animating wordmark for the README:
 ```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="240" height="240" role="img" aria-labelledby="t">
-  <title id="t">SS monogram</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" width="360" height="96" role="img" aria-labelledby="t">
+  <title id="t">~/sachu — Sachu S</title>
   <style>
-    .s { fill: none; stroke: #2F4A3A; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round;
-         stroke-dasharray: 260; stroke-dashoffset: 260; animation: draw 4s cubic-bezier(.7,0,.3,1) infinite; }
-    .s2 { stroke: #6E8F72; animation-delay: .25s; }
-    .ring { fill: none; stroke: #C8A97E; stroke-width: 1.5; stroke-dasharray: 4 6; transform-origin: 60px 60px; animation: spin 18s linear infinite; }
-    @keyframes draw { 0% { stroke-dashoffset: 260; } 35%, 75% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -260; } }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @media (prefers-reduced-motion: reduce) { .s { animation: none; stroke-dashoffset: 0; } .ring { animation: none; } }
+    .bg { fill: #0B0B0B; }
+    .txt { font: 700 40px "JetBrains Mono", Consolas, monospace; fill: #EDEDED; }
+    .tilde { fill: #C6F432; }
+    .caret { fill: #C6F432; animation: blink 1s steps(1) infinite; }
+    .brk { fill: none; stroke: #C6F432; stroke-width: 3; stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw 3.2s cubic-bezier(.7,0,.3,1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes draw { 0% { stroke-dashoffset: 60; } 30%, 80% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -60; } }
+    @media (prefers-reduced-motion: reduce) { .caret, .brk { animation: none; stroke-dashoffset: 0; } }
   </style>
-  <circle class="ring" cx="60" cy="60" r="54"/>
-  <path class="s" d="M58 34c-4-5-10-7-16-7-9 0-15 5-15 12 0 16 31 10 31 27 0 8-7 13-16 13-7 0-13-3-17-8"/>
-  <path class="s s2" d="M94 42c-4-5-10-7-16-7-9 0-15 5-15 12 0 16 31 10 31 27 0 8-7 13-16 13-7 0-13-3-17-8"/>
+  <rect class="bg" width="360" height="96"/>
+  <path class="brk" d="M30 18 H14 V78 H30"/>
+  <path class="brk" d="M330 18 H346 V78 H330"/>
+  <text class="txt" x="40" y="62"><tspan class="tilde">~/</tspan>sachu</text>
+  <rect class="caret" x="282" y="30" width="22" height="38"/>
 </svg>
 ```
 
-`assets/favicon.svg` — static: paper rounded square, the two S paths in moss/sage (`stroke-dashoffset` 0, no animation).
+`assets/favicon.svg`:
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#C6F432"/>
+  <path d="M14 20l14 12-14 12" fill="none" stroke="#0B0B0B" stroke-width="6" stroke-linecap="square"/>
+  <rect x="32" y="40" width="18" height="6" fill="#0B0B0B"/>
+</svg>
+```
 
 - [ ] **Step 4: Write `css/tokens.css`**
 
 ```css
-/* Design tokens — Editorial × Engineering. Light is default; dark via [data-theme="dark"]. */
+/* Design tokens — Neo Terminal (single dark theme). */
 :root {
-  --paper: #F4F1EA; --paper-2: #EAE5DA; --ink: #141614; --ink-soft: #5B605A;
-  --sage: #6E8F72; --moss: #2F4A3A; --sand: #C8A97E; --rule: rgb(20 22 20 / .14);
-  --on-accent: #F4F1EA;
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --bg: #0B0B0B; --bg-2: #121212; --bg-3: #1A1A1A;
+  --line: #2A2A2A; --line-strong: #3A3A3A; --grid: rgb(42 42 42 / .35);
+  --text: #EDEDED; --muted: #8A8A8A;
+  --lime: #C6F432; --lime-dim: #9DC21F; --on-lime: #0B0B0B;
+  --danger: #FF5F56; --warn: #FFBD2E;
+  --font-display: "Syne", "Arial Black", Impact, sans-serif;
+  --font-body: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
-  --step--1: clamp(.82rem, .8rem + .1vw, .9rem);
+  --step--1: clamp(.78rem, .76rem + .1vw, .85rem);
   --step-0: clamp(1rem, .96rem + .2vw, 1.0625rem);
-  --step-1: clamp(1.25rem, 1.1rem + .6vw, 1.6rem);
-  --step-2: clamp(1.6rem, 1.3rem + 1.4vw, 2.4rem);
-  --step-3: clamp(2.2rem, 1.6rem + 3vw, 4.2rem);
-  --step-4: clamp(2.8rem, 1.6rem + 6vw, 7.5rem);
-  --space-section: clamp(6rem, 4rem + 8vw, 11rem);
+  --step-1: clamp(1.2rem, 1.05rem + .6vw, 1.5rem);
+  --step-2: clamp(1.6rem, 1.2rem + 1.6vw, 2.5rem);
+  --step-3: clamp(2.2rem, 1.4rem + 3.6vw, 4.8rem);
+  --step-4: clamp(2.8rem, 1.2rem + 7vw, 8.5rem);
+  --space-section: clamp(6rem, 4rem + 8vw, 10rem);
   --gutter: clamp(1rem, .5rem + 2.5vw, 3rem);
-  --max: 1320px;
-  --radius: 18px;
+  --max: 1360px;
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --ease-in-out: cubic-bezier(.7, 0, .3, 1);
-  color-scheme: light;
-}
-:root[data-theme="dark"] {
-  --paper: #0F120F; --paper-2: #171B17; --ink: #ECE8DF; --ink-soft: #A3A89F;
-  --sage: #8FB393; --moss: #C9DCC8; --sand: #D6BA8F; --rule: rgb(236 232 223 / .14);
-  --on-accent: #0F120F;
   color-scheme: dark;
 }
 ```
 
 - [ ] **Step 5: Write `css/base.css`**
 
-Must contain (complete rules, not just these selectors):
-- Reset (`*,*::before,*::after{box-sizing:border-box;margin:0}`), `html{-webkit-text-size-adjust:100%}`, `body{background:var(--paper);color:var(--ink);font:400 var(--step-0)/1.65 var(--font-body);overflow-x:clip;transition:background-color .5s,color .5s}`, `img,svg{display:block;max-width:100%}`, `::selection{background:var(--sage);color:var(--on-accent)}`.
-- Lenis rules: `html.lenis,html.lenis body{height:auto}` `.lenis.lenis-smooth{scroll-behavior:auto!important}` `.lenis.lenis-stopped{overflow:hidden}`.
-- Typography utilities: `.display` (Fraunces, `font-variation-settings:"opsz" 144,"SOFT" 50`, weight 350, line-height .95, letter-spacing -.02em), `.display em{font-style:italic;color:var(--sage)}`, `.mono-label` (mono, `--step--1`, uppercase, letter-spacing .14em, color ink-soft), `.section-label` (mono label with leading `—` rule), `.container{width:min(100% - 2*var(--gutter), var(--max));margin-inline:auto}`, `.section{padding-block:var(--space-section)}`, `.visually-hidden`.
-- `.skip-link` (off-screen until `:focus`), `:focus-visible{outline:2px solid var(--sage);outline-offset:3px;border-radius:4px}`.
-- Grain: `body::after{content:"";position:fixed;inset:-50%;pointer-events:none;z-index:90;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}` and `.motion-ready body::after{animation:grain 1.2s steps(6) infinite}` with `@keyframes grain` translating in 6 jumps of ±5%.
-- `.progress{position:fixed;inset:0 0 auto;height:2px;z-index:80}` `.progress__bar{height:100%;background:var(--sage);transform-origin:0 50%;transform:scaleX(0)}`.
-- Buttons: `.btn` (pill, 1px ink border, mono uppercase label, `padding:1rem 1.6rem`, hover fills ink with paper text via `::before` sliding up), `.btn--solid` (moss bg / paper text in light, sage bg in dark), `.btn .arrow` slides on hover.
-- Nav: `.nav{position:fixed;inset:0 0 auto;z-index:70;transition:transform .5s var(--ease-out),background-color .3s}` `.nav.is-scrolled{background:color-mix(in srgb,var(--paper) 82%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}` `.nav.is-hidden{transform:translateY(-100%)}`; inner flex row `.nav__inner` (logo, `.nav__links` hidden below 900px, `.theme-toggle` 40px circle with sun/moon SVG swapped by `[data-theme]`, `.nav__cta`, `.nav__burger` shown below 900px with two lines morphing to × under `.menu-open`).
-- Menu: `.menu{position:fixed;inset:0;z-index:65;background:var(--paper-2);display:grid;place-content:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}` `.menu-open .menu{opacity:1;visibility:visible}`; `.menu__link` large Fraunces inside an `overflow:hidden` wrapper; at `min-width:900px` `.menu{display:none}`.
-- Loader: `.loader{display:none}` `.show-intro .loader{display:grid;position:fixed;inset:0;z-index:100;background:var(--paper);place-content:center;justify-items:center;gap:1.5rem}` `.loader .monogram{width:96px}` `.loader__count` mono.
-- Cursor: `.cursor{display:none}` `.has-cursor .cursor{display:block}` dot 8px ink, ring 40px 1px border, both `position:fixed;top:0;left:0;pointer-events:none;z-index:95;mix-blend-mode:difference` with `background/border-color:#fff`; `.cursor.is-link .cursor__ring{transform:scale(1.6)}` (use `scale` property, not transform, because GSAP owns transform); `.cursor.is-view .cursor__ring{scale:2.4;background:#fff}` label centered mono 10px; `.has-cursor, .has-cursor a, .has-cursor button{cursor:none}` and `.has-cursor input,.has-cursor textarea{cursor:text}`.
-- Toast: `.toast{position:fixed;left:50%;bottom:2rem;translate:-50% 150%;transition:translate .5s var(--ease-out)}` `.toast.is-visible{translate:-50% 0}`.
-- Work preview shell: `.work-preview{position:fixed;top:0;left:0;width:280px;aspect-ratio:4/3;pointer-events:none;z-index:60;border-radius:var(--radius);overflow:hidden;opacity:0;visibility:hidden;background:var(--paper-2)}` (hidden by default; JS animates it).
-- `@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}`.
+Must contain complete rules for:
+- Reset (`*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}`), `html{-webkit-text-size-adjust:100%}`, `body{background:var(--bg);color:var(--text);font:400 var(--step-0)/1.65 var(--font-body);overflow-x:clip}`, `img,svg{display:block;max-width:100%}`, `a{color:inherit;text-decoration:none}`, `button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}`, `ul,ol{list-style:none}`, `::selection{background:var(--lime);color:var(--on-lime)}`.
+- Fixed grid backdrop: `body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 30%,#000 30%,transparent 80%)}`.
+- Scanlines: `body::after{content:"";position:fixed;inset:0;z-index:90;pointer-events:none;background:repeating-linear-gradient(to bottom,rgb(255 255 255 / .03) 0 1px,transparent 1px 3px)}` and `.motion-ready body::after{animation:scan 10s linear infinite}` with `@keyframes scan{to{background-position:0 300px}}`.
+- Lenis: `html.lenis,html.lenis body{height:auto}` `.lenis.lenis-smooth{scroll-behavior:auto!important}` `.lenis.lenis-stopped{overflow:hidden}`.
+- Type utilities: `.display{font-family:var(--font-display);font-weight:800;text-transform:uppercase;line-height:.9;letter-spacing:-.01em}` `.hl{color:var(--lime)}` `.mono{font-family:var(--font-mono)}` `.muted{color:var(--muted)}` `.lime{color:var(--lime)}` `.section-label{font:500 var(--step--1)/1 var(--font-mono);color:var(--muted);margin-bottom:1.5rem}` `.section-label span{color:var(--lime)}` `.section-title{font-size:var(--step-3);max-width:16ch;margin-bottom:3rem}`.
+- Layout: `.container{width:min(100% - 2*var(--gutter),var(--max));margin-inline:auto}` `.section{padding-block:var(--space-section)}` `.visually-hidden{…standard…}`.
+- `.skip-link{position:fixed;left:1rem;top:-4rem;z-index:120;background:var(--lime);color:var(--on-lime);padding:.6rem 1rem;font-family:var(--font-mono)}` `.skip-link:focus{top:1rem}` `:focus-visible{outline:2px solid var(--lime);outline-offset:3px}`.
+- `.caret{display:inline-block;width:.55em;height:1em;background:var(--lime);vertical-align:-.12em;margin-left:.12em;animation:blink 1s steps(1) infinite}` `@keyframes blink{50%{opacity:0}}`.
+- Progress: `.progress{position:fixed;inset:0 0 auto;height:2px;z-index:80}` `.progress__bar{height:100%;background:var(--lime);transform-origin:0 50%;transform:scaleX(0)}`.
+- Buttons: `.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.95rem 1.4rem;border:1px solid var(--text);font:500 13px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.08em;transition:translate .25s var(--ease-out),box-shadow .25s var(--ease-out),background-color .2s}` `.btn:hover{translate:-3px -3px;box-shadow:6px 6px 0 var(--lime)}` `.btn--lime{background:var(--lime);color:var(--on-lime);border-color:var(--lime)}` `.btn--lime:hover{box-shadow:6px 6px 0 var(--text)}` (use the `translate` property — GSAP owns `transform` for magnetic movement).
+- Terminal chrome: `.term{border:1px solid var(--line);background:var(--bg-2)}` `.term__bar{display:flex;align-items:center;gap:.8rem;padding:.6rem .9rem;border-bottom:1px solid var(--line);font:500 12px/1 var(--font-mono);color:var(--muted)}` `.term__dots{display:flex;gap:6px}` `.term__dots i{width:10px;height:10px;border-radius:50%;background:var(--line-strong)}` `.term__dots i:nth-child(1){background:var(--danger)}` `:nth-child(2){background:var(--warn)}` `:nth-child(3){background:var(--lime)}` `.term__body{padding:1.25rem 1.4rem}`.
+- Photos: `.photo{position:relative;overflow:hidden;background:var(--bg-3)}` `.photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05);transition:filter .6s var(--ease-out)}` `.photo:hover img,.photo.is-color img{filter:none}` corner brackets: `.photo::before,.photo::after{content:"";position:absolute;width:22px;height:22px;z-index:2;border:2px solid var(--lime)}` `.photo::before{top:10px;left:10px;border-right:0;border-bottom:0}` `.photo::after{bottom:10px;right:10px;border-left:0;border-top:0}` `.photo__cap{position:absolute;left:12px;bottom:12px;z-index:2;font:500 11px var(--font-mono);background:var(--bg);padding:.25rem .5rem}`.
+- Nav: `.nav{position:fixed;inset:0 0 auto;z-index:70;transition:transform .5s var(--ease-out),background-color .3s,border-color .3s;border-bottom:1px solid transparent}` `.nav.is-scrolled{background:rgb(11 11 11 / .86);backdrop-filter:blur(10px);border-bottom-color:var(--line)}` `.nav.is-hidden{transform:translateY(-100%)}` `.nav__inner{display:flex;align-items:center;gap:2rem;height:68px}` `.nav__logo{font:700 15px var(--font-mono)}` `.nav__links{display:flex;gap:1.4rem;margin-left:auto;font:500 13px var(--font-mono);color:var(--muted)}` `.nav__links a:hover,.nav__links a:focus-visible{color:var(--lime)}` `.nav__status{font:500 12px var(--font-mono);color:var(--muted)}` `.nav__status .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--lime);margin-right:.5rem;animation:pulse 1.6s infinite}` `@keyframes pulse{0%{box-shadow:0 0 0 0 rgb(198 244 50 / .6)}100%{box-shadow:0 0 0 10px rgb(198 244 50 / 0)}}` `.nav__burger{display:none;margin-left:auto;font:500 13px var(--font-mono);color:var(--lime)}`; `@media (max-width:899px){.nav__links,.nav__status,.nav__cta{display:none}.nav__burger{display:block}}`.
+- Menu: `.menu{position:fixed;inset:0;z-index:65;background:var(--bg);display:grid;align-content:center;padding:var(--gutter);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}` `.menu-open .menu{opacity:1;visibility:visible}` `.menu__list li{overflow:hidden;border-bottom:1px solid var(--line)}` `.menu__link{display:flex;align-items:baseline;gap:1rem;font:800 clamp(2.4rem,12vw,5rem)/1.05 var(--font-display);text-transform:uppercase}` `.menu__link span{font:500 13px var(--font-mono);color:var(--lime)}` `.menu__link:hover{color:var(--lime)}`; `@media (min-width:900px){.menu{display:none}}`.
+- Boot loader: `.loader{display:none}` `.show-intro .loader{display:block;position:fixed;inset:0;z-index:100}` `.loader__half{position:absolute;left:0;right:0;height:50.5%;background:var(--bg)}` `.loader__half--top{top:0;border-bottom:1px solid var(--line)}` `.loader__half--bottom{bottom:0}` `.loader__term{position:absolute;left:50%;top:50%;translate:-50% -50%;width:min(92vw,560px);font:500 14px/1.9 var(--font-mono);color:var(--muted)}` `.loader__line{white-space:pre}` `.loader__progress{color:var(--lime);margin-top:.6rem}`.
+- Cursor: `.cursor{display:none}` `.has-cursor .cursor{display:block;position:fixed;top:0;left:0;z-index:95;pointer-events:none}` `.cursor__block{display:grid;place-items:center;width:12px;height:20px;background:var(--lime);transition:width .25s var(--ease-out),height .25s var(--ease-out),background-color .2s,outline-color .2s;outline:1px solid transparent}` `.cursor.is-idle .cursor__block{animation:blink 1s steps(1) infinite}` `.cursor.is-link .cursor__block{width:38px;height:38px;background:transparent;outline-color:var(--lime)}` `.cursor.is-view .cursor__block{width:auto;height:auto;padding:.35rem .6rem;background:var(--lime)}` `.cursor__label{font:700 11px var(--font-mono);color:var(--on-lime);white-space:nowrap}` `.cursor:not(.is-view) .cursor__label{display:none}` `.has-cursor,.has-cursor a,.has-cursor button{cursor:none}` `.has-cursor input,.has-cursor textarea{cursor:text}`.
+- Toast: `.toast{position:fixed;left:var(--gutter);bottom:var(--gutter);z-index:110;background:var(--bg-2);border:1px solid var(--lime);color:var(--lime);font:500 13px var(--font-mono);padding:.75rem 1rem;translate:0 calc(100% + 3rem);transition:translate .5s var(--ease-out)}` `.toast.is-visible{translate:0 0}`.
+- Work preview shell: `.work-preview{position:fixed;top:0;left:0;width:300px;z-index:60;pointer-events:none;opacity:0;visibility:hidden;background:var(--bg-2);border:1px solid var(--lime)}`.
+- Reduced motion: `@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}`.
 
 `css/sections.css`: `/* Section layouts: hero → footer. */` (filled from Task 4).
 
@@ -548,16 +571,16 @@ Must contain (complete rules, not just these selectors):
 
 ```html
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sachu S — Technical Lead & Software Engineer</title>
   <meta name="description" content="Sachu S is a Technical Lead and Software Engineer in Kerala, India, building HIPAA-compliant healthcare data platforms with Python, Django and FastAPI." />
-  <meta name="theme-color" content="#F4F1EA" />
+  <meta name="theme-color" content="#0B0B0B" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Sachu S — Technical Lead & Software Engineer" />
-  <meta property="og:description" content="Engineering calm systems for messy healthcare data. Python · Django · FastAPI · EDI 835/837." />
+  <meta property="og:description" content="Code that ships. Teams that scale. Python · Django · FastAPI · EDI 835/837 · HIPAA." />
   <meta property="og:image" content="https://sachusudevan.github.io/portfolio/assets/og-image.png" />
   <meta property="og:url" content="https://sachusudevan.github.io/portfolio/" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -565,17 +588,14 @@ Must contain (complete rules, not just these selectors):
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Geist:wght@400;500&display=swap" />
   <link rel="stylesheet" href="css/tokens.css" />
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/sections.css" />
   <script>
-    /* Boot before first paint: theme + motion flags. Falls back to static if scripts never boot. */
+    /* Boot before first paint: motion flags. Falls back to static if scripts never boot. */
     (function (d, w) {
-      var r = d.documentElement, theme = null, seen = false;
-      try { theme = w.localStorage.getItem('theme'); } catch (e) {}
-      if (theme !== 'light' && theme !== 'dark') theme = w.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      r.setAttribute('data-theme', theme);
+      var r = d.documentElement, seen = false;
       var reduce = w.matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]motion=off\b/.test(w.location.search);
       if (reduce) return;
       r.classList.add('motion-ready');
@@ -592,35 +612,50 @@ Must contain (complete rules, not just these selectors):
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="progress" aria-hidden="true"><div class="progress__bar"></div></div>
   <div class="loader" aria-hidden="true">
-    <svg class="monogram" viewBox="0 0 120 120"><!-- same two .s paths as assets/svg/monogram.svg, stroke currentColor --></svg>
-    <span class="loader__count mono-label">000</span>
+    <div class="loader__half loader__half--top"></div>
+    <div class="loader__half loader__half--bottom"></div>
+    <div class="loader__term">
+      <p class="loader__line">&gt; booting sachu.dev …</p>
+      <p class="loader__line">&gt; loading python django fastapi … ok</p>
+      <p class="loader__line">&gt; mounting healthcare/edi … ok</p>
+      <p class="loader__progress"><span class="loader__bar">[░░░░░░░░░░░░░░░░]</span> <span class="loader__pct">000%</span></p>
+    </div>
   </div>
-  <div class="cursor" aria-hidden="true"><div class="cursor__ring"><span class="cursor__label"></span></div><div class="cursor__dot"></div></div>
+  <div class="cursor" aria-hidden="true"><div class="cursor__block"><span class="cursor__label"></span></div></div>
   <header class="nav">
     <div class="nav__inner container">
-      <a class="nav__logo" href="#hero" aria-label="Sachu S — back to top"><!-- inline monogram svg 36px --></a>
+      <a class="nav__logo" href="#hero" aria-label="Sachu S — back to top"><span class="lime">~/</span>sachu<span class="caret" aria-hidden="true"></span></a>
       <nav class="nav__links" aria-label="Primary">
-        <a href="#work">Work</a><a href="#about">About</a><a href="#pipeline">Pipeline</a><a href="#contact">Contact</a>
+        <a href="#work" data-scramble>[work]</a>
+        <a href="#about" data-scramble>[about]</a>
+        <a href="#pipeline" data-scramble>[pipeline]</a>
+        <a href="#contact" data-scramble>[contact]</a>
       </nav>
-      <button class="theme-toggle" type="button" aria-label="Switch to dark theme"><!-- sun + moon svgs --></button>
-      <a class="btn btn--solid nav__cta" href="#contact" data-magnetic="0.25">Let's talk</a>
-      <button class="nav__burger" type="button" aria-controls="menu" aria-expanded="false" aria-label="Open menu"><span></span><span></span></button>
+      <p class="nav__status"><span class="dot" aria-hidden="true"></span>online · IST <span data-clock="short">--:--</span></p>
+      <a class="btn btn--lime nav__cta" href="#contact" data-magnetic="0.25">Hire me</a>
+      <button class="nav__burger" type="button" aria-controls="menu" aria-expanded="false" aria-label="Open menu">[menu]</button>
     </div>
   </header>
   <div id="menu" class="menu" inert>
     <nav aria-label="Mobile">
       <ul class="menu__list">
-        <li><a class="menu__link" href="#work">Work</a></li>
-        <li><a class="menu__link" href="#about">About</a></li>
-        <li><a class="menu__link" href="#pipeline">Pipeline</a></li>
-        <li><a class="menu__link" href="#experience">Experience</a></li>
-        <li><a class="menu__link" href="#contact">Contact</a></li>
+        <li><a class="menu__link" href="#work"><span>01</span>Work</a></li>
+        <li><a class="menu__link" href="#about"><span>02</span>About</a></li>
+        <li><a class="menu__link" href="#pipeline"><span>03</span>Pipeline</a></li>
+        <li><a class="menu__link" href="#experience"><span>04</span>Experience</a></li>
+        <li><a class="menu__link" href="#contact"><span>05</span>Contact</a></li>
       </ul>
     </nav>
   </div>
   <main id="main" tabindex="-1">
     <section id="hero" class="hero"></section>
-    <!-- Tasks 4–7 add the remaining sections here -->
+    <section id="about"></section>
+    <section id="pipeline"></section>
+    <section id="experience"></section>
+    <section id="work"></section>
+    <section id="toolkit"></section>
+    <section id="beyond"></section>
+    <section id="contact"></section>
   </main>
   <div class="work-preview" aria-hidden="true"></div>
   <div class="toast" role="status" aria-live="polite"></div>
@@ -628,6 +663,7 @@ Must contain (complete rules, not just these selectors):
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrambleTextPlugin.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.3.23/dist/lenis.min.js"></script>
@@ -636,23 +672,23 @@ Must contain (complete rules, not just these selectors):
 </body>
 </html>
 ```
-(The inline-SVG comments above are filled with the real monogram/sun/moon paths when writing the file.)
+(The empty `<section id="…">` elements are placeholders so in-page anchors resolve; Tasks 4–7 replace each one.)
 
 - [ ] **Step 7: Write `js/main.js`**
 
 ```js
-/* Boot: motion detection, smooth scroll, theme, nav, menu, progress, anchors and the intro loader. */
+/* Boot: motion detection, smooth scroll, nav, menu, progress, anchors and the boot loader. */
 (function () {
   'use strict';
   var root = document.documentElement;
   var lib = window.PortfolioLib;
   var gsap = window.gsap;
-  var hasMotionLibs = !!(gsap && window.ScrollTrigger && window.SplitText && window.DrawSVGPlugin && window.MotionPathPlugin);
+  var hasMotionLibs = !!(gsap && window.ScrollTrigger && window.SplitText && window.ScrambleTextPlugin && window.DrawSVGPlugin && window.MotionPathPlugin);
   var motion = root.classList.contains('motion-ready') && hasMotionLibs;
 
   if (motion) {
     window.__portfolioBooted = true;
-    gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, MotionPathPlugin);
+    gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin, DrawSVGPlugin, MotionPathPlugin);
   } else {
     root.classList.remove('motion-ready', 'show-intro');
   }
@@ -673,31 +709,6 @@ Must contain (complete rules, not just these selectors):
     gsap.ticker.lagSmoothing(0);
     Portfolio.lenis = lenis;
   }
-
-  /* Theme */
-  var themeMeta = document.querySelector('meta[name="theme-color"]');
-  var toggle = document.querySelector('.theme-toggle');
-  function applyTheme(theme) {
-    root.setAttribute('data-theme', theme);
-    Portfolio.storage.set('theme', theme);
-    if (themeMeta) themeMeta.setAttribute('content', theme === 'dark' ? '#0F120F' : '#F4F1EA');
-    if (toggle) toggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
-  }
-  applyTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
-  if (toggle) toggle.addEventListener('click', function (e) {
-    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    if (!motion || !document.startViewTransition) return applyTheme(next);
-    var rect = toggle.getBoundingClientRect();
-    var x = e.clientX || rect.left + rect.width / 2;
-    var y = e.clientY || rect.top + rect.height / 2;
-    var r = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-    document.startViewTransition(function () { applyTheme(next); }).ready.then(function () {
-      root.animate(
-        { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + r + 'px at ' + x + 'px ' + y + 'px)'] },
-        { duration: 700, easing: 'cubic-bezier(.7,0,.3,1)', pseudoElement: '::view-transition-new(root)' }
-      );
-    });
-  });
 
   /* Nav state + progress bar (plain scroll events — Lenis drives native scroll) */
   var nav = document.querySelector('.nav');
@@ -725,6 +736,7 @@ Must contain (complete rules, not just these selectors):
     root.classList.toggle('menu-open', open);
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    burger.textContent = open ? '[close]' : '[menu]';
     menu.inert = !open;
     if (Portfolio.lenis) open ? Portfolio.lenis.stop() : Portfolio.lenis.start();
     if (open) {
@@ -760,11 +772,14 @@ Must contain (complete rules, not just these selectors):
     history.replaceState(null, '', id);
   });
 
-  /* Intro loader — always resolves within 3s */
+  /* Boot loader — always resolves within 3s */
   Portfolio.introDone = new Promise(function (resolve) {
     if (!motion || !root.classList.contains('show-intro')) return resolve();
     var loader = document.querySelector('.loader');
-    var count = loader.querySelector('.loader__count');
+    var lines = loader.querySelectorAll('.loader__line');
+    var barText = loader.querySelector('.loader__bar');
+    var pct = loader.querySelector('.loader__pct');
+    var CELLS = 16;
     var done = false;
     function finish() {
       if (done) return;
@@ -777,9 +792,19 @@ Must contain (complete rules, not just these selectors):
     if (Portfolio.lenis) Portfolio.lenis.stop();
     var n = { v: 0 };
     var tl = gsap.timeline({ onComplete: finish });
-    tl.from(loader.querySelectorAll('.monogram path'), { drawSVG: 0, duration: 1.1, ease: 'power2.inOut', stagger: 0.15 })
-      .to(n, { v: 100, duration: 1.2, ease: 'power2.inOut', onUpdate: function () { count.textContent = String(Math.round(n.v)).padStart(3, '0'); } }, 0)
-      .to(loader, { yPercent: -100, duration: 0.9, ease: 'expo.inOut' }, '+=0.1');
+    lines.forEach(function (line, i) {
+      var text = line.textContent;
+      line.textContent = '';
+      tl.to(line, { duration: 0.4, scrambleText: { text: text, chars: 'lowerCase', speed: 0.8 } }, i * 0.3);
+    });
+    tl.to(n, { v: 100, duration: 1.3, ease: 'power2.inOut', onUpdate: function () {
+        var filled = Math.round((n.v / 100) * CELLS);
+        barText.textContent = '[' + '█'.repeat(filled) + '░'.repeat(CELLS - filled) + ']';
+        pct.textContent = String(Math.round(n.v)).padStart(3, '0') + '%';
+      } }, 0)
+      .to('.loader__term', { autoAlpha: 0, duration: 0.2 }, '+=0.1')
+      .to('.loader__half--top', { yPercent: -100, duration: 0.8, ease: 'expo.inOut' })
+      .to('.loader__half--bottom', { yPercent: 100, duration: 0.8, ease: 'expo.inOut' }, '<');
     window.setTimeout(function () { tl.progress(1); finish(); }, 3000);
   });
 
@@ -793,30 +818,30 @@ Must contain (complete rules, not just these selectors):
 git rm -q css/style.css js/script.js
 npm test
 ```
-Expected: all site tests PASS (the in-page anchor test passes because `#hero`, `#main`, `#menu` exist; links to `#work`, `#about`, `#pipeline`, `#experience`, `#contact` **fail** until Tasks 4–7 — so for this task add temporary empty `<section id="…">` placeholders for each of those ids inside `<main>`; later tasks replace them).
+Expected: all site, lib and asset tests PASS.
 
 - [ ] **Step 9: Browser smoke check**
 
-Start the preview (Task 9 adds `.claude/launch.json`; for now `npx http-server . -p 5173 -c-1`). Load `http://localhost:5173/`. Expected: loader draws monogram and lifts once; reload → no loader (session); theme toggle swaps palette with circular wipe; console has no errors.
+Run `npx http-server . -p 5173 -c-1` (Task 9 adds `.claude/launch.json`). Load `http://localhost:5173/`. Expected: boot lines decode, ASCII bar fills, screen splits; reload → no loader (session); nav links scramble only after Task 4 (motion.js) — for now they are static; menu opens at 375px; console has no errors.
 
 - [ ] **Step 10: Commit**
 
 ```bash
-git add -A index.html css js/main.js assets/favicon.svg assets/svg/monogram.svg tests/site.test.mjs
-git commit -m "feat: new document shell with tokens, nav, menu, loader and boot script"
+git add -A index.html css js/main.js assets/favicon.svg assets/svg/logo.svg tests/site.test.mjs
+git commit -m "feat: neo terminal document shell with tokens, nav, menu, boot loader and boot script"
 ```
 
 ---
 
-### Task 4: Hero, marquee and About + generic motion layer
+### Task 4: Hero, tape marquee and About + generic motion layer
 
 **Files:**
-- Modify: `index.html` (replace `#hero` placeholder, add `.marquee`, replace `#about` placeholder), `css/sections.css`, `tests/site.test.mjs`
-- Create: `js/motion.js` (+ `<script defer src="js/motion.js">` after `main.js`)
+- Modify: `index.html` (replace `#hero` and `#about` placeholders, add `.marquee` between them; add `<script defer src="js/motion.js">` after `main.js`), `css/sections.css`, `tests/site.test.mjs`
+- Create: `js/motion.js`
 
 **Interfaces:**
-- Consumes: `window.Portfolio.{motion, introDone}`, `data-anim` contract.
-- Produces: generic handlers for `data-anim="lines|fade|stagger|wipe"`, `[data-speed]`, `[data-count]`, `.marquee__row/.marquee__track`, `.timeline__progress/.timeline__item`, `.beyond/.beyond__track` (the last two are inert until Tasks 6–7 add markup).
+- Consumes: `window.Portfolio.{motion, introDone}`, `data-anim` / `data-scramble` / `data-type` contract.
+- Produces: `Portfolio.typeText(el: Element, opts?: {delay?: number}) → gsap.core.Tween` (types `el.dataset.text || el.textContent`); generic handlers for `data-anim="lines|fade|stagger|wipe"`, `[data-scramble]`, `[data-speed]`, `[data-count]`, `.marquee__row/.marquee__track`, `.timeline__progress/.timeline__item`, `.beyond/.beyond__track`, mobile `.photo` colour toggle.
 
 - [ ] **Step 1: Add failing tests** (append to `tests/site.test.mjs`)
 
@@ -844,7 +869,8 @@ test('images have alt, width, height and lazy-loading except the hero', async ()
   }
 });
 
-test('about section carries the three stats', () => {
+test('hero uses the noir portrait and about carries the three stats', () => {
+  assert.match(src, /<section id="hero"[\s\S]*?portrait-noir\.jpg[\s\S]*?<\/section>/);
   assert.match(src, /data-count="5" data-suffix="\+"/);
   assert.match(src, /data-count="20" data-suffix="\+"/);
   assert.match(src, /data-count="100" data-suffix="%"/);
@@ -853,81 +879,91 @@ test('about section carries the three stats', () => {
 
 Run: `npm test` — Expected: these FAIL.
 
-- [ ] **Step 2: Hero + marquee + About markup**
+- [ ] **Step 2: Hero + tape marquee + About markup**
 
 ```html
 <section id="hero" class="hero">
   <div class="hero__grid container">
     <div class="hero__copy">
-      <p class="mono-label" data-anim="hero-fade">Sachu S — Technical Lead</p>
-      <h1 class="hero__title display" data-anim="hero-title">Engineering <em>calm</em> systems for messy healthcare data.</h1>
+      <p class="hero__prompt mono" data-anim="hero-fade"><span class="lime">$</span> whoami</p>
+      <p class="hero__whoami mono" data-anim="hero-fade" data-type>sachu s — technical lead @ aventus informatics</p>
+      <h1 class="hero__title display" data-anim="hero-title">Code that <span class="hl">ships.</span> Teams that scale.</h1>
       <p class="hero__lede" data-anim="hero-fade">I design and lead HIPAA-compliant platforms that turn EOBs, 835/837 files and patient-pay documents into clean, reliable data — with Python, Django and FastAPI.</p>
       <div class="hero__actions" data-anim="hero-fade">
-        <a class="btn btn--solid" href="#work" data-magnetic="0.3">See the work <span class="arrow" aria-hidden="true">→</span></a>
-        <a class="btn" href="#contact" data-magnetic="0.3">Get in touch</a>
+        <a class="btn btn--lime" href="#work" data-magnetic="0.3">View work <span aria-hidden="true">→</span></a>
+        <a class="btn" href="https://github.com/sachusudevan" target="_blank" rel="noopener" data-magnetic="0.3">GitHub ↗</a>
       </div>
     </div>
-    <figure class="hero__media" data-anim="hero-media">
+    <figure class="hero__media photo" data-anim="hero-media">
       <picture>
-        <source srcset="assets/img/portrait-sage.webp" type="image/webp" />
-        <img src="assets/img/portrait-sage.jpg" alt="Sachu S in a sage suit, seated on a stool against a green backdrop" width="{W}" height="{H}" fetchpriority="high" data-speed="-0.6" />
+        <source srcset="assets/img/portrait-noir.webp" type="image/webp" />
+        <img src="assets/img/portrait-noir.jpg" alt="Black-and-white studio portrait of Sachu S seated in a dark suit" width="{W}" height="{H}" fetchpriority="high" data-speed="-0.6" />
       </picture>
-      <figcaption class="hero__badge" aria-hidden="true"><!-- rotating circular text svg: textPath "Python · Django · FastAPI · PostgreSQL · " + centre arrow --></figcaption>
+      <figcaption class="photo__cap">img_000.jpg</figcaption>
     </figure>
   </div>
-  <div class="hero__meta container" data-anim="hero-fade">
-    <span class="mono-label">Technical Lead · Aventus Informatics</span>
-    <span class="mono-label">Kerala, IN</span>
-    <span class="mono-label status"><span class="status__dot"></span>Open to opportunities</span>
-  </div>
+  <ul class="hero__chips container mono" data-anim="hero-fade">
+    <li><b class="lime">5+</b> yrs shipping</li>
+    <li><b class="lime">20+</b> projects</li>
+    <li><b class="lime">edi</b> 835 / 837</li>
+    <li><b class="lime">hipaa</b> compliant</li>
+  </ul>
+  <a class="hero__scroll mono" href="#about" data-anim="hero-fade">scroll <span class="caret" aria-hidden="true"></span></a>
 </section>
 
 <div class="marquee" aria-hidden="true">
-  <div class="marquee__row"><div class="marquee__track">
-    <!-- repeat this group twice inside the track -->
-    <span>Python</span><span class="sep">✳</span><span><em>Django</em></span><span class="sep">✳</span><span>FastAPI</span><span class="sep">✳</span><span><em>PostgreSQL</em></span><span class="sep">✳</span><span>REST APIs</span><span class="sep">✳</span>
+  <div class="marquee__row marquee__row--lime"><div class="marquee__track">
+    <!-- the group below appears twice inside the track -->
+    <span>Python</span><span>✳</span><span>Django</span><span>✳</span><span>FastAPI</span><span>✳</span><span>PostgreSQL</span><span>✳</span><span>REST APIs</span><span>✳</span><span>Laravel</span><span>✳</span>
   </div></div>
-  <div class="marquee__row marquee__row--mono"><div class="marquee__track">
-    <!-- repeat twice -->
-    <span>HIPAA</span><span class="sep">/</span><span>EDI 835</span><span class="sep">/</span><span>EDI 837</span><span class="sep">/</span><span>EOB processing</span><span class="sep">/</span><span>File pipelines</span><span class="sep">/</span><span>Team leadership</span><span class="sep">/</span>
+  <div class="marquee__row marquee__row--dark"><div class="marquee__track">
+    <!-- twice -->
+    <span>HIPAA</span><span>/</span><span>EDI 835</span><span>/</span><span>EDI 837</span><span>/</span><span>EOB</span><span>/</span><span>File pipelines</span><span>/</span><span>Team lead</span><span>/</span>
   </div></div>
 </div>
 
 <section id="about" class="section about">
   <div class="container">
-    <p class="section-label">01 — About</p>
+    <p class="section-label"><span>01</span> // about</p>
+    <h2 class="display section-title" data-anim="lines">I like the <span class="hl">unglamorous</span> problems.</h2>
     <div class="about__grid">
-      <div class="about__copy">
-        <h2 class="display about__quote" data-anim="lines">I like the unglamorous problems — the <em>835 file</em> at 2&nbsp;a.m. that has to be right.</h2>
-        <div data-anim="stagger">
-          <p>I'm a software engineer and technical lead with 5+ years of designing, building and leading scalable web applications and enterprise healthcare solutions.</p>
-          <p>My speciality is HIPAA-compliant healthcare data processing: EDI transactions (835/837), EOB and patient-pay workflows, and architectures that handle very large files without breaking a sweat.</p>
-          <p>I lead product architecture, mentor engineers and deliver client-customised enterprise platforms end to end.</p>
+      <div class="term about__readme" data-anim="fade">
+        <div class="term__bar"><span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term__title">README.md</span></div>
+        <div class="term__body md">
+          <p class="md__h"># hi, i'm sachu</p>
+          <p>Software engineer and technical lead with 5+ years of designing, building and leading scalable web applications and enterprise healthcare solutions — the kind of systems where the 835 file at 2 a.m. has to be right.</p>
+          <p class="md__h">## what i do</p>
+          <ul class="md__list" data-anim="stagger">
+            <li>HIPAA-compliant healthcare data processing — EDI 835/837, EOB and patient-pay workflows</li>
+            <li>Architectures that process very large files without breaking a sweat</li>
+            <li>Product architecture, mentoring engineers and client-customised enterprise delivery</li>
+          </ul>
+          <p class="md__h">## stats</p>
+          <dl class="stats">
+            <div><dt>years experience</dt><dd class="display" data-count="5" data-suffix="+">5+</dd></div>
+            <div><dt>projects delivered</dt><dd class="display" data-count="20" data-suffix="+">20+</dd></div>
+            <div><dt>client satisfaction</dt><dd class="display" data-count="100" data-suffix="%">100%</dd></div>
+          </dl>
         </div>
-        <dl class="stats">
-          <div><dt class="mono-label">Years experience</dt><dd class="display" data-count="5" data-suffix="+">5+</dd></div>
-          <div><dt class="mono-label">Projects delivered</dt><dd class="display" data-count="20" data-suffix="+">20+</dd></div>
-          <div><dt class="mono-label">Client satisfaction</dt><dd class="display" data-count="100" data-suffix="%">100%</dd></div>
-        </dl>
       </div>
       <div class="about__media">
-        <figure class="about__photo about__photo--main" data-anim="wipe" data-speed="0.5"><picture>…portrait-sand…</picture></figure>
-        <figure class="about__photo about__photo--inset" data-anim="wipe" data-speed="1.4"><picture>…portrait-noir…</picture></figure>
+        <figure class="photo about__photo--main" data-anim="wipe" data-speed="0.5"><picture><source srcset="assets/img/portrait-sand.webp" type="image/webp" /><img src="assets/img/portrait-sand.jpg" alt="Sachu S in a beige double-breasted suit against a concrete wall" width="{W}" height="{H}" loading="lazy" /></picture><figcaption class="photo__cap">img_001.jpg</figcaption></figure>
+        <figure class="photo about__photo--inset" data-anim="wipe" data-speed="1.4"><picture><source srcset="assets/img/portrait-sage.webp" type="image/webp" /><img src="assets/img/portrait-sage.jpg" alt="Sachu S in a sage suit, seated on a stool against a green backdrop" width="{W}" height="{H}" loading="lazy" /></picture><figcaption class="photo__cap">img_002.jpg</figcaption></figure>
       </div>
     </div>
   </div>
 </section>
 ```
-(`{W}`/`{H}` = dimensions printed in Task 1 Step 4. `<picture>` blocks for sand/noir follow the hero pattern with `loading="lazy"` and descriptive alts: "Sachu S in a beige double-breasted suit against a concrete wall", "Black-and-white studio portrait of Sachu S seated in a dark suit".)
+(`{W}`/`{H}` = dimensions printed in Task 1 Step 4.)
 
 - [ ] **Step 3: Section CSS** (append to `css/sections.css`)
 
 Complete rules for:
-- `.hero{min-height:100svh;padding-top:7rem;display:grid;align-content:center}`; `.hero__grid{display:grid;grid-template-columns:1.25fr .75fr;gap:var(--gutter);align-items:end}`; `.hero__title{font-size:var(--step-4)}`; `.hero__media{position:relative;border-radius:999px 999px var(--radius) var(--radius);overflow:hidden;aspect-ratio:3/4.2;background:var(--moss)}` with `img{width:100%;height:115%;object-fit:cover}`; `.hero__badge` 120px circle absolutely positioned bottom-left overlapping the frame, its text svg spinning via `@keyframes spin 16s linear infinite`; `.hero__meta` flex row with hairline top border; `.status__dot` 8px sage with `@keyframes pulse` ring.
+- `.hero{min-height:100svh;padding-top:7rem;display:grid;align-content:center;gap:2.5rem}`; `.hero__grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:var(--gutter);align-items:end}`; `.hero__prompt,.hero__whoami{font-size:var(--step--1);color:var(--muted)}` `.hero__whoami{color:var(--text);margin-bottom:1.5rem}`; `.hero__title{font-size:var(--step-4)}`; `.hero__lede{max-width:52ch;color:var(--muted);margin:1.75rem 0 2rem}`; `.hero__actions{display:flex;flex-wrap:wrap;gap:1rem}`; `.hero__media{aspect-ratio:3/4;max-height:72svh}` `.hero__media img{height:115%}`; hover glitch: `.hero__media:hover img{animation:glitch .6s steps(2) 2}` with `@keyframes glitch` shifting `translate` ±4px and `filter:drop-shadow(-3px 0 0 #ff2bd6) drop-shadow(3px 0 0 var(--lime))` mid-frames; `.hero__chips{display:flex;flex-wrap:wrap;gap:.75rem;font-size:var(--step--1)}` each `li{border:1px solid var(--line);padding:.55rem .85rem}`; `.hero__scroll{justify-self:start;font-size:var(--step--1);color:var(--muted)}`.
 - Motion start states (scoped): `.motion-ready [data-anim="hero-title"]{visibility:hidden}` `.motion-ready [data-anim="hero-fade"]{opacity:0;transform:translateY(24px)}` `.motion-ready [data-anim="hero-media"]{clip-path:inset(100% 0 0 0)}`.
-- `.marquee{padding-block:2.5rem;border-block:1px solid var(--rule);overflow:hidden}` `.marquee__track{display:flex;width:max-content;gap:2rem;font:italic 300 var(--step-3)/1 var(--font-display)}` `.marquee__row--mono .marquee__track{font:500 var(--step-1)/1 var(--font-mono);text-transform:uppercase;color:var(--ink-soft)}` `.sep{color:var(--sage)}`; when not `.motion-ready`, `.marquee__track{animation:none}` (static row is fine).
-- `.about__grid{display:grid;grid-template-columns:1.1fr .9fr;gap:calc(var(--gutter)*2)}`, `.about__quote{font-size:var(--step-3)}`, `.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule)}` `dd{font-size:var(--step-3)}`, `.about__media{position:relative}` main photo 80% width, inset photo 48% width absolutely bottom-right with 6px paper border.
-- `@media (max-width: 899px)`: hero grid single column, media first with max-height 70svh; about grid single column; stats keep 3 columns at small font.
+- Tape: `.marquee{position:relative;padding-block:4rem;overflow:hidden}` `.marquee__row{width:110%;margin-left:-5%;border-block:1px solid var(--lime)}` `.marquee__row--lime{background:var(--lime);color:var(--on-lime);rotate:-2deg}` `.marquee__row--dark{background:var(--bg);color:transparent;-webkit-text-stroke:1px var(--lime);rotate:1.5deg;margin-top:-1.2rem}` `.marquee__track{display:flex;width:max-content;gap:1.5rem;padding-block:.9rem;font:800 var(--step-2)/1 var(--font-display);text-transform:uppercase;white-space:nowrap}`.
+- About: `.about__grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:calc(var(--gutter)*2);align-items:start}`; `.md{font-size:var(--step-0)}` `.md__h{font:700 var(--step--1)/1 var(--font-mono);color:var(--lime);margin:1.5rem 0 .75rem}` `.md__h:first-child{margin-top:0}` `.md__list li{padding-left:1.4rem;position:relative;margin-bottom:.5rem}` `.md__list li::before{content:"-";position:absolute;left:0;color:var(--lime);font-family:var(--font-mono)}`; `.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--line)}` `.stats>div{padding:1rem;border-right:1px solid var(--line)}` `.stats>div:last-child{border-right:0}` `.stats dt{font:500 11px var(--font-mono);color:var(--muted)}` `.stats dd{font-size:var(--step-3);color:var(--lime)}`; `.about__media{position:relative;padding-bottom:20%}` `.about__photo--main{width:78%;aspect-ratio:2/3}` `.about__photo--inset{position:absolute;right:0;bottom:0;width:46%;aspect-ratio:2/3;border:6px solid var(--bg)}`.
+- `@media (max-width:899px)`: hero grid single column with media first (`order:-1`, `max-height:60svh`); about grid single column; stats keep 3 columns with `dd{font-size:var(--step-2)}`.
 
 - [ ] **Step 4: Write `js/motion.js`**
 
@@ -941,29 +977,60 @@ Complete rules for:
   var each = function (sel, fn) { gsap.utils.toArray(sel).forEach(fn); };
   var fontsReady = Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 1500); })]);
 
-  /* Hero entrance, after the intro loader */
+  /* Typing helper shared with pipeline.js — the final text stays in data-text */
+  P.typeText = function (el, opts) {
+    var text = el.dataset.text || el.textContent;
+    el.dataset.text = text;
+    var o = { n: 0 };
+    return gsap.to(o, {
+      n: text.length, duration: Math.min(text.length * 0.025, 1.4), ease: 'none', delay: (opts && opts.delay) || 0,
+      onStart: function () { el.textContent = ''; },
+      onUpdate: function () { el.textContent = text.slice(0, Math.round(o.n)); }
+    });
+  };
+
+  function scrambleHighlights(container, tl, at) {
+    container.querySelectorAll('.hl').forEach(function (hl, i) {
+      tl.to(hl, { duration: 0.8, scrambleText: { text: hl.textContent, chars: 'upperCase', speed: 0.6 } }, at + i * 0.1);
+    });
+  }
+
+  /* Hero entrance, after the boot loader */
   Promise.all([P.introDone, fontsReady]).then(function () {
     var title = document.querySelector('[data-anim="hero-title"]');
     if (!title) return;
     gsap.set(title, { visibility: 'visible' });
     var split = SplitText.create(title, { type: 'lines', mask: 'lines' });
-    gsap.timeline({ defaults: { ease: 'expo.out' } })
-      .from(split.lines, { yPercent: 110, duration: 1.3, stagger: 0.1 })
-      .to('[data-anim="hero-media"]', { clipPath: 'inset(0% 0 0 0)', duration: 1.6, ease: 'expo.inOut' }, 0)
+    var tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
+      .from(split.lines, { yPercent: 110, duration: 1.2, stagger: 0.1 })
+      .to('[data-anim="hero-media"]', { clipPath: 'inset(0% 0 0 0)', duration: 1.5, ease: 'expo.inOut' }, 0)
       .from('[data-anim="hero-media"] img', { scale: 1.3, duration: 2.2 }, 0.1)
-      .to('[data-anim="hero-fade"]', { opacity: 1, y: 0, duration: 1.1, stagger: 0.08, ease: 'power3.out' }, 0.45);
+      .to('[data-anim="hero-fade"]', { opacity: 1, y: 0, duration: 1, stagger: 0.07, ease: 'power3.out' }, 0.3);
+    scrambleHighlights(title, tl, 0.7);
+    var whoami = document.querySelector('.hero [data-type]');
+    if (whoami) tl.add(P.typeText(whoami), 0.45);
   });
 
-  /* Split-line headings */
+  /* Split-line headings, highlight word decodes after the lines land */
   fontsReady.then(function () {
     each('[data-anim="lines"]', function (el) {
       SplitText.create(el, {
         type: 'lines', mask: 'lines', autoSplit: true,
         onSplit: function (self) {
-          return gsap.from(self.lines, { yPercent: 105, duration: 1.1, ease: 'expo.out', stagger: 0.08,
-            scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+          var tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+          tl.from(self.lines, { yPercent: 105, duration: 1.1, ease: 'expo.out', stagger: 0.08 });
+          scrambleHighlights(el, tl, 0.5);
+          return tl;
         }
       });
+    });
+  });
+
+  /* Hover scramble on mono labels (text is restored to the original) */
+  each('[data-scramble]', function (el) {
+    var text = el.textContent;
+    el.addEventListener('pointerenter', function () {
+      gsap.to(el, { duration: 0.5, scrambleText: { text: text, chars: '01<>/_[]', speed: 0.9 }, overwrite: true });
     });
   });
 
@@ -972,13 +1039,13 @@ Complete rules for:
   });
 
   each('[data-anim="stagger"]', function (el) {
-    gsap.from(el.children, { y: 30, autoAlpha: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08, scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+    gsap.from(el.children, { y: 24, autoAlpha: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
   });
 
   each('[data-anim="wipe"]', function (el) {
     var img = el.querySelector('img');
     var tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
-    tl.fromTo(el, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut' });
+    tl.fromTo(el, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'expo.inOut' });
     if (img) tl.fromTo(img, { scale: 1.25 }, { scale: 1, duration: 1.8, ease: 'expo.out' }, 0);
   });
 
@@ -994,12 +1061,12 @@ Complete rules for:
       onUpdate: function () { el.textContent = Math.round(n.v) + suffix; } });
   });
 
-  /* Marquee: constant drift, boosted and reversed by scroll velocity */
+  /* Tape marquee: constant drift, boosted and reversed by scroll velocity */
   var loops = gsap.utils.toArray('.marquee__row').map(function (row, i) {
     var track = row.querySelector('.marquee__track');
     return i % 2
-      ? gsap.fromTo(track, { xPercent: -50 }, { xPercent: 0, duration: 45, ease: 'none', repeat: -1 })
-      : gsap.fromTo(track, { xPercent: 0 }, { xPercent: -50, duration: 45, ease: 'none', repeat: -1 });
+      ? gsap.fromTo(track, { xPercent: -50 }, { xPercent: 0, duration: 40, ease: 'none', repeat: -1 })
+      : gsap.fromTo(track, { xPercent: 0 }, { xPercent: -50, duration: 40, ease: 'none', repeat: -1 });
   });
   if (loops.length) ScrollTrigger.create({
     trigger: '.marquee', start: 'top bottom', end: 'bottom top',
@@ -1012,7 +1079,7 @@ Complete rules for:
     }
   });
 
-  /* Experience timeline (markup in Task 6) */
+  /* git-log experience graph (markup in Task 6) */
   var progress = document.querySelector('.timeline__progress');
   if (progress) gsap.fromTo(progress, { scaleY: 0 }, { scaleY: 1, ease: 'none',
     scrollTrigger: { trigger: '.timeline', start: 'top 70%', end: 'bottom 60%', scrub: true } });
@@ -1021,7 +1088,7 @@ Complete rules for:
     ScrollTrigger.create({ trigger: item, start: 'top 60%', end: 'bottom 60%', toggleClass: 'is-active' });
   });
 
-  /* Horizontal "Beyond the code" strip (markup in Task 7) — desktop only */
+  /* Desktop: horizontal "offline" strip (markup in Task 7) */
   mm.add('(min-width: 900px)', function () {
     var section = document.querySelector('.beyond');
     var track = section && section.querySelector('.beyond__track');
@@ -1030,104 +1097,124 @@ Complete rules for:
     gsap.to(track, { x: function () { return -distance(); }, ease: 'none',
       scrollTrigger: { trigger: section, start: 'top top', end: function () { return '+=' + distance(); }, pin: true, scrub: 1, invalidateOnRefresh: true } });
   });
+
+  /* Mobile: photos turn to colour while centred (no hover on touch) */
+  mm.add('(max-width: 899px)', function () {
+    each('.photo', function (photo) {
+      ScrollTrigger.create({ trigger: photo, start: 'top 65%', end: 'bottom 35%', toggleClass: 'is-color' });
+    });
+  });
 })();
 ```
 
 - [ ] **Step 5: Run tests** — `npm test` — Expected: all PASS.
 
-- [ ] **Step 6: Browser check** — desktop 1440×900 and mobile 375×812: hero headline rises line-by-line after the loader, arch photo wipes up, marquee drifts and speeds up while scrolling, About stats count up, photos wipe and drift. Console clean.
+- [ ] **Step 6: Browser check** — desktop 1440×900 and mobile 375×812: after the boot loader the headline lines rise and "SHIPS." decodes; `whoami` line types; portrait wipes up, goes colour on hover and glitches; tape bands drift and speed up with scroll; README panel fades in, stats count up; nav labels scramble on hover. Console clean.
 
 - [ ] **Step 7: Commit**
 
 ```bash
 git add index.html css/sections.css js/motion.js tests/site.test.mjs
-git commit -m "feat: hero, marquee and about sections with generic motion layer"
+git commit -m "feat: hero, tape marquee and README about section with generic motion layer"
 ```
 
 ---
 
-### Task 5: Signature pipeline section + standalone pipeline SVG
+### Task 5: Signature pipeline section + synced log + standalone pipeline SVG
 
 **Files:**
 - Modify: `index.html` (replace `#pipeline` placeholder; add `<script defer src="js/pipeline.js">` after `motion.js`), `css/sections.css`, `tests/site.test.mjs`
 - Create: `js/pipeline.js`, `assets/svg/pipeline.svg`
 
 **Interfaces:**
-- Consumes: `window.Portfolio.motion`, GSAP DrawSVG + MotionPath.
-- Produces: SVG classes `.pl-doc`, `.pl-page`, `.pl-gate`, `.pl-check-ring`, `.pl-check-mark`, `.pl-wire-in`, `.pl-core`, `.pl-core-ring`, `.pl-packet`, `.pl-wire-out`, `.pl-out`, `.pl-sync`, `.pl-dash`, `.pl-bar`; steps `.pipeline__step[data-step=ingest|split|validate|transform|deliver]`.
+- Consumes: `window.Portfolio.{motion, typeText}`, GSAP DrawSVG + MotionPath.
+- Produces: SVG classes `.pl-doc`, `.pl-page`, `.pl-gate`, `.pl-check-ring`, `.pl-check-mark`, `.pl-wire-in`, `.pl-core`, `.pl-core-ring`, `.pl-packet`, `.pl-wire-out`, `.pl-out`, `.pl-sync`, `.pl-dash`, `.pl-bar`; steps `.pipeline__step[data-step=ingest|split|validate|transform|deliver]`; log `.pl-log li[data-log=…] > .pl-log__msg`.
 
 - [ ] **Step 1: Add failing tests**
 
 ```js
-test('pipeline section has an accessible SVG and five ordered steps', () => {
+test('pipeline section has an accessible SVG, five steps and a matching log', () => {
   const section = src.match(/<section id="pipeline"[\s\S]*?<\/section>/)[0];
   assert.match(section, /<svg[^>]*role="img"[^>]*aria-labelledby="pl-title pl-desc"/);
   assert.match(section, /<title id="pl-title">/);
   assert.match(section, /<desc id="pl-desc">/);
-  const steps = [...section.matchAll(/data-step="(\w+)"/g)].map((m) => m[1]);
-  assert.deepEqual(steps, ['ingest', 'split', 'validate', 'transform', 'deliver']);
+  const order = ['ingest', 'split', 'validate', 'transform', 'deliver'];
+  assert.deepEqual([...section.matchAll(/data-step="(\w+)"/g)].map((m) => m[1]), order);
+  assert.deepEqual([...section.matchAll(/data-log="(\w+)"/g)].map((m) => m[1]), order);
+  assert.equal((section.match(/class="pl-log__msg"/g) || []).length, 5);
   for (const cls of ['pl-doc', 'pl-page', 'pl-check-mark', 'pl-wire-in', 'pl-core-ring', 'pl-packet', 'pl-wire-out', 'pl-out', 'pl-sync', 'pl-bar']) {
     assert.match(section, new RegExp(`class="${cls}\\b`), `missing .${cls}`);
   }
 });
 
-test('standalone pipeline.svg animates itself and respects reduced motion', () => {
+test('standalone pipeline.svg is dark, animates itself and respects reduced motion', () => {
   const svg = read('assets/svg/pipeline.svg');
   assert.match(svg, /@keyframes/);
   assert.match(svg, /prefers-reduced-motion/);
   assert.match(svg, /EDI ENGINE/);
+  assert.match(svg, /#C6F432/i);
+  assert.match(svg, /#0B0B0B/i);
 });
 ```
 
 - [ ] **Step 2: Run tests** — Expected: FAIL.
 
-- [ ] **Step 3: Pipeline markup** (viewBox `0 0 1100 560`; colours via CSS classes using tokens)
+- [ ] **Step 3: Pipeline markup** (viewBox `0 0 1100 560`; colours via CSS classes)
 
 ```html
 <section id="pipeline" class="section pipeline">
   <div class="pipeline__inner container">
     <div class="pipeline__copy">
-      <p class="section-label">02 — How I build</p>
-      <h2 class="display pipeline__title" data-anim="lines">From a pile of claim files to <em>clean</em> data.</h2>
+      <p class="section-label"><span>02</span> // pipeline</p>
+      <h2 class="display pipeline__title" data-anim="lines">From claim files to <span class="hl">clean</span> data.</h2>
       <ol class="pipeline__steps">
-        <li class="pipeline__step" data-step="ingest"><span class="mono-label">01</span><h3>Ingest</h3><p>EOBs, 837 claims and self-pay documents arrive in every shape a client can produce.</p></li>
-        <li class="pipeline__step" data-step="split"><span class="mono-label">02</span><h3>Split</h3><p>An automated splitting engine breaks huge batches into indexed, traceable pages.</p></li>
-        <li class="pipeline__step" data-step="validate"><span class="mono-label">03</span><h3>Validate</h3><p>Index-based schema validation catches bad data before it reaches anyone downstream.</p></li>
-        <li class="pipeline__step" data-step="transform"><span class="mono-label">04</span><h3>Transform</h3><p>EDI ENGINE maps every record into a consistent, HIPAA-compliant model.</p></li>
-        <li class="pipeline__step" data-step="deliver"><span class="mono-label">05</span><h3>Deliver &amp; sync</h3><p>A customisable output engine writes 835, CSV or TXT — and syncs results live into Client Portal dashboards.</p></li>
+        <li class="pipeline__step" data-step="ingest"><span class="mono">01</span><h3>Ingest</h3><p>EOBs, 837 claims and self-pay documents arrive in every shape a client can produce.</p></li>
+        <li class="pipeline__step" data-step="split"><span class="mono">02</span><h3>Split</h3><p>An automated splitting engine breaks huge batches into indexed, traceable pages.</p></li>
+        <li class="pipeline__step" data-step="validate"><span class="mono">03</span><h3>Validate</h3><p>Index-based schema validation catches bad data before anyone downstream sees it.</p></li>
+        <li class="pipeline__step" data-step="transform"><span class="mono">04</span><h3>Transform</h3><p>EDI ENGINE maps every record into one consistent, HIPAA-compliant model.</p></li>
+        <li class="pipeline__step" data-step="deliver"><span class="mono">05</span><h3>Deliver &amp; sync</h3><p>A customisable output engine writes 835, CSV or TXT and syncs results live into Client Portal.</p></li>
       </ol>
     </div>
     <div class="pipeline__stage">
       <svg class="pipeline__svg" viewBox="0 0 1100 560" role="img" aria-labelledby="pl-title pl-desc">
         <title id="pl-title">The EDI ENGINE claims pipeline</title>
         <desc id="pl-desc">EOB, 837 and self-pay files are ingested, split into pages, validated, transformed by EDI ENGINE, output as 835, CSV and TXT, and synced to a Client Portal dashboard.</desc>
-        <!-- Docs: three <g class="pl-doc" transform="translate(40,{y})"> at y = 100, 248, 396:
-             rect 100×64 rx6 + folded-corner path + 3 text lines (rects) + <text class="pl-label">EOB|837|SELF-PAY</text> -->
-        <!-- Pages: six <rect class="pl-page"> 34×44 rx3: two per doc at (200,y-6) and (214,y+14) -->
-        <!-- Gate: <line class="pl-gate" x1="330" y1="70" x2="330" y2="490"/> + label "VALIDATE" -->
-        <!-- Checks at (330, y+32) for each doc: <circle class="pl-check-ring" r="14"/> <path class="pl-check-mark" d="M-6 0l4 4 8-8"/> inside a translated <g> -->
-        <!-- Wires in: <path class="pl-wire-in" d="M344 132 C 430 132, 440 280, 500 280"/>, (…164→280… for y=280 straight), (M344 428 C 430 428, 440 280, 500 280) -->
-        <!-- Core: <g class="pl-core"> circle r=72 at (580,280) (fill moss), <circle class="pl-core-ring" r="92" stroke-dasharray="6 10"/>, <text>EDI ENGINE</text> -->
-        <!-- Packets: six <circle class="pl-packet" r="6" opacity="0"/> (3 in, 3 out) -->
-        <!-- Wires out: <path class="pl-wire-out" d="M660 280 C 710 280, 710 150, 760 150"/>, (M660 280 L760 280), (M660 280 C 710 280, 710 410, 760 410) -->
-        <!-- Outputs: three <g class="pl-out"> chips 96×44 rx22 at (760,128),(760,258),(760,388) labelled 835, CSV, TXT -->
+        <!-- geometry to author as real elements (no comments in the file): -->
+        <!-- Docs: three <g class="pl-doc" transform="translate(40,{y})"> at y = 100, 248, 396: rect 100×64 + folded-corner path + 3 text-line rects + <text class="pl-label">EOB|837|SELF-PAY</text> -->
+        <!-- Pages: six <rect class="pl-page"> 34×44: two per doc at (200,y-6) and (214,y+14) -->
+        <!-- Gate: <line class="pl-gate" x1="330" y1="70" x2="330" y2="490"/> + <text class="pl-label">VALIDATE</text> -->
+        <!-- Checks: per doc a <g transform="translate(330,{y+32})"> with <rect class="pl-check-ring" x="-14" y="-14" width="28" height="28"/> and <path class="pl-check-mark" d="M-6 0l4 4 8-8"/> -->
+        <!-- Wires in: <path class="pl-wire-in" d="M344 132 C 430 132, 440 280, 500 280"/>, <path class="pl-wire-in" d="M344 280 L 500 280"/>, <path class="pl-wire-in" d="M344 428 C 430 428, 440 280, 500 280"/> -->
+        <!-- Core: <g class="pl-core"> square 150×150 centred at (580,280) (fill lime), <circle class="pl-core-ring" cx="580" cy="280" r="104" stroke-dasharray="6 10"/>, <text>EDI ENGINE</text> in on-lime mono bold -->
+        <!-- Packets: six <rect class="pl-packet" width="10" height="10" opacity="0"/> (3 in, 3 out) -->
+        <!-- Wires out: <path class="pl-wire-out" d="M660 280 C 710 280, 710 150, 760 150"/>, <path class="pl-wire-out" d="M660 280 L 760 280"/>, <path class="pl-wire-out" d="M660 280 C 710 280, 710 410, 760 410"/> -->
+        <!-- Outputs: three <g class="pl-out"> rects 96×44 at (760,128),(760,258),(760,388) labelled 835, CSV, TXT -->
         <!-- Sync: <path class="pl-sync" d="M856 280 L 900 280"/> -->
-        <!-- Dashboard: <g class="pl-dash"> card rect (900,190) 180×180 rx14, label "Client Portal", four <rect class="pl-bar"> width 26 at x=920,960,1000,1040, baseline y=350, heights 60/100/80/130 -->
+        <!-- Dashboard: <g class="pl-dash"> rect (900,190) 180×180 + label PORTAL + four <rect class="pl-bar"> width 26 at x=920,960,1000,1040, baseline y=350, heights 60/100/80/130 -->
       </svg>
+      <div class="term pipeline__log">
+        <div class="term__bar"><span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term__title">edi-engine.log</span></div>
+        <ol class="term__body pl-log" aria-label="Pipeline log">
+          <li data-log="ingest"><span class="lime">[ingest]</span> <span class="pl-log__msg">3 files received (EOB, 837, SELF-PAY)</span></li>
+          <li data-log="split"><span class="lime">[split]</span> <span class="pl-log__msg">3 → 12 pages, indexed</span></li>
+          <li data-log="validate"><span class="lime">[validate]</span> <span class="pl-log__msg">schema ok ✓ 12/12</span></li>
+          <li data-log="transform"><span class="lime">[transform]</span> <span class="pl-log__msg">edi-engine → canonical model</span></li>
+          <li data-log="deliver"><span class="lime">[deliver]</span> <span class="pl-log__msg">835 · csv · txt → client-portal ✓ synced</span></li>
+        </ol>
+      </div>
     </div>
   </div>
 </section>
 ```
-(Comments describe the exact geometry to author; the file contains real elements, no comments.)
 
 - [ ] **Step 4: Pipeline CSS**
 
-`.pipeline__inner{display:grid;grid-template-columns:.8fr 1.2fr;gap:var(--gutter);min-height:100svh;align-items:center}`; `.pipeline__step{opacity:.38;transition:opacity .4s;border-top:1px solid var(--rule);padding:.9rem 0}` `.pipeline__step.is-active{opacity:1}` `.pipeline__step.is-active h3{color:var(--sage)}` `.pipeline__step.is-done{opacity:.7}`; without `.motion-ready` all steps `opacity:1`. SVG classes: docs/pages/chips fill `var(--paper-2)` stroke `var(--ink)` 1.5; wires stroke `var(--sage)` 2 fill none; gate stroke `var(--rule)` dash; check ring fill `var(--sage)`, mark stroke `var(--on-accent)` 2.5; core fill `var(--moss)` text `var(--paper)` Fraunces; core ring stroke `var(--sand)`; packets fill `var(--sand)`; bars fill `var(--sage)`; labels mono 13px fill `var(--ink-soft)`. Mobile (<900px): single column, steps become a horizontal scroll-snap row of compact cards above the SVG.
+`.pipeline__inner{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:var(--gutter);min-height:100svh;align-items:center}`; `.pipeline__title{font-size:var(--step-3);margin-bottom:2rem}`; `.pipeline__step{display:grid;grid-template-columns:2.5rem 1fr;column-gap:.5rem;padding:.9rem 0;border-top:1px solid var(--line);color:var(--muted)}` `.pipeline__step h3{font:800 var(--step-1)/1 var(--font-display);text-transform:uppercase;color:var(--text)}` `.pipeline__step p{grid-column:2;font-size:var(--step--1)}` `.pipeline__step span{color:var(--lime)}`; motion-scoped dimming `.motion-ready .pipeline__step{opacity:.35;transition:opacity .4s}` `.motion-ready .pipeline__step.is-done{opacity:.6}` `.motion-ready .pipeline__step.is-active{opacity:1}` `.pipeline__step.is-active h3{color:var(--lime)}`; `.pipeline__stage{display:grid;gap:1rem}`; log `.pl-log{font:500 13px/1.9 var(--font-mono);min-height:12.5em}` `.motion-ready .pl-log li{opacity:.15;transition:opacity .3s}` `.motion-ready .pl-log li.is-shown{opacity:1}`. SVG styling: docs/pages/chips/dash `fill:var(--bg-2);stroke:var(--text);stroke-width:1.5`; doc text-line rects `fill:var(--line-strong)`; wires/sync `fill:none;stroke:var(--lime);stroke-width:2`; gate `stroke:var(--line-strong);stroke-dasharray:4 6`; check ring `fill:var(--lime)`, mark `fill:none;stroke:var(--on-lime);stroke-width:2.5`; core square `fill:var(--lime)`, core text `fill:var(--on-lime);font:700 22px var(--font-mono)`; core ring `fill:none;stroke:var(--lime);stroke-opacity:.6`; packets `fill:var(--lime)`; bars `fill:var(--lime)`; `.pl-label{font:500 13px var(--font-mono);fill:var(--muted)}`. Mobile (<900px): single column; steps become a horizontal scroll-snap row (`display:flex;overflow-x:auto;scroll-snap-type:x mandatory`, each step `min-width:72vw`).
 
 - [ ] **Step 5: Write `js/pipeline.js`**
 
 ```js
-/* Signature pipeline: scrubbed + pinned on desktop, looping when visible on mobile. */
+/* Signature pipeline: scrubbed + pinned on desktop, looping when visible on mobile, with a synced log. */
 (function () {
   'use strict';
   var P = window.Portfolio;
@@ -1136,8 +1223,10 @@ test('standalone pipeline.svg animates itself and respects reduced motion', () =
 
   var svg = section.querySelector('.pipeline__svg');
   var steps = section.querySelectorAll('.pipeline__step');
+  var logs = section.querySelectorAll('.pl-log li');
   var order = ['ingest', 'split', 'validate', 'transform', 'deliver'];
   var q = function (sel) { return svg.querySelectorAll(sel); };
+  var lastIdx = -1;
 
   function setActive(label) {
     var idx = order.indexOf(label === 'end' ? 'deliver' : label);
@@ -1145,6 +1234,9 @@ test('standalone pipeline.svg animates itself and respects reduced motion', () =
       step.classList.toggle('is-active', i === idx);
       step.classList.toggle('is-done', i < idx);
     });
+    logs.forEach(function (li, i) { li.classList.toggle('is-shown', i <= idx); });
+    if (idx > lastIdx && logs[idx] && P.typeText) P.typeText(logs[idx].querySelector('.pl-log__msg'));
+    lastIdx = idx;
   }
 
   function travel(tl, packets, wires, at) {
@@ -1185,11 +1277,13 @@ test('standalone pipeline.svg animates itself and respects reduced motion', () =
   gsap.to(q('.pl-core-ring'), { rotation: 360, svgOrigin: '580 280', duration: 14, ease: 'none', repeat: -1 });
 
   gsap.matchMedia().add({ desktop: '(min-width: 900px)', mobile: '(max-width: 899px)' }, function (ctx) {
+    lastIdx = -1;
     var tl = build();
     if (ctx.conditions.desktop) {
       ScrollTrigger.create({ animation: tl, trigger: section, start: 'top top', end: '+=2400', pin: true, scrub: 1 });
     } else {
-      tl.to(svg.querySelectorAll('g, path, rect, circle, line'), { autoAlpha: 0, duration: 0.4 }, '+=1.4');
+      tl.to(svg.querySelectorAll('g, path, rect, circle, line'), { autoAlpha: 0, duration: 0.4 }, '+=1.4')
+        .call(function () { lastIdx = -1; });
       tl.repeat(-1).pause();
       ScrollTrigger.create({ trigger: svg, start: 'top 85%', end: 'bottom 15%',
         onToggle: function (self) { self.isActive ? tl.play() : tl.pause(); } });
@@ -1200,22 +1294,22 @@ test('standalone pipeline.svg animates itself and respects reduced motion', () =
 
 - [ ] **Step 6: Write standalone `assets/svg/pipeline.svg`**
 
-Same geometry as the inline SVG with hard-coded light-theme colours and an internal `<style>`: 8s infinite loop; `@keyframes` for doc slide-in (0–10%), pages pop (10–20%), check draw via `stroke-dashoffset` (20–32%), wires draw (32–45%), packets moving using `offset-path: path('…')` + `offset-distance 0%→100%` (45–65%), outputs fade (60–70%), bars `scaleY` (70–85%), everything fades out (92–100%); core ring rotates continuously; `@media (prefers-reduced-motion: reduce){*{animation:none!important}}` and the non-animated state equals the final composed picture.
+Same geometry as the inline SVG with hard-coded Neo Terminal colours (`#0B0B0B` background rect, `#121212` panels, `#EDEDED` strokes, `#C6F432` accent) and an internal `<style>`: 8s infinite loop; `@keyframes` for doc slide-in (0–10%), pages pop (10–20%), checks draw via `stroke-dashoffset` (20–32%), wires draw (32–45%), packets moving with `offset-path: path('…')` + `offset-distance 0%→100%` (45–65%), outputs fade (60–70%), bars `scaleY` (70–85%), everything fades out (92–100%); core ring rotates continuously; `@media (prefers-reduced-motion: reduce){*{animation:none!important}}`; the non-animated state equals the final composed picture.
 
 - [ ] **Step 7: Run tests** — `npm test` — Expected: PASS.
 
-- [ ] **Step 8: Browser check** — desktop: section pins, scrolling scrubs through the 5 steps and the active step highlights in sync; packets follow wires; un-pins cleanly into Experience. Mobile: no pin; timeline loops while visible. Open `assets/svg/pipeline.svg` directly: it loops.
+- [ ] **Step 8: Browser check** — desktop: section pins; scrolling scrubs the five steps; active step turns lime and the log line for it types out; packets follow wires; un-pins cleanly. Mobile: no pin; loops while visible with the log replaying. Open `assets/svg/pipeline.svg` directly: it loops on black.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add index.html css/sections.css js/pipeline.js assets/svg/pipeline.svg tests/site.test.mjs
-git commit -m "feat: scroll-driven EDI ENGINE pipeline section and standalone animated SVG"
+git commit -m "feat: scroll-driven EDI ENGINE pipeline with synced terminal log and standalone SVG"
 ```
 
 ---
 
-### Task 6: Experience timeline + Selected Work with animated covers
+### Task 6: git-log Experience + `ls -la` Projects with animated covers
 
 **Files:**
 - Modify: `index.html` (replace `#experience`, `#work` placeholders; add `<script defer src="js/work.js">`), `css/sections.css`, `tests/site.test.mjs`
@@ -1223,7 +1317,7 @@ git commit -m "feat: scroll-driven EDI ENGINE pipeline section and standalone an
 
 **Interfaces:**
 - Consumes: `PortfolioLib.matchesFilter`, `Portfolio.motion`, `.work-preview`.
-- Produces: `.timeline`, `.timeline__progress`, `.timeline__item`; `.work__filters [data-filter]`, `.work__list .work-row[data-category]`, `.work-row__toggle[aria-expanded][aria-controls]`, `.work-row__panel[hidden]`, `.cover.cover--{files|bars|ring|grid|wave|pulse}`, `.work__count[aria-live]`.
+- Produces: `.timeline`, `.timeline__progress`, `.timeline__item.commit`; `.work__flags [data-filter]`, `.work__list .work-row[data-category]`, `.work-row__toggle[aria-expanded][aria-controls]`, `.work-row__panel[hidden]`, `.cover.cover--{files|bars|ring|grid|wave|pulse}`, `.work__count[aria-live]` (text `total N`).
 
 - [ ] **Step 1: Add failing tests**
 
@@ -1236,18 +1330,19 @@ test('content fixes are applied', () => {
   assert.match(src, /Mobatia Technology/);
 });
 
-test('work rows, filters and accordions are wired consistently', () => {
-  const rows = [...src.matchAll(/<li class="work-row"[^>]*data-category="([^"]+)"[\s\S]*?<\/li>/g)];
-  assert.equal(rows.length, 6);
+test('work rows, flags and accordions are wired consistently', () => {
   const filters = [...src.matchAll(/data-filter="([^"]+)"/g)].map((m) => m[1]);
   assert.deepEqual(filters, ['all', 'healthcare', 'enterprise', 'commerce']);
-  for (const [row, cats] of rows) {
+  const chunks = src.split('<li class="work-row"').slice(1);
+  assert.equal(chunks.length, 6);
+  for (const chunk of chunks) {
+    const cats = chunk.match(/data-category="([^"]+)"/)[1];
     for (const c of cats.split(' ')) assert.ok(filters.includes(c), `unknown category ${c}`);
-    const toggle = row.match(/<button class="work-row__toggle"[^>]*>/)[0];
+    const toggle = chunk.match(/<button class="work-row__toggle"[^>]*>/)[0];
     assert.equal(attr(toggle, 'aria-expanded'), 'false');
     const panelId = attr(toggle, 'aria-controls');
-    assert.match(row, new RegExp(`id="${panelId}"[^>]*hidden`));
-    assert.match(row, /class="cover cover--\w+"/);
+    assert.match(chunk, new RegExp(`id="${panelId}"[^>]*hidden`));
+    assert.match(chunk, /class="cover cover--\w+"/);
   }
 });
 ```
@@ -1259,62 +1354,74 @@ test('work rows, filters and accordions are wired consistently', () => {
 ```html
 <section id="experience" class="section experience">
   <div class="container">
-    <p class="section-label">03 — Experience</p>
-    <h2 class="display section-title" data-anim="lines">Leading teams that ship <em>dependable</em> software.</h2>
+    <p class="section-label"><span>03</span> // experience</p>
+    <h2 class="display section-title" data-anim="lines">Leading teams that <span class="hl">ship.</span></h2>
+    <p class="mono muted gitlog__cmd"><span class="lime">$</span> git log --graph --career</p>
     <ol class="timeline">
       <li class="timeline__rail" aria-hidden="true"><span class="timeline__progress"></span></li>
-      <li class="timeline__item">
-        <p class="timeline__year display">2022 — <em>Now</em></p>
-        <div><h3>Software Engineer (Lead / Technical Head)</h3><p class="mono-label">Aventus Informatics</p>
-        <p>Leading architecture, development and enhancement of enterprise healthcare systems — owning product scalability, HIPAA compliance, client-customisation frameworks and technical team leadership.</p></div>
+      <li class="timeline__item commit">
+        <p class="commit__meta mono"><span class="commit__hash">a7f3e21</span> <span class="lime">(HEAD → main)</span> 2022 — now</p>
+        <h3 class="commit__subject">feat(aventus): software engineer — lead / technical head</h3>
+        <p class="mono muted">Aventus Informatics</p>
+        <p>Leading architecture, development and enhancement of enterprise healthcare systems — owning product scalability, HIPAA compliance, client-customisation frameworks and technical team leadership.</p>
       </li>
-      <li class="timeline__item">
-        <p class="timeline__year display">2019 — 2022</p>
-        <div><h3>Software Engineer</h3><p class="mono-label">Mobatia Technology Pvt Ltd · from Dec 2019</p>
-        <p>Managed multiple Laravel and Django projects, built REST APIs for mobile apps, integrated payment gateways, delivered CMS-based enterprise applications and supported live production systems.</p></div>
+      <li class="timeline__item commit">
+        <p class="commit__meta mono"><span class="commit__hash">4c9b0d2</span> dec 2019 — 2022</p>
+        <h3 class="commit__subject">feat(mobatia): software engineer</h3>
+        <p class="mono muted">Mobatia Technology Pvt Ltd</p>
+        <p>Managed multiple Laravel and Django projects, built REST APIs for mobile apps, integrated payment gateways, delivered CMS-based enterprise applications and supported live production systems.</p>
       </li>
-      <li class="timeline__item timeline__item--edu">
-        <p class="timeline__year display"><em>Education</em></p>
-        <div><h3>BSc Computer Science</h3><p class="mono-label">University of Kerala · CGPA 6.6</p></div>
+      <li class="timeline__item commit commit--root">
+        <p class="commit__meta mono"><span class="commit__hash">0000001</span> root commit</p>
+        <h3 class="commit__subject">init: bsc computer science</h3>
+        <p class="mono muted">University of Kerala · CGPA 6.6</p>
       </li>
     </ol>
   </div>
 </section>
 ```
-(`.timeline__rail` is a decorative `li` with `aria-hidden`; if a validator flags it, move it to a `::before` on `.timeline` plus a sibling `<span class="timeline__progress">` inside a wrapper `div`. Keep the test-visible class names.)
+(Commit hashes are decorative labels, not claims; `.timeline__rail` is a decorative `aria-hidden` list item.)
 
-- [ ] **Step 4: Work markup** — one row shown; repeat for all six with the data below.
+- [ ] **Step 4: Projects markup** — one row shown; repeat for all six with the table below.
 
 ```html
 <section id="work" class="section work">
   <div class="container">
-    <p class="section-label">04 — Selected work</p>
+    <p class="section-label"><span>04</span> // projects</p>
     <div class="work__head">
-      <h2 class="display section-title" data-anim="lines">Platforms I've <em>architected</em> and shipped.</h2>
-      <div class="work__filters" role="group" aria-label="Filter projects">
-        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
-        <button class="chip" type="button" data-filter="healthcare" aria-pressed="false">Healthcare</button>
-        <button class="chip" type="button" data-filter="enterprise" aria-pressed="false">Enterprise</button>
-        <button class="chip" type="button" data-filter="commerce" aria-pressed="false">Commerce &amp; social</button>
+      <h2 class="display section-title" data-anim="lines">Platforms I've <span class="hl">shipped.</span></h2>
+      <div class="work__cmd mono">
+        <span><span class="lime">$</span> ls -la ~/projects</span>
+        <span class="work__flags" role="group" aria-label="Filter projects">
+          <button class="flag" type="button" data-filter="all" aria-pressed="true">--all</button>
+          <button class="flag" type="button" data-filter="healthcare" aria-pressed="false">--healthcare</button>
+          <button class="flag" type="button" data-filter="enterprise" aria-pressed="false">--enterprise</button>
+          <button class="flag" type="button" data-filter="commerce" aria-pressed="false">--commerce</button>
+        </span>
       </div>
-      <p class="work__count mono-label" aria-live="polite">Showing 6 projects</p>
+      <p class="work__count mono muted" aria-live="polite">total 6</p>
     </div>
+    <div class="work__cols mono" aria-hidden="true"><span>perm</span><span>type</span><span>name</span><span>stack</span></div>
     <ol class="work__list">
-      <li class="work-row" data-category="healthcare" data-cursor="view" data-cursor-label="Open">
+      <li class="work-row" data-category="healthcare" data-cursor="view" data-cursor-label="[open]">
         <button class="work-row__toggle" type="button" aria-expanded="false" aria-controls="work-1">
-          <span class="work-row__index mono-label">01</span>
-          <span class="work-row__title display">EDI ENGINE <em>— EDI processing platform</em></span>
-          <span class="work-row__tags mono-label">Python · Django · Healthcare</span>
-          <span class="work-row__icon" aria-hidden="true"></span>
+          <span class="work-row__perm mono">drwxr-xr-x</span>
+          <span class="work-row__type mono">healthcare</span>
+          <span class="work-row__title">edi-engine/ <span class="muted">edi processing platform</span></span>
+          <span class="work-row__tags mono">python · django</span>
+          <span class="work-row__icon mono" aria-hidden="true">+</span>
         </button>
         <div class="work-row__panel" id="work-1" hidden>
           <div class="work-row__body">
-            <ul>
-              <li>Designed the architecture for processing EOB, 837, self-pay and many other EOB file formats.</li>
-              <li>Built an automated file-splitting engine with index-based schema validation.</li>
-              <li>Created a customisable output engine supporting 835, CSV, TXT and client-specific formats.</li>
-            </ul>
-            <svg class="cover cover--files" viewBox="0 0 320 240" aria-hidden="true"><!-- 3 stacked file rects that fan out/in on loop (@keyframes fan) + scanning line --></svg>
+            <div class="md">
+              <p class="mono muted"><span class="lime">$</span> cat edi-engine/README.md</p>
+              <ul class="md__list">
+                <li>Designed the architecture for processing EOB, 837, self-pay and many other EOB file formats.</li>
+                <li>Built an automated file-splitting engine with index-based schema validation.</li>
+                <li>Created a customisable output engine supporting 835, CSV, TXT and client-specific formats.</li>
+              </ul>
+            </div>
+            <svg class="cover cover--files" viewBox="0 0 320 240" aria-hidden="true"><!-- 3 outlined file rects fanning out/in (@keyframes fan) + a lime scan line sweeping down --></svg>
           </div>
         </div>
       </li>
@@ -1324,26 +1431,26 @@ test('work rows, filters and accordions are wired consistently', () => {
 </section>
 ```
 
-Rows 2–6 (same structure; ids `work-2`…`work-6`):
+Rows 2–6 (same structure; ids `work-2`…`work-6`; perm `drwxr-xr-x`; type column shows the first category):
 
-| # | category | title / *em* | tags | bullets | cover |
+| # | category | name / *muted* | stack | bullets | cover |
 |---|---|---|---|---|---|
-| 02 | `healthcare` | Client Portal *— client operations system* | Data sync · Dashboards | Real-time data sync from EDI ENGINE to Client Portal. / Client dashboards for processed records, output management and file tracking. / Client-level access control and operational reporting. | `cover--bars` (bars rising/falling, staggered) |
-| 03 | `enterprise` | Ticketing *& analytics* | SLA tracking · BI | Client and provider ticketing with SLA tracking and status workflows. / Report-generation engine and dynamic analytics dashboards. / Role-based access, resolution tracking and audit logs. | `cover--ring` (SLA ring stroke filling 0→80%, ticking hand) |
-| 04 | `enterprise` | School management *systems* | Laravel · Payments | BISAD — school management system for BIS Abu Dhabi. / NAIS Dubai, Al Khor and Manila — school CMS and payment portal. | `cover--grid` (4×3 tiles lighting in sequence) |
-| 05 | `commerce` | VLURB *& e-commerce* | Social · E-commerce | VLURB — a voice-based social media platform. / Tasveek — e-commerce platform. / Desert Motors — auto-parts e-commerce. | `cover--wave` (9 bars of a sound wave oscillating) |
-| 06 | `healthcare enterprise` | Clinic *& project management* | Hospital · Task tracking | RAM Clinics — hospital management system. / Task tracking with module-based project segmentation and team performance. | `cover--pulse` (ECG polyline drawn by `stroke-dashoffset` loop) |
+| 02 | `healthcare` | client-portal/ *client operations system* | data sync · dashboards | Real-time data sync from EDI ENGINE to Client Portal. / Client dashboards for processed records, output management and file tracking. / Client-level access control and operational reporting. | `cover--bars` (outlined bars rising/falling, staggered) |
+| 03 | `enterprise` | ticketing/ *sla & analytics* | sla · bi | Client and provider ticketing with SLA tracking and status workflows. / Report-generation engine and dynamic analytics dashboards. / Role-based access, resolution tracking and audit logs. | `cover--ring` (SLA ring stroke filling 0→80%, ticking hand) |
+| 04 | `enterprise` | schools/ *management systems* | laravel · payments | BISAD — school management system for BIS Abu Dhabi. / NAIS Dubai, Al Khor and Manila — school CMS and payment portal. | `cover--grid` (4×3 outlined tiles lighting lime in sequence) |
+| 05 | `commerce` | vlurb/ *social & e-commerce* | social · commerce | VLURB — a voice-based social media platform. / Tasveek — e-commerce platform. / Desert Motors — auto-parts e-commerce. | `cover--wave` (9 bars of a sound wave oscillating) |
+| 06 | `healthcare enterprise` | clinic/ *clinic & project mgmt* | hospital · tasks | RAM Clinics — hospital management system. / Task tracking with module-based project segmentation and team performance. | `cover--pulse` (ECG polyline drawn by `stroke-dashoffset` loop) |
 
-- [ ] **Step 5: CSS for timeline, work rows and covers**
+- [ ] **Step 5: CSS for git log, projects and covers**
 
-Timeline: `.timeline{position:relative;list-style:none;padding:0;display:grid;gap:4rem;margin-top:4rem}`; rail `position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--rule)`; `.timeline__progress{position:absolute;inset:0;background:var(--sage);transform-origin:top}`; items `padding-left:3rem;display:grid;grid-template-columns:minmax(14rem,.6fr) 1fr;gap:var(--gutter)` with a `::before` 11px dot on the rail that fills sage when `.is-active`; year `font-size:var(--step-3)`. Mobile: single column.
+Git log: `.gitlog__cmd{margin:-1.5rem 0 3rem}`; `.timeline{position:relative;display:grid;gap:3.5rem}`; rail `position:absolute;left:5px;top:.4rem;bottom:0;width:2px;background:var(--line)`; `.timeline__progress{position:absolute;inset:0;background:var(--lime);transform-origin:top}`; `.commit{position:relative;padding-left:2.75rem;max-width:62rem}` `.commit::before{content:"";position:absolute;left:0;top:.35rem;width:12px;height:12px;border:2px solid var(--lime);background:var(--bg);transition:background-color .3s}` `.commit.is-active::before{background:var(--lime)}`; `.commit__meta{font-size:var(--step--1);color:var(--muted)}` `.commit__hash{color:var(--warn)}` `.commit__subject{font:800 var(--step-2)/1.05 var(--font-display);text-transform:uppercase;margin:.5rem 0}`; `.commit--root .commit__subject{color:var(--muted)}`.
 
-Work: `.work__head` grid (title left, filters + count right/bottom); `.chip` pill mono, `[aria-pressed="true"]` filled ink; rows `border-top:1px solid var(--rule)`; toggle is a full-width grid `3rem 1fr auto 2rem` reset button styles, title `font-size:var(--step-2)`, hover: title shifts right 1rem and `em` turns sage; `.work-row__icon` plus sign rotating 45° when `aria-expanded="true"`; `.work-row__body` grid `1.2fr .8fr`, cover `border-radius:var(--radius);background:var(--paper-2)`; `.work-row[hidden]{display:none}`. Cover keyframes per type (`fan`, `bars`, `ring`, `tiles`, `wave`, `ecg`) with `animation-play-state:paused` by default and `running` inside `.work-row.is-open` and `.work-preview` — so off-screen covers don't burn CPU. Mobile: body single column.
+Projects: `.work__head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:1rem 2rem;margin-bottom:2rem}`; `.work__cmd{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;align-items:center;font-size:13px}` `.flag{font:500 13px var(--font-mono);color:var(--muted);padding:.35rem .6rem;border:1px solid var(--line)}` `.flag[aria-pressed="true"]{background:var(--lime);color:var(--on-lime);border-color:var(--lime)}` `.flag:hover{color:var(--lime);border-color:var(--lime)}`; columns grid shared by `.work__cols` and `.work-row__toggle`: `grid-template-columns:8.5rem 7.5rem minmax(0,1fr) 12rem 2rem;gap:1rem;align-items:center`; `.work__cols{font-size:11px;color:var(--muted);padding:0 1rem .5rem;border-bottom:1px solid var(--line)}`; rows `border-bottom:1px solid var(--line)`; `.work-row__toggle{display:grid;width:100%;text-align:left;padding:1.4rem 1rem;transition:background-color .2s}` `.work-row__toggle:hover{background:var(--bg-3)}` `.work-row__perm,.work-row__type,.work-row__tags{font-size:12px;color:var(--muted)}` `.work-row__title{font:800 var(--step-1)/1.1 var(--font-display);text-transform:uppercase}` `.work-row__title .muted{font:400 var(--step--1) var(--font-mono);text-transform:none;margin-left:.5rem}` `.work-row__toggle:hover .work-row__title{color:var(--lime)}` `.work-row__icon{color:var(--lime);font-size:20px;transition:rotate .3s}` `[aria-expanded="true"] .work-row__icon{rotate:45deg}`; `.work-row__body{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:2rem;padding:0 1rem 2rem}` cover `background:var(--bg-2);border:1px solid var(--line)`; `.work-row[hidden]{display:none}`. Cover SVG strokes `var(--text)`/fills `var(--lime)`; keyframes per type (`fan`, `bars`, `ring`, `tiles`, `wave`, `ecg`) with `animation-play-state:paused` by default and `running` inside `.work-row.is-open` and `.work-preview`. Mobile (<900px): `.work__cols` hidden; toggle grid `1fr 2rem` with perm/type/tags hidden and title wrapping; body single column; `.work__head` single column.
 
 - [ ] **Step 6: Write `js/work.js`**
 
 ```js
-/* Selected work: filters, accordion rows and the cursor-following cover preview. */
+/* Projects: CLI-flag filters, accordion rows and the cursor-following cover preview. */
 (function () {
   'use strict';
   var P = window.Portfolio, lib = window.PortfolioLib;
@@ -1351,14 +1458,14 @@ Work: `.work__head` grid (title left, filters + count right/bottom); `.chip` pil
   if (!list) return;
   var motion = P && P.motion;
   var rows = Array.prototype.slice.call(list.querySelectorAll('.work-row'));
-  var chips = document.querySelectorAll('.work__filters [data-filter]');
+  var flags = document.querySelectorAll('.work__flags [data-filter]');
   var count = document.querySelector('.work__count');
   var refresh = function () { if (motion) ScrollTrigger.refresh(); };
 
-  chips.forEach(function (chip) {
-    chip.addEventListener('click', function () {
-      var filter = chip.dataset.filter, shown = 0;
-      chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c === chip)); });
+  flags.forEach(function (flag) {
+    flag.addEventListener('click', function () {
+      var filter = flag.dataset.filter, shown = 0;
+      flags.forEach(function (f) { f.setAttribute('aria-pressed', String(f === flag)); });
       rows.forEach(function (row) {
         var show = lib.matchesFilter(row.dataset.category, filter);
         if (show) shown++;
@@ -1366,12 +1473,12 @@ Work: `.work__head` grid (title left, filters + count right/bottom); `.chip` pil
         if (!motion) { row.hidden = !show; return; }
         if (show) {
           row.hidden = false;
-          gsap.fromTo(row, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power3.out' });
+          gsap.fromTo(row, { autoAlpha: 0, x: -16 }, { autoAlpha: 1, x: 0, duration: 0.5, ease: 'power3.out' });
         } else {
-          gsap.to(row, { autoAlpha: 0, y: -12, duration: 0.25, onComplete: function () { row.hidden = true; refresh(); } });
+          gsap.to(row, { autoAlpha: 0, x: 16, duration: 0.2, onComplete: function () { row.hidden = true; refresh(); } });
         }
       });
-      count.textContent = 'Showing ' + shown + (shown === 1 ? ' project' : ' projects');
+      count.textContent = 'total ' + shown;
       refresh();
     });
   });
@@ -1386,9 +1493,9 @@ Work: `.work__head` grid (title left, filters + count right/bottom); `.chip` pil
       if (!motion) { panel.hidden = !open; return; }
       if (open) {
         panel.hidden = false;
-        gsap.fromTo(panel, { height: 0, autoAlpha: 0 }, { height: 'auto', autoAlpha: 1, duration: 0.7, ease: 'expo.out', onComplete: refresh });
+        gsap.fromTo(panel, { height: 0, autoAlpha: 0 }, { height: 'auto', autoAlpha: 1, duration: 0.6, ease: 'expo.out', onComplete: refresh });
       } else {
-        gsap.to(panel, { height: 0, autoAlpha: 0, duration: 0.4, ease: 'power2.inOut',
+        gsap.to(panel, { height: 0, autoAlpha: 0, duration: 0.35, ease: 'power2.inOut',
           onComplete: function () { panel.hidden = true; gsap.set(panel, { clearProps: 'height,opacity,visibility' }); refresh(); } });
       }
     });
@@ -1396,36 +1503,36 @@ Work: `.work__head` grid (title left, filters + count right/bottom); `.chip` pil
 
   var preview = document.querySelector('.work-preview');
   if (!motion || !preview || !window.matchMedia('(min-width: 900px) and (hover: hover) and (pointer: fine)').matches) return;
-  gsap.set(preview, { xPercent: -50, yPercent: -120, scale: 0.85 });
-  var xTo = gsap.quickTo(preview, 'x', { duration: 0.6, ease: 'power3' });
-  var yTo = gsap.quickTo(preview, 'y', { duration: 0.6, ease: 'power3' });
+  gsap.set(preview, { xPercent: -50, yPercent: -115, scale: 0.85 });
+  var xTo = gsap.quickTo(preview, 'x', { duration: 0.5, ease: 'power3' });
+  var yTo = gsap.quickTo(preview, 'y', { duration: 0.5, ease: 'power3' });
   list.addEventListener('pointermove', function (e) { xTo(e.clientX); yTo(e.clientY); });
   rows.forEach(function (row) {
     row.addEventListener('pointerenter', function () {
       if (row.classList.contains('is-open')) return;
       var cover = row.querySelector('.cover');
       if (cover) preview.replaceChildren(cover.cloneNode(true));
-      gsap.to(preview, { autoAlpha: 1, scale: 1, rotation: gsap.utils.random(-4, 4), duration: 0.4, ease: 'power3.out' });
+      gsap.to(preview, { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'power3.out' });
     });
-    row.addEventListener('pointerleave', function () { gsap.to(preview, { autoAlpha: 0, scale: 0.85, duration: 0.3 }); });
+    row.addEventListener('pointerleave', function () { gsap.to(preview, { autoAlpha: 0, scale: 0.85, duration: 0.25 }); });
   });
 })();
 ```
 
 - [ ] **Step 7: Run tests** — `npm test` — Expected: PASS.
 
-- [ ] **Step 8: Browser check** — timeline line grows with scroll and dots activate; filters hide/show rows with animation and update the count; rows expand/collapse with keyboard (Tab + Enter) and mouse; desktop hover shows a tilted animated cover following the cursor; mobile shows the cover inside the expanded panel.
+- [ ] **Step 8: Browser check** — git graph line grows with scroll and commit nodes fill; flags filter rows with slide animation and `total N` updates; rows expand/collapse via keyboard (Tab + Enter) and mouse; desktop hover shows a lime-framed animated cover following the cursor; mobile shows the cover inside the expanded panel.
 
 - [ ] **Step 9: Commit**
 
 ```bash
 git add index.html css/sections.css js/work.js tests/site.test.mjs
-git commit -m "feat: experience timeline and filterable work list with animated SVG covers"
+git commit -m "feat: git-log experience and ls -la projects with flag filters and animated covers"
 ```
 
 ---
 
-### Task 7: Toolkit, Beyond the code, Contact, Footer + cursor and contact scripts
+### Task 7: Stack, Offline strip, Contact, Footer + cursor and contact scripts
 
 **Files:**
 - Modify: `index.html` (replace `#toolkit`, `#beyond`, `#contact` placeholders; add footer; add `<script defer>` for `js/cursor.js`, `js/contact.js`), `css/sections.css`, `tests/site.test.mjs`
@@ -1433,18 +1540,18 @@ git commit -m "feat: experience timeline and filterable work list with animated 
 
 **Interfaces:**
 - Consumes: `PortfolioLib.{buildMailto, validateContact, formatClock}`, `Portfolio.motion`, `.cursor`, `.toast`, `[data-magnetic]`, `[data-cursor]`.
-- Produces: `.contact-form[novalidate]` with fields `name,email,subject,message`, error spans `#{field}-error`, `.contact-form__status`; `[data-copy]`, `[data-clock]`, `[data-year]`.
+- Produces: `.contact-form[novalidate]` with fields `name,email,subject,message`, error spans `#{field}-error`, `.contact-form__status`; `[data-copy]`, `[data-clock]`, `[data-clock="short"]`, `[data-year]`.
 
 - [ ] **Step 1: Add failing tests**
 
 ```js
-test('toolkit has six groups', () => {
+test('stack has six terminal panes', () => {
   const section = src.match(/<section id="toolkit"[\s\S]*?<\/section>/)[0];
-  assert.equal((section.match(/class="tool-card\b/g) || []).length, 6);
+  assert.equal((section.match(/class="term tool-card\b/g) || []).length, 6);
 });
 
 test('contact form is labelled, novalidate and wired to error messages', () => {
-  const form = src.match(/<form class="contact-form"[\s\S]*?<\/form>/)[0];
+  const form = src.match(/<form class="contact-form[^"]*"[\s\S]*?<\/form>/)[0];
   assert.match(form, /novalidate/);
   for (const f of ['name', 'email', 'subject', 'message']) {
     assert.match(form, new RegExp(`<label[^>]*for="${f}"`));
@@ -1456,11 +1563,12 @@ test('contact form is labelled, novalidate and wired to error messages', () => {
   }
 });
 
-test('contact details, clock, year and copy button exist', () => {
+test('contact details, clocks, year and copy button exist', () => {
   assert.match(src, /href="mailto:sachusudeve8690@gmail\.com"/);
   assert.match(src, /href="tel:\+918157864536"/);
   assert.match(src, /data-copy="sachusudeve8690@gmail\.com"/);
-  assert.match(src, /data-clock/);
+  assert.match(src, /data-clock>/);
+  assert.match(src, /data-clock="short"/);
   assert.match(src, /data-year/);
   assert.match(src, /<section id="beyond"/);
 });
@@ -1468,106 +1576,120 @@ test('contact details, clock, year and copy button exist', () => {
 
 - [ ] **Step 2: Run tests** — Expected: FAIL.
 
-- [ ] **Step 3: Toolkit markup** — `<section id="toolkit" class="section toolkit">` with label `05 — Toolkit`, heading "The stack I *reach for*." (`data-anim="lines"`), `.bento` grid of six `<article class="tool-card" data-anim="fade">` each: small looping inline SVG icon (`aria-hidden`), `<h3>`, `<ul class="tags">`:
-  1. Languages — Python, PHP, JavaScript — icon: `</>` brackets with blinking caret.
-  2. Frameworks — Django, FastAPI, Laravel, ReactJS, Kohana — icon: three stacked layers sliding.
-  3. Databases — PostgreSQL, MySQL, SQLite — icon: cylinder stack with pulsing top.
-  4. Healthcare & EDI (wide card) — HIPAA compliance, 835 payments, 837 claims, EOB processing, Patient pay, Correspondence — icon: shield with drawn check.
-  5. Tools & platforms — Git, REST APIs, CMS development, Payment gateways — icon: branching git graph with travelling dot.
-  6. Architecture (wide card) — File pipelines, Data synchronisation, Reporting engines, Client customisation — icon: three nodes linked with flowing dashes.
-  Below: "Key strengths" as `<ul class="strengths">` hairline list: Healthcare domain expertise · HIPAA-compliant architecture · EDI & 835 processing · Large-file processing · Client customisation frameworks · Technical leadership · Performance optimisation · Scalable API development.
+- [ ] **Step 3: Stack markup** — `<section id="toolkit" class="section toolkit">`, label `<span>05</span> // stack`, heading "The stack I <span class="hl">reach for.</span>" (`data-anim="lines"`), `.bento` grid of six `<article class="term tool-card" data-anim="fade">` each with a `.term__bar` (dots + file name), and a `.term__body` holding a looping inline lime SVG icon (`aria-hidden`), an `<h3>` and `<ul class="tags">` of `[tag]` items:
+  1. `languages.json` — Languages — `[python] [php] [javascript]` — icon: `</>` with blinking caret.
+  2. `frameworks.toml` — Frameworks — `[django] [fastapi] [laravel] [reactjs] [kohana]` — icon: three stacked layers sliding.
+  3. `databases.yml` — Databases — `[postgresql] [mysql] [sqlite]` — icon: cylinder stack with a pulsing top.
+  4. `healthcare.edi` (wide) — Healthcare & EDI — `[hipaa] [835 payments] [837 claims] [eob processing] [patient pay] [correspondence]` — icon: shield with a drawn check.
+  5. `tools.sh` — Tools & platforms — `[git] [rest apis] [cms development] [payment gateways]` — icon: git branch graph with a travelling dot.
+  6. `architecture.md` (wide) — Architecture — `[file pipelines] [data sync] [reporting engines] [client customisation]` — icon: three nodes linked by flowing dashes.
+  Below: a `.term strengths` pane titled `sachu --help` with a `<dl>` of flag/description pairs: `--healthcare` healthcare domain expertise · `--hipaa` HIPAA-compliant architecture · `--edi` EDI & 835 processing · `--big-files` large-file processing systems · `--custom` client customisation frameworks · `--lead` technical leadership · `--perf` performance optimisation · `--api` scalable API development.
 
-- [ ] **Step 4: Beyond markup** — `<section id="beyond" class="beyond">` containing `.beyond__track` (flex row): intro card (`06 — Off the clock`, heading "Good coffee, *slow* walks, sharp suits.", short line "Away from the terminal I'm usually somewhere with good light and better coffee."), figure `street-coffee` (alt "Sachu S holding a coffee outside the Velvet & Bloom café, a blue sports car behind him"), figure `street-walk` (alt "Sachu S walking past a café terrace under a frangipani tree"), and a closing card "Let's talk →" linking `#contact`. Figures use `<picture>` + lazy images + `data-anim="wipe"`.
+- [ ] **Step 4: Offline strip markup** — `<section id="beyond" class="beyond">` with `.beyond__track` (flex row): intro card (`<span>06</span> // offline`, heading "When the terminal is <span class="hl">closed…</span>", line "…you'll find me somewhere with good light and better coffee."), `<figure class="photo beyond__photo" data-anim="wipe">` for `street-coffee` (alt "Sachu S holding a coffee outside the Velvet & Bloom café, a blue sports car behind him", caption `IMG_2031.JPG — coffee.run()`), the same for `street-walk` (alt "Sachu S walking past a café terrace under a frangipani tree", caption `IMG_2047.JPG — walk.slow()`), and a closing card linking `#contact` ("Back to work → let's talk").
 
 - [ ] **Step 5: Contact + footer markup**
 
 ```html
 <section id="contact" class="section contact">
-  <div class="container contact__grid">
-    <div class="contact__intro">
-      <p class="section-label">07 — Contact</p>
-      <h2 class="display contact__title" data-anim="lines">Let's build something <em>reliable</em>.</h2>
-      <p>I'm open to new opportunities and interesting problems. Whether it's a role, a project or just hello — my inbox is open.</p>
-      <ul class="contact__list">
-        <li><span class="mono-label">Email</span><a href="mailto:sachusudeve8690@gmail.com">sachusudeve8690@gmail.com</a>
-            <button class="copy-btn" type="button" data-copy="sachusudeve8690@gmail.com" aria-label="Copy email address">Copy</button></li>
-        <li><span class="mono-label">Phone</span><a href="tel:+918157864536">+91 81578 64536</a></li>
-        <li><span class="mono-label">Location</span><span>Kerala, India · <span data-clock>--:--:--</span> IST</span></li>
-        <li><span class="mono-label">Elsewhere</span><a href="https://linkedin.com/in/sachu-s-705813179" target="_blank" rel="noopener" data-magnetic="0.4">LinkedIn ↗</a> <a href="https://github.com/sachusudevan" target="_blank" rel="noopener" data-magnetic="0.4">GitHub ↗</a></li>
-      </ul>
-      <figure class="contact__photo" data-anim="wipe"><picture>…portrait-wall (alt "Black-and-white portrait of Sachu S leaning against a wall, eyes closed")…</picture></figure>
+  <div class="container">
+    <p class="section-label"><span>07</span> // contact</p>
+    <h2 class="display contact__title" data-anim="lines">Let's build something that <span class="hl">ships.</span></h2>
+    <div class="contact__grid">
+      <div class="contact__side">
+        <div class="term contact__yml" data-anim="fade">
+          <div class="term__bar"><span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term__title">contact.yml</span></div>
+          <dl class="term__body yml">
+            <div><dt>email:</dt><dd><a href="mailto:sachusudeve8690@gmail.com">sachusudeve8690@gmail.com</a> <button class="copy-btn mono" type="button" data-copy="sachusudeve8690@gmail.com" aria-label="Copy email address">[copy]</button></dd></div>
+            <div><dt>phone:</dt><dd><a href="tel:+918157864536">+91 81578 64536</a></dd></div>
+            <div><dt>location:</dt><dd>kerala, in · IST <span data-clock>--:--:--</span></dd></div>
+            <div><dt>linkedin:</dt><dd><a href="https://linkedin.com/in/sachu-s-705813179" target="_blank" rel="noopener" data-magnetic="0.3">/in/sachu-s ↗</a></dd></div>
+            <div><dt>github:</dt><dd><a href="https://github.com/sachusudevan" target="_blank" rel="noopener" data-magnetic="0.3">@sachusudevan ↗</a></dd></div>
+            <div><dt>status:</dt><dd class="lime">open to opportunities</dd></div>
+          </dl>
+        </div>
+        <figure class="photo contact__photo" data-anim="wipe"><picture><source srcset="assets/img/portrait-wall.webp" type="image/webp" /><img src="assets/img/portrait-wall.jpg" alt="Black-and-white portrait of Sachu S leaning against a wall, eyes closed" width="{W}" height="{H}" loading="lazy" /></picture><figcaption class="photo__cap">img_003.jpg</figcaption></figure>
+      </div>
+      <form class="contact-form term" novalidate>
+        <div class="term__bar"><span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term__title">new_message.sh</span></div>
+        <div class="term__body">
+          <div class="field"><label for="name"><span class="lime">&gt;</span> name</label><input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error" /><span class="field__error" id="name-error"></span></div>
+          <div class="field"><label for="email"><span class="lime">&gt;</span> email</label><input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error" /><span class="field__error" id="email-error"></span></div>
+          <div class="field"><label for="subject"><span class="lime">&gt;</span> subject <span class="muted">(optional)</span></label><input id="subject" name="subject" type="text" /></div>
+          <div class="field"><label for="message"><span class="lime">&gt;</span> message</label><textarea id="message" name="message" rows="5" required aria-describedby="message-error"></textarea><span class="field__error" id="message-error"></span></div>
+          <button class="btn btn--lime" type="submit" data-magnetic="0.3">[ send ↵ ]</button>
+          <p class="contact-form__status mono" role="status"></p>
+        </div>
+      </form>
     </div>
-    <form class="contact-form" novalidate>
-      <div class="field"><label for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error" /><span class="field__error" id="name-error"></span></div>
-      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error" /><span class="field__error" id="email-error"></span></div>
-      <div class="field"><label for="subject">Subject <span class="optional">(optional)</span></label><input id="subject" name="subject" type="text" /></div>
-      <div class="field"><label for="message">Message</label><textarea id="message" name="message" rows="5" required aria-describedby="message-error"></textarea><span class="field__error" id="message-error"></span></div>
-      <button class="btn btn--solid btn--lg" type="submit" data-magnetic="0.3">Send message <span class="arrow" aria-hidden="true">→</span></button>
-      <p class="contact-form__status mono-label" role="status"></p>
-    </form>
   </div>
 </section>
 </main>
 <footer class="footer">
-  <div class="container footer__grid">
-    <a class="footer__logo" href="#hero" aria-label="Back to top"><!-- monogram svg --></a>
-    <nav aria-label="Footer"><a href="#work">Work</a><a href="#about">About</a><a href="#pipeline">Pipeline</a><a href="#contact">Contact</a></nav>
-    <p class="mono-label">Kerala · <span data-clock>--:--:--</span> IST</p>
-    <p class="mono-label">© <span data-year>2026</span> Sachu S</p>
-    <a class="footer__top mono-label" href="#hero">Back to top ↑</a>
+  <div class="container footer__grid mono">
+    <a class="footer__logo" href="#hero" aria-label="Back to top"><span class="lime">~/</span>sachu</a>
+    <nav aria-label="Footer"><a href="#work" data-scramble>[work]</a> <a href="#about" data-scramble>[about]</a> <a href="#pipeline" data-scramble>[pipeline]</a> <a href="#contact" data-scramble>[contact]</a></nav>
+    <p class="muted">kerala · IST <span data-clock>--:--:--</span></p>
+    <p class="muted">© <span data-year>2026</span> · built with vanilla js, gsap &amp; caffeine</p>
+    <a class="footer__top" href="#hero">cd ~ ↑</a>
   </div>
-  <p class="footer__wordmark display" aria-hidden="true">Sachu <em>S.</em></p>
+  <p class="footer__wordmark display" aria-hidden="true">Sachu S</p>
 </footer>
 ```
+(Remove the `#toolkit`, `#beyond`, `#contact` placeholders; the new `</main>` closes after Contact.)
 
-- [ ] **Step 6: CSS** — `.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}` (wide cards `grid-column:span 2`; mobile 1 column), `.tool-card{background:var(--paper-2);border:1px solid var(--rule);border-radius:var(--radius);padding:1.75rem;transition:translate .4s var(--ease-out)}` hover `translate:0 -4px`; icon keyframes (`blink`, `slide`, `pulse`, `draw`, `travel`, `flow`). `.beyond{overflow:hidden;padding-block:var(--space-section)}` `.beyond__track{display:flex;gap:2rem;padding-inline:var(--gutter);width:max-content}` figures `height:70vh;aspect-ratio:2/3`; mobile: `.beyond__track{width:auto;overflow-x:auto;scroll-snap-type:x mandatory}` children `scroll-snap-align:center;height:60svh`. Contact grid two columns; `.field` floating label style (label above input, input bottom-border only, focus underline grows sage via `background-size`), `.field__error{color:#B4443A}` (dark: `#E08A80`), `[aria-invalid="true"]` red underline. Footer: wordmark `font-size:clamp(4rem,18vw,16rem)` clipped at bottom.
+- [ ] **Step 6: CSS** — `.bento{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}` `.tool-card--wide{grid-column:span 2}` (mobile: 1 column, no spans); `.tool-card{transition:translate .25s var(--ease-out),box-shadow .25s var(--ease-out),border-color .2s}` `.tool-card:hover{translate:-4px -4px;box-shadow:8px 8px 0 var(--lime);border-color:var(--lime)}` `.tool-card h3{font:800 var(--step-1)/1 var(--font-display);text-transform:uppercase;margin:1rem 0}` `.tags{display:flex;flex-wrap:wrap;gap:.4rem;font:500 12px var(--font-mono);color:var(--muted)}` `.tags li:hover{color:var(--lime)}`; icon keyframes (`blink`, `slide`, `pulse`, `draw`, `travel`, `flow`); `.strengths dl` 2-column grid flag (lime) / description. Offline: `.beyond{overflow:hidden;padding-block:var(--space-section)}` `.beyond__track{display:flex;gap:2rem;padding-inline:var(--gutter);width:max-content;align-items:center}` `.beyond__photo{height:72vh;aspect-ratio:2/3}` cards `width:min(80vw,26rem)`; mobile: `.beyond__track{width:auto;overflow-x:auto;scroll-snap-type:x mandatory}` children `scroll-snap-align:center` and `.beyond__photo{height:60svh}`. Contact: `.contact__title{font-size:var(--step-4);margin-bottom:3rem}` `.contact__grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:var(--gutter)}` `.yml>div{display:grid;grid-template-columns:7rem 1fr;gap:1rem;padding:.4rem 0;font:500 14px var(--font-mono)}` `.yml dt{color:var(--lime)}` `.yml a:hover{color:var(--lime)}` `.contact__photo{margin-top:1rem;aspect-ratio:4/3}`; `.field{display:grid;gap:.4rem;margin-bottom:1.25rem}` `.field label{font:500 13px var(--font-mono)}` `.field input,.field textarea{background:var(--bg-3);border:1px solid var(--line);color:var(--text);font:400 15px var(--font-mono);padding:.8rem .9rem;caret-color:var(--lime)}` `.field input:focus,.field textarea:focus{outline:none;border-color:var(--lime);box-shadow:4px 4px 0 var(--lime)}` `.field__error{font:500 12px var(--font-mono);color:var(--danger)}` `[aria-invalid="true"]{border-color:var(--danger)}` `.contact-form__status{margin-top:1rem;color:var(--lime)}`; mobile: contact grid single column. Footer: `.footer{border-top:1px solid var(--line);padding-top:3rem;overflow:hidden}` `.footer__grid{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem 2rem;font-size:13px}` `.footer__wordmark{font-size:clamp(4rem,19vw,17rem);line-height:.8;color:transparent;-webkit-text-stroke:1px var(--line-strong);text-align:center;margin-top:3rem;transition:color .5s,-webkit-text-stroke-color .5s}` `.footer:hover .footer__wordmark{-webkit-text-stroke-color:var(--lime)}`.
 
 - [ ] **Step 7: Write `js/cursor.js`**
 
 ```js
-/* Custom cursor + magnetic elements — fine pointers with motion only. */
+/* Block cursor + magnetic elements — fine pointers with motion only. */
 (function () {
   'use strict';
   var P = window.Portfolio;
   var cursor = document.querySelector('.cursor');
   if (!P || !P.motion || !cursor || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   document.documentElement.classList.add('has-cursor');
-  var dot = cursor.querySelector('.cursor__dot'), ring = cursor.querySelector('.cursor__ring'), label = cursor.querySelector('.cursor__label');
-  gsap.set([dot, ring], { xPercent: -50, yPercent: -50 });
-  var dx = gsap.quickTo(dot, 'x', { duration: 0.1, ease: 'power3' }), dy = gsap.quickTo(dot, 'y', { duration: 0.1, ease: 'power3' });
-  var rx = gsap.quickTo(ring, 'x', { duration: 0.45, ease: 'power3' }), ry = gsap.quickTo(ring, 'y', { duration: 0.45, ease: 'power3' });
+  var label = cursor.querySelector('.cursor__label');
+  gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+  var xTo = gsap.quickTo(cursor, 'x', { duration: 0.18, ease: 'power3' });
+  var yTo = gsap.quickTo(cursor, 'y', { duration: 0.18, ease: 'power3' });
+  var idleTimer;
   window.addEventListener('pointermove', function (e) {
-    dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY);
-    cursor.classList.add('is-visible');
+    xTo(e.clientX); yTo(e.clientY);
+    cursor.classList.remove('is-idle');
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(function () { cursor.classList.add('is-idle'); }, 1200);
   }, { passive: true });
-  document.documentElement.addEventListener('mouseleave', function () { cursor.classList.remove('is-visible'); });
+  document.documentElement.addEventListener('mouseleave', function () { gsap.to(cursor, { autoAlpha: 0, duration: 0.2 }); });
+  document.documentElement.addEventListener('mouseenter', function () { gsap.to(cursor, { autoAlpha: 1, duration: 0.2 }); });
   document.addEventListener('pointerover', function (e) {
     var view = e.target.closest('[data-cursor="view"]');
     var link = e.target.closest('a, button, label, input, textarea');
-    // Work rows are buttons inside a [data-cursor="view"] row — the row's "view" state wins there.
+    // Project rows are buttons inside a [data-cursor="view"] row — the row's "view" state wins there.
     var inView = !!view && (!link || view.contains(link));
     cursor.classList.toggle('is-view', inView);
     cursor.classList.toggle('is-link', !!link && !inView);
-    label.textContent = inView ? (view.dataset.cursorLabel || 'View') : '';
+    label.textContent = inView ? (view.dataset.cursorLabel || '[view]') : '';
   });
 
   document.querySelectorAll('[data-magnetic]').forEach(function (el) {
     var strength = parseFloat(el.dataset.magnetic) || 0.3;
-    var xTo = gsap.quickTo(el, 'x', { duration: 0.8, ease: 'elastic.out(1, 0.4)' });
-    var yTo = gsap.quickTo(el, 'y', { duration: 0.8, ease: 'elastic.out(1, 0.4)' });
+    var mx = gsap.quickTo(el, 'x', { duration: 0.8, ease: 'elastic.out(1, 0.4)' });
+    var my = gsap.quickTo(el, 'y', { duration: 0.8, ease: 'elastic.out(1, 0.4)' });
     el.addEventListener('pointermove', function (e) {
       var r = el.getBoundingClientRect();
-      xTo((e.clientX - (r.left + r.width / 2)) * strength);
-      yTo((e.clientY - (r.top + r.height / 2)) * strength);
+      mx((e.clientX - (r.left + r.width / 2)) * strength);
+      my((e.clientY - (r.top + r.height / 2)) * strength);
     });
-    el.addEventListener('pointerleave', function () { xTo(0); yTo(0); });
+    el.addEventListener('pointerleave', function () { mx(0); my(0); });
   });
 })();
 ```
+
 - [ ] **Step 8: Write `js/contact.js`**
 
 ```js
-/* Contact form (mailto), copy-to-clipboard, toast, live IST clock and footer year. */
+/* Terminal contact form (mailto), copy-to-clipboard, toast, live IST clocks and footer year. */
 (function () {
   'use strict';
   var lib = window.PortfolioLib;
@@ -1590,7 +1712,7 @@ test('contact details, clock, year and copy button exist', () => {
     var result = lib.validateContact(fields);
     ['name', 'email', 'message'].forEach(function (key) {
       var msg = result.errors[key] || '';
-      document.getElementById(key + '-error').textContent = msg;
+      document.getElementById(key + '-error').textContent = msg ? '! ' + msg : '';
       form.elements.namedItem(key).setAttribute('aria-invalid', String(!!msg));
     });
     var status = form.querySelector('.contact-form__status');
@@ -1599,7 +1721,7 @@ test('contact details, clock, year and copy button exist', () => {
       form.elements.namedItem(Object.keys(result.errors)[0]).focus();
       return;
     }
-    status.textContent = 'Opening your email app…';
+    status.textContent = '> opening your mail client … ok';
     window.location.href = lib.buildMailto(EMAIL, fields);
   });
 
@@ -1613,9 +1735,9 @@ test('contact details, clock, year and copy button exist', () => {
         var ok = false;
         try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
         ta.remove();
-        toast(ok ? 'Email copied to clipboard' : 'Copy failed — ' + text);
+        toast(ok ? '> email copied ✓' : '! copy failed — ' + text);
       }
-      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function () { toast('Email copied to clipboard'); }, fallback);
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function () { toast('> email copied ✓'); }, fallback);
       else fallback();
     });
   });
@@ -1623,7 +1745,7 @@ test('contact details, clock, year and copy button exist', () => {
   var clocks = document.querySelectorAll('[data-clock]');
   function tick() {
     var time = lib.formatClock(new Date(), 'Asia/Kolkata');
-    clocks.forEach(function (c) { c.textContent = time; });
+    clocks.forEach(function (c) { c.textContent = c.dataset.clock === 'short' ? time.slice(0, 5) : time; });
   }
   if (clocks.length) { tick(); setInterval(tick, 1000); }
   document.querySelectorAll('[data-year]').forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
@@ -1632,18 +1754,18 @@ test('contact details, clock, year and copy button exist', () => {
 
 - [ ] **Step 9: Run tests** — `npm test` — Expected: PASS.
 
-- [ ] **Step 10: Browser check** — bento icons loop; Beyond strip pins and scrolls horizontally on desktop, swipes on mobile; contact: submit empty → errors announced and first invalid field focused; valid → status text and `mailto:` navigation (verify the URL via `javascript_tool` by temporarily overriding `location` is not possible → instead check `PortfolioLib.buildMailto` output in console); copy button shows toast; clock ticks; cursor ring grows on links and shows "Open" on work rows; magnetic buttons pull.
+- [ ] **Step 10: Browser check** — stack panes lift with lime offset shadow and icons loop; offline strip pins and scrolls horizontally on desktop, swipes on mobile; photos colourise on hover; contact: submit empty → `! …` errors and first invalid field focused; valid → status line and `mailto:` navigation (check the generated URL via `PortfolioLib.buildMailto` in the console); `[copy]` shows the toast; nav + contact + footer clocks tick; cursor is a lime block, outlines on links, shows `[open]` on project rows, blinks when idle; magnetic buttons pull.
 
 - [ ] **Step 11: Commit**
 
 ```bash
 git add index.html css/sections.css js/cursor.js js/contact.js tests/site.test.mjs
-git commit -m "feat: toolkit, beyond-the-code strip, contact and footer with cursor + contact scripts"
+git commit -m "feat: stack panes, offline strip, terminal contact and footer with cursor + contact scripts"
 ```
 
 ---
 
-### Task 8: Generated GIF and OG image
+### Task 8: Generated GIF and OG image (dark)
 
 **Files:**
 - Create: `tools/pipeline-frames.mjs`, `tools/render-gif.mjs`, `tools/render-og.mjs`, `tests/media.test.mjs`
@@ -1665,9 +1787,11 @@ import { renderFrame, FRAMES, WIDTH, HEIGHT } from '../tools/pipeline-frames.mjs
 import { buildGif } from '../tools/render-gif.mjs';
 import { renderOg } from '../tools/render-og.mjs';
 
-test('pipeline frames are valid SVG, animated, and loop seamlessly', () => {
+test('pipeline frames are valid dark SVG, animated, and loop seamlessly', () => {
   const first = renderFrame(0);
   assert.match(first, /^<svg[^>]+viewBox="0 0 720 360"/);
+  assert.match(first, /#0B0B0B/);
+  assert.match(first, /#C6F432/);
   assert.notEqual(first, renderFrame(Math.floor(FRAMES / 3)));
   assert.equal(first, renderFrame(FRAMES));
 });
@@ -1705,7 +1829,8 @@ export const HEIGHT = 360;
 export const FRAMES = 72;
 export const FPS = 18;
 
-const C = { paper: '#F4F1EA', paper2: '#EAE5DA', ink: '#141614', soft: '#5B605A', sage: '#6E8F72', moss: '#2F4A3A', sand: '#C8A97E' };
+const C = { bg: '#0B0B0B', bg2: '#121212', line: '#2A2A2A', text: '#EDEDED', muted: '#8A8A8A', lime: '#C6F432', onLime: '#0B0B0B' };
+const MONO = 'Consolas, monospace';
 const DOCS = [{ y: 70, label: 'EOB' }, { y: 160, label: '837' }, { y: 250, label: 'SELF-PAY' }];
 const OUTS = [{ y: 90, label: '835' }, { y: 170, label: 'CSV' }, { y: 250, label: 'TXT' }];
 const CORE = { x: 360, y: 180 };
@@ -1720,45 +1845,52 @@ const pathD = (w) => `M${w.x[0]} ${w.y[0]} C ${w.x[1]} ${w.y[1]}, ${w.x[2]} ${w.
 const point = (w, t) => [bezier(...w.x, t), bezier(...w.y, t)];
 const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 
+function grid() {
+  const lines = [];
+  for (let x = 40; x < WIDTH; x += 40) lines.push(`<path d="M${x} 0V${HEIGHT}" stroke="${C.line}" stroke-opacity=".45"/>`);
+  for (let y = 40; y < HEIGHT; y += 40) lines.push(`<path d="M0 ${y}H${WIDTH}" stroke="${C.line}" stroke-opacity=".45"/>`);
+  return lines.join('');
+}
+
 export function renderFrame(i) {
   const phase = (((i % FRAMES) + FRAMES) % FRAMES) / FRAMES; // 0..1
-  const parts = [];
-  parts.push(`<rect width="${WIDTH}" height="${HEIGHT}" fill="${C.paper}"/>`);
-  parts.push(`<text x="24" y="34" font-family="Consolas, monospace" font-size="12" letter-spacing="2" fill="${C.soft}">EDI ENGINE · CLAIMS PIPELINE</text>`);
+  const caretOn = Math.floor(phase * 8) % 2 === 0;
+  const parts = [`<rect width="${WIDTH}" height="${HEIGHT}" fill="${C.bg}"/>`, grid()];
+  parts.push(`<text x="24" y="30" font-family="${MONO}" font-size="13" fill="${C.muted}"><tspan fill="${C.lime}">$</tspan> ./edi-engine --in eob,837,self-pay --out 835</text>`);
+  if (caretOn) parts.push(`<rect x="370" y="19" width="8" height="14" fill="${C.lime}"/>`);
 
   DOCS.forEach((d, k) => {
-    parts.push(`<g transform="translate(40 ${d.y})"><rect width="110" height="44" rx="6" fill="${C.paper2}" stroke="${C.ink}" stroke-width="1.5"/>`
-      + `<text x="14" y="28" font-family="Consolas, monospace" font-size="13" fill="${C.ink}">${d.label}</text></g>`);
+    parts.push(`<g transform="translate(40 ${d.y})"><rect width="110" height="44" fill="${C.bg2}" stroke="${C.text}" stroke-width="1.5"/>`
+      + `<text x="12" y="28" font-family="${MONO}" font-size="13" fill="${C.text}">${d.label}</text></g>`);
     const w = inWire(d.y);
-    parts.push(`<path d="${pathD(w)}" fill="none" stroke="${C.sage}" stroke-width="2" opacity=".55"/>`);
-    const t = ease((phase * 2 + k / 3) % 1);
-    const [x, y] = point(w, t);
-    parts.push(`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="5" fill="${C.sand}"/>`);
+    parts.push(`<path d="${pathD(w)}" fill="none" stroke="${C.lime}" stroke-width="2" opacity=".5"/>`);
+    const [x, y] = point(w, ease((phase * 2 + k / 3) % 1));
+    parts.push(`<rect x="${(x - 5).toFixed(2)}" y="${(y - 5).toFixed(2)}" width="10" height="10" fill="${C.lime}"/>`);
     const checkOn = Math.sin((phase + k / 3) * Math.PI * 2) > -0.2;
-    parts.push(`<g transform="translate(200 ${d.y + 22})" opacity="${checkOn ? 1 : 0.25}"><circle r="10" fill="${C.sage}"/><path d="M-4.5 0l3 3 6-6" fill="none" stroke="${C.paper}" stroke-width="2.2" stroke-linecap="round"/></g>`);
+    parts.push(`<g transform="translate(200 ${d.y + 22})" opacity="${checkOn ? 1 : 0.25}"><rect x="-10" y="-10" width="20" height="20" fill="${C.lime}"/><path d="M-4.5 0l3 3 6-6" fill="none" stroke="${C.onLime}" stroke-width="2.2"/></g>`);
   });
 
   const angle = (phase * 360).toFixed(2);
   const pulse = (1 + 0.04 * Math.sin(phase * Math.PI * 4)).toFixed(4);
-  parts.push(`<g transform="translate(${CORE.x} ${CORE.y})"><circle r="74" fill="none" stroke="${C.sand}" stroke-width="2" stroke-dasharray="6 10" transform="rotate(${angle})"/>`
-    + `<circle r="58" fill="${C.moss}" transform="scale(${pulse})"/><text y="7" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="${C.paper}">EDI ENGINE</text></g>`);
+  parts.push(`<g transform="translate(${CORE.x} ${CORE.y})"><circle r="78" fill="none" stroke="${C.lime}" stroke-opacity=".6" stroke-width="2" stroke-dasharray="6 10" transform="rotate(${angle})"/>`
+    + `<rect x="-56" y="-56" width="112" height="112" fill="${C.lime}" transform="scale(${pulse})"/>`
+    + `<text y="7" text-anchor="middle" font-family="${MONO}" font-weight="bold" font-size="18" fill="${C.onLime}">EDI ENGINE</text></g>`);
 
   OUTS.forEach((o, k) => {
     const w = outWire(o.y);
-    parts.push(`<path d="${pathD(w)}" fill="none" stroke="${C.sage}" stroke-width="2" opacity=".55"/>`);
-    const t = ease((phase * 2 + 0.5 + k / 3) % 1);
-    const [x, y] = point(w, t);
-    parts.push(`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="5" fill="${C.sand}"/>`);
-    parts.push(`<g transform="translate(520 ${o.y})"><rect width="76" height="36" rx="18" fill="${C.paper2}" stroke="${C.ink}" stroke-width="1.5"/>`
-      + `<text x="38" y="23" text-anchor="middle" font-family="Consolas, monospace" font-size="13" fill="${C.ink}">${o.label}</text></g>`);
+    parts.push(`<path d="${pathD(w)}" fill="none" stroke="${C.lime}" stroke-width="2" opacity=".5"/>`);
+    const [x, y] = point(w, ease((phase * 2 + 0.5 + k / 3) % 1));
+    parts.push(`<rect x="${(x - 5).toFixed(2)}" y="${(y - 5).toFixed(2)}" width="10" height="10" fill="${C.lime}"/>`);
+    parts.push(`<g transform="translate(520 ${o.y})"><rect width="76" height="36" fill="${C.bg2}" stroke="${C.text}" stroke-width="1.5"/>`
+      + `<text x="38" y="23" text-anchor="middle" font-family="${MONO}" font-size="13" fill="${C.text}">${o.label}</text></g>`);
   });
 
-  parts.push(`<path d="M596 178 L620 178" stroke="${C.sage}" stroke-width="2"/>`);
-  parts.push(`<rect x="620" y="110" width="80" height="136" rx="10" fill="${C.paper2}" stroke="${C.ink}" stroke-width="1.5"/>`);
-  parts.push(`<text x="660" y="132" text-anchor="middle" font-family="Consolas, monospace" font-size="10" fill="${C.soft}">PORTAL</text>`);
+  parts.push(`<path d="M596 178 L620 178" stroke="${C.lime}" stroke-width="2"/>`);
+  parts.push(`<rect x="620" y="110" width="80" height="136" fill="${C.bg2}" stroke="${C.text}" stroke-width="1.5"/>`);
+  parts.push(`<text x="660" y="132" text-anchor="middle" font-family="${MONO}" font-size="10" fill="${C.muted}">PORTAL</text>`);
   [0, 1, 2, 3].forEach((b) => {
     const h = 30 + 40 * (0.5 + 0.5 * Math.sin((phase + b / 4) * Math.PI * 2));
-    parts.push(`<rect x="${632 + b * 16}" y="${(232 - h).toFixed(2)}" width="10" height="${h.toFixed(2)}" rx="2" fill="${C.sage}"/>`);
+    parts.push(`<rect x="${632 + b * 16}" y="${(232 - h).toFixed(2)}" width="10" height="${h.toFixed(2)}" fill="${C.lime}"/>`);
   });
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${WIDTH} ${HEIGHT}" width="${WIDTH}" height="${HEIGHT}">${parts.join('')}</svg>`;
@@ -1779,7 +1911,7 @@ import { renderFrame, WIDTH, FRAMES, FPS } from './pipeline-frames.mjs';
 const { GIFEncoder, quantize, applyPalette } = gifenc;
 
 export function rasterize(svg) {
-  const img = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH }, font: { loadSystemFonts: true, defaultFontFamily: 'Georgia' } }).render();
+  const img = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH }, font: { loadSystemFonts: true, defaultFontFamily: 'Consolas' } }).render();
   return { data: new Uint8Array(img.pixels), width: img.width, height: img.height };
 }
 
@@ -1787,7 +1919,7 @@ export function buildGif(frameCount = FRAMES) {
   const frames = Array.from({ length: frameCount }, (_, i) => rasterize(renderFrame(i)));
   const sample = new Uint8Array(frames.reduce((n, f) => n + f.data.length, 0));
   frames.reduce((offset, f) => (sample.set(f.data, offset), offset + f.data.length), 0);
-  const palette = quantize(sample, 64);
+  const palette = quantize(sample, 32);
   const gif = GIFEncoder();
   frames.forEach((f, i) => {
     gif.writeFrame(applyPalette(f.data, palette), f.width, f.height, i === 0 ? { palette, delay: Math.round(1000 / FPS), repeat: 0 } : { delay: Math.round(1000 / FPS) });
@@ -1817,24 +1949,28 @@ import { dirname, join } from 'node:path';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 export function buildOgSvg(photoDataUri) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="630" viewBox="0 0 1200 630">
-  <defs><clipPath id="arch"><path d="M800 630 V250 a170 170 0 0 1 340 0 V630 Z"/></clipPath></defs>
-  <rect width="1200" height="630" fill="#F4F1EA"/>
-  <rect x="800" y="80" width="340" height="550" fill="#2F4A3A" clip-path="url(#arch)"/>
-  <image href="${photoDataUri}" x="770" y="70" width="400" height="597" preserveAspectRatio="xMidYMin slice" clip-path="url(#arch)"/>
-  <text x="80" y="120" font-family="Consolas, monospace" font-size="20" letter-spacing="4" fill="#5B605A">TECHNICAL LEAD · SOFTWARE ENGINEER</text>
-  <text x="76" y="270" font-family="Georgia, serif" font-size="128" fill="#141614">Sachu S</text>
-  <text x="80" y="360" font-family="Georgia, serif" font-style="italic" font-size="40" fill="#2F4A3A">Engineering calm systems</text>
-  <text x="80" y="410" font-family="Georgia, serif" font-style="italic" font-size="40" fill="#2F4A3A">for messy healthcare data.</text>
-  <line x1="80" y1="470" x2="700" y2="470" stroke="#141614" stroke-opacity=".15"/>
-  <text x="80" y="520" font-family="Consolas, monospace" font-size="20" fill="#6E8F72">Python · Django · FastAPI · EDI 835/837 · HIPAA</text>
+  const gridLines = [];
+  for (let x = 60; x < 1200; x += 60) gridLines.push(`<path d="M${x} 0V630" stroke="#2A2A2A" stroke-opacity=".5"/>`);
+  for (let y = 60; y < 630; y += 60) gridLines.push(`<path d="M0 ${y}H1200" stroke="#2A2A2A" stroke-opacity=".5"/>`);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><clipPath id="frame"><rect x="800" y="70" width="320" height="490"/></clipPath></defs>
+  <rect width="1200" height="630" fill="#0B0B0B"/>
+  ${gridLines.join('')}
+  <image href="${photoDataUri}" x="780" y="60" width="360" height="537" preserveAspectRatio="xMidYMin slice" clip-path="url(#frame)"/>
+  <path d="M800 100V70H830M1120 530V560H1090" fill="none" stroke="#C6F432" stroke-width="4"/>
+  <text x="80" y="110" font-family="Consolas, monospace" font-size="22" fill="#8A8A8A"><tspan fill="#C6F432">~/</tspan>sachu · technical lead</text>
+  <text x="76" y="270" font-family="Arial Black, Impact, sans-serif" font-size="118" fill="#EDEDED">SACHU S</text>
+  <rect x="80" y="320" width="640" height="64" fill="#C6F432"/>
+  <text x="96" y="366" font-family="Arial Black, Impact, sans-serif" font-size="34" fill="#0B0B0B">CODE THAT SHIPS. TEAMS THAT SCALE.</text>
+  <text x="80" y="470" font-family="Consolas, monospace" font-size="22" fill="#EDEDED"><tspan fill="#C6F432">$</tspan> python · django · fastapi · edi 835/837 · hipaa</text>
+  <rect x="80" y="500" width="14" height="26" fill="#C6F432"/>
 </svg>`;
 }
 
 export function renderOg() {
-  const photo = readFileSync(join(ROOT, 'assets', 'img', 'portrait-sage.jpg')).toString('base64');
+  const photo = readFileSync(join(ROOT, 'assets', 'img', 'portrait-noir.jpg')).toString('base64');
   const svg = buildOgSvg(`data:image/jpeg;base64,${photo}`);
-  return new Resvg(svg, { fitTo: { mode: 'width', value: 1200 }, font: { loadSystemFonts: true, defaultFontFamily: 'Georgia' } }).render().asPng();
+  return new Resvg(svg, { fitTo: { mode: 'width', value: 1200 }, font: { loadSystemFonts: true, defaultFontFamily: 'Consolas' } }).render().asPng();
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
@@ -1846,13 +1982,13 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 
 - [ ] **Step 6: Generate and test**
 
-Run: `npm run gif && npm run og && npm test` — Expected: both files written (GIF ≲ 1.5MB), all tests PASS. Open `assets/pipeline.gif` and `assets/og-image.png` with the Read tool to eyeball them; fix geometry overlaps if any.
+Run: `npm run gif && npm run og && npm test` — Expected: both files written (GIF ≲ 1.5MB), all tests PASS. Open `assets/pipeline.gif` and `assets/og-image.png` with the Read tool to eyeball them; fix overlaps (e.g. headline width vs the photo frame) if any.
 
 - [ ] **Step 7: Commit**
 
 ```bash
 git add tools/pipeline-frames.mjs tools/render-gif.mjs tools/render-og.mjs tests/media.test.mjs assets/pipeline.gif assets/og-image.png
-git commit -m "feat: generate animated pipeline GIF and OG share image"
+git commit -m "feat: generate dark animated pipeline GIF and OG share image"
 ```
 
 ---
@@ -1871,7 +2007,7 @@ test('old image folder is gone and README showcases generated media', () => {
   assert.ok(!exists('images'));
   const readme = read('README.md');
   assert.match(readme, /assets\/pipeline\.gif/);
-  assert.match(readme, /assets\/svg\/monogram\.svg/);
+  assert.match(readme, /assets\/svg\/logo\.svg/);
   assert.match(readme, /npm test/);
 });
 ```
@@ -1893,18 +2029,18 @@ git rm -r -q images
 }
 ```
 
-`README.md` sections: title with `assets/svg/monogram.svg` (96px), one-line pitch, `![EDI ENGINE pipeline](assets/pipeline.gif)`, Live link, "Design" (Editorial × Engineering, palette, type), "Motion" (bullet list of animations), "Structure" (file map), "Develop" (`npm install`, `npm run serve`, `npm test`, `npm run images|gif|og`), "Deploy" (GitHub Pages from `main`, root), "Accessibility" (reduced motion, `?motion=off`, keyboard), author links.
+`README.md` sections: `assets/svg/logo.svg` header image, one-line pitch, `![EDI ENGINE pipeline](assets/pipeline.gif)`, live link, "Design" (Neo Terminal: palette, Syne/Geist/JetBrains Mono, sharp edges), "Motion" (bullet list of animations), "Structure" (file map), "Develop" (`npm install`, `npm run serve`, `npm test`, `npm run images|gif|og`), "Deploy" (GitHub Pages from `main`, root), "Accessibility" (reduced motion, `?motion=off`, keyboard), author links.
 
 Run: `npm test` — Expected: all PASS.
 
 - [ ] **Step 3: Full browser verification** (preview server `portfolio`)
 
-For each state, screenshot hero, pipeline, work, contact and record findings:
-1. Desktop 1440×900 light → dark toggle (circular wipe), full scroll top→bottom: no layout jumps, pins release cleanly, console has no errors (`read_console_messages onlyErrors`).
-2. Mobile 375×812 and 360px width: `document.documentElement.scrollWidth <= innerWidth` via `javascript_tool`; menu opens/closes, Esc closes, focus returns to burger; Beyond swipes; pipeline loops.
+For each state, screenshot hero, pipeline, projects and contact and record findings:
+1. Desktop 1440×900, full scroll top→bottom: boot loader once, no layout jumps, pins release cleanly, console has no errors (`read_console_messages onlyErrors`).
+2. Mobile 375×812 and 360px width: `document.documentElement.scrollWidth <= innerWidth` via `javascript_tool`; `[menu]` opens/closes, Esc closes, focus returns to the toggle; offline strip swipes; pipeline loops; photos colourise when centred.
 3. `?motion=off`: no loader, all content visible, no pin spacers (`document.querySelectorAll('.pin-spacer').length === 0`).
-4. Scripts blocked: temporarily serve a copy with the CDN `<script>` tags removed (or block `cdn.jsdelivr.net` via a modified copy in the scratchpad) → content visible after ≤3.5s, no stuck loader.
-5. Keyboard pass: skip link → main; Tab through nav, filters, rows (Enter toggles), form; visible focus rings throughout.
+4. Scripts blocked: serve a scratchpad copy of `index.html` with the CDN `<script>` tags removed → content visible after ≤3.5s, no stuck loader.
+5. Keyboard pass: skip link → main; Tab through nav, flags, project rows (Enter toggles), form; lime focus rings visible throughout.
 
 Fix anything found (each fix: smallest change + re-run `npm test` + re-check the failing state).
 
