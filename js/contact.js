@@ -1,8 +1,8 @@
-/* Terminal contact form (WhatsApp click-to-chat), copy-to-clipboard, toast, live IST clocks and footer year. */
+/* Contact helpers: copy-to-clipboard, toast, live IST clocks and footer year.
+   (WhatsApp connect is a plain link in index.html, so it works without JavaScript.) */
 (function () {
   'use strict';
   var lib = window.PortfolioLib;
-  var WHATSAPP = '918157864536';
   var toastEl = document.querySelector('.toast'), toastTimer;
 
   function toast(message) {
@@ -12,28 +12,6 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toastEl.classList.remove('is-visible'); }, 2400);
   }
-
-  var form = document.querySelector('.contact-form');
-  if (form) form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var get = function (n) { return form.elements.namedItem(n).value; };
-    var fields = { name: get('name'), email: get('email'), phone: get('phone'), subject: get('subject'), message: get('message') };
-    var result = lib.validateContact(fields);
-    ['name', 'email', 'phone', 'message'].forEach(function (key) {
-      var msg = result.errors[key] || '';
-      document.getElementById(key + '-error').textContent = msg ? '! ' + msg : '';
-      form.elements.namedItem(key).setAttribute('aria-invalid', String(!!msg));
-    });
-    var status = form.querySelector('.contact-form__status');
-    if (!result.valid) {
-      status.textContent = '';
-      form.elements.namedItem(Object.keys(result.errors)[0]).focus();
-      return;
-    }
-    // Click-to-chat: WhatsApp opens with the enquiry prefilled; the visitor presses Send
-    status.textContent = '> opening whatsapp … press send to deliver';
-    window.open(lib.buildWhatsApp(WHATSAPP, fields), '_blank', 'noopener');
-  });
 
   document.querySelectorAll('[data-copy]').forEach(function (btn) {
     btn.addEventListener('click', function () {

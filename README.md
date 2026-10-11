@@ -12,7 +12,7 @@ Personal site of **Sachu S**, Technical Lead & Software Engineer building HIPAA-
 
 - Near-black canvas `#0B0B0B`, a single lime accent `#C6F432`, sharp edges everywhere.
 - **Syne** for uppercase display type, **JetBrains Mono** for labels and UI, **Geist** for body copy.
-- Terminal motifs throughout: boot loader, `$ whoami` prompt, `README.md` about panel, `git log` experience, `ls -la` projects, `contact.yml`.
+- Terminal motifs throughout: boot loader, `$ whoami` prompt, `README.md` about panel, `git log` experience, `ls -la` projects, `contact.yml` and a one-tap WhatsApp connect.
 - Photography shown monochrome with lime corner brackets, colour on hover.
 
 ## Motion
@@ -37,7 +37,7 @@ js/motion.js          # generic scroll/entrance animation
 js/pipeline.js        # the signature pipeline timeline
 js/work.js            # project filters, rows, hover preview
 js/cursor.js          # custom cursor + magnetic elements
-js/contact.js         # mailto form, copy email, live IST clock
+js/contact.js         # copy email, toast, live IST clock
 assets/img/           # optimised photos (WebP + JPEG)
 assets/svg/           # logo.svg and pipeline.svg (self-animating)
 assets/pipeline.gif   # generated animation for this README

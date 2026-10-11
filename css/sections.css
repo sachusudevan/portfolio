@@ -315,23 +315,52 @@
 .copy-btn:hover { color: var(--lime); }
 .contact__photo { margin-top: 1rem; aspect-ratio: 4 / 3; }
 .contact__photo img { object-position: 50% 20%; }
-.field { display: grid; gap: .4rem; margin-bottom: 1.25rem; }
-.field label { font: 500 13px var(--font-mono); }
-.field input, .field textarea {
-  width: 100%;
+.contact-wa .term__body { display: grid; gap: 1.25rem; }
+.wa-cta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: var(--lime);
+  color: var(--on-lime);
+  border: 1px solid var(--lime);
+  transition: translate .25s var(--ease-out), box-shadow .25s var(--ease-out);
+}
+.wa-cta:hover, .wa-cta:focus-visible { translate: -4px -4px; box-shadow: 8px 8px 0 var(--text); }
+.wa-cta__icon {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--on-lime);
+}
+.wa-cta__icon svg { width: 36px; height: 36px; }
+.wa-cta__bubble { fill: none; stroke: var(--lime); stroke-width: 2; }
+.wa-cta__phone { fill: var(--lime); }
+.wa-cta__icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--on-lime);
+  animation: wa-ring 1.8s ease-out infinite;
+}
+@keyframes wa-ring { from { transform: scale(1); opacity: .8; } to { transform: scale(1.6); opacity: 0; } }
+.wa-cta__text { display: grid; gap: .35rem; }
+.wa-cta__label { font-size: var(--step-2); }
+.wa-cta__sub { font-size: 12px; }
+.wa-preview__note { font-size: 12px; margin-bottom: -.5rem; }
+.wa-bubble {
+  max-width: 36ch;
+  padding: .9rem 1.1rem;
   background: var(--bg-3);
   border: 1px solid var(--line);
-  color: var(--text);
-  font: 400 15px var(--font-mono);
-  padding: .8rem .9rem;
-  caret-color: var(--lime);
-  transition: border-color .2s, box-shadow .2s;
-  resize: vertical;
+  border-left: 3px solid var(--lime);
+  font-size: var(--step--1);
 }
-.field input:focus, .field textarea:focus { outline: none; border-color: var(--lime); box-shadow: 4px 4px 0 var(--lime); }
-.field__error { font: 500 12px var(--font-mono); color: var(--danger); min-height: 1em; }
-.field [aria-invalid="true"] { border-color: var(--danger); }
-.contact-form__status { margin-top: 1rem; color: var(--lime); font-size: 13px; min-height: 1.4em; }
 
 /* ---------- Footer ---------- */
 .footer { border-top: 1px solid var(--line); padding-top: 3rem; overflow: hidden; }

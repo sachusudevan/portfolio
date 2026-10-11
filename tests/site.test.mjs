@@ -161,19 +161,6 @@ test('stack has six terminal panes', () => {
   assert.equal((section.match(/class="term tool-card\b/g) || []).length, 6);
 });
 
-test('contact form is labelled, novalidate and wired to error messages', () => {
-  const form = src.match(/<form class="contact-form[^"]*"[\s\S]*?<\/form>/)[0];
-  assert.match(form, /novalidate/);
-  for (const f of ['name', 'email', 'subject', 'message']) {
-    assert.match(form, new RegExp(`<label[^>]*for="${f}"`));
-    assert.match(form, new RegExp(`id="${f}"[^>]*name="${f}"`));
-  }
-  for (const f of ['name', 'email', 'message']) {
-    assert.match(form, new RegExp(`aria-describedby="${f}-error"`));
-    assert.match(form, new RegExp(`id="${f}-error"`));
-  }
-});
-
 test('contact details, clocks, year and copy button exist', () => {
   assert.match(src, /href="mailto:sachusudeve8690@gmail\.com"/);
   assert.match(src, /href="tel:\+918157864536"/);
@@ -209,14 +196,17 @@ test('site does not advertise job-seeking status', () => {
   assert.ok(!/open to (new )?(opportunities|work)|hire me|looking for (new )?(opportunities|a job)/i.test(src), 'job-seeking wording found');
 });
 
-test('contact offers WhatsApp: link, optional phone field and a WhatsApp send button', () => {
-  assert.match(src, /href="https:\/\/wa\.me\/918157864536"/);
-  const form = src.match(/<form class="contact-form[^"]*"[\s\S]*?<\/form>/)[0];
-  assert.match(form, /<label[^>]*for="phone"/);
-  assert.match(form, /id="phone"[^>]*name="phone"[^>]*type="tel"/);
-  assert.match(form, /aria-describedby="phone-error"/);
-  assert.match(form, /id="phone-error"/);
-  assert.match(form, /<button[^>]*type="submit"[^>]*data-channel="whatsapp"/);
-  assert.equal((form.match(/type="submit"/g) || []).length, 1, 'WhatsApp is the only send option');
-  assert.ok(!/data-channel="email"|email instead/i.test(form), 'no email send option');
+test('contact connects straight to WhatsApp with a prefilled enquiry and collects no details', () => {
+  const section = src.match(/<section id="contact"[\s\S]*?<\/section>/)[0];
+  assert.ok(!/<form\b|<input\b|<textarea\b/.test(section), 'contact section must not collect visitor details');
+  const cta = section.match(/<a class="wa-cta"[^>]*>/);
+  assert.ok(cta, 'WhatsApp connect button missing');
+  const href = attr(cta[0], 'href').replace(/&amp;/g, '&');
+  assert.ok(href.startsWith('https://wa.me/918157864536?text='), href);
+  const text = new URLSearchParams(href.split('?')[1]).get('text');
+  assert.match(text, /^Hi Sachu, I came across your portfolio/);
+  assert.equal(attr(cta[0], 'target'), '_blank');
+  assert.match(attr(cta[0], 'rel'), /noopener/);
+  assert.match(attr(cta[0], 'aria-label'), /WhatsApp/);
+  assert.match(section, /class="wa-cta__icon"/);
 });
