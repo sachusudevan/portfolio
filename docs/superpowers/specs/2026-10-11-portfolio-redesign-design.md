@@ -40,6 +40,7 @@ Static HTML + CSS + classic `<script defer>` files (not ES modules, so `file://`
 | ScrollTrigger | 3.13.0 | jsdelivr | Pinning, scrubbing, reveals |
 | SplitText | 3.13.0 | jsdelivr | Line/char heading reveals |
 | DrawSVGPlugin | 3.13.0 | jsdelivr | Monogram + pipeline stroke drawing |
+| MotionPathPlugin | 3.13.0 | jsdelivr | Pipeline data packets travelling along wires |
 | Lenis | 1.3.23 | cdn.jsdelivr.net | Smooth scroll (synced to ScrollTrigger) |
 | Google Fonts | — | fonts.googleapis.com | Fraunces, Inter, JetBrains Mono |
 
@@ -75,8 +76,10 @@ assets/
   pipeline.gif      # generated GIF of the pipeline
   og-image.png      # 1200×630 social share image
   favicon.svg
+package.json        # private, dev-only deps (sharp, @resvg/resvg-js, gifenc, http-server); npm test
+tests/              # node:test suites (lib, site structure, assets)
 tools/
-  package.json      # dev-only deps: sharp, @resvg/resvg-js, gifenc
+  pipeline-frames.mjs # frame geometry for the GIF
   optimize-images.mjs
   render-gif.mjs    # draws pipeline frames → GIF
   render-og.mjs     # SVG → og-image.png
@@ -214,7 +217,7 @@ back to an instant swap.
 | `assets/pipeline.gif` | `tools/render-gif.mjs`: computes each frame's geometry in JS, renders SVG → RGBA via `@resvg/resvg-js`, encodes with `gifenc` (≈ 720×360, 60 frames, 15 fps) | README |
 | `assets/og-image.png` | `tools/render-og.mjs`: SVG card (name, title, monogram, sage) → PNG via resvg | `og:image` / Twitter card |
 
-`tools/` dependencies are dev-only and never loaded by the site.
+Dev dependencies live in the root `package.json` and are never loaded by the site.
 
 ## 7. Content changes
 
