@@ -190,3 +190,9 @@ test('old image folder is gone and README showcases generated media', () => {
   assert.match(readme, /assets\/svg\/logo\.svg/);
   assert.match(readme, /npm test/);
 });
+
+test('keyframe animations avoid full-repaint properties like background-position', () => {
+  for (const [, name, body] of cssText().matchAll(/@keyframes\s+([\w-]+)\s*\{([\s\S]*?\})\s*\}/g)) {
+    assert.ok(!/background-position/.test(body), `@keyframes ${name} animates background-position`);
+  }
+});

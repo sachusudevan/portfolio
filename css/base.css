@@ -32,13 +32,14 @@ body::before {
 body::after {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -3px 0 0;
   z-index: 90;
   pointer-events: none;
   background: repeating-linear-gradient(to bottom, rgb(255 255 255 / .03) 0 1px, transparent 1px 3px);
 }
-.motion-ready body::after { animation: scan 10s linear infinite; }
-@keyframes scan { to { background-position: 0 300px; } }
+/* transform (compositor-only) instead of background-position, which repainted the full viewport every frame */
+.motion-ready body::after { animation: scan .45s steps(3) infinite; }
+@keyframes scan { to { transform: translateY(3px); } }
 
 /* Lenis */
 html.lenis, html.lenis body { height: auto; }

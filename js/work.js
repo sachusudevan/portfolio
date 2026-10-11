@@ -17,8 +17,11 @@
       rows.forEach(function (row) {
         var show = lib.matchesFilter(row.dataset.category, filter);
         if (show) shown++;
-        if (show === !row.hidden) return;
+        // Compare against the intended state, not row.hidden: a hide tween may still be running
+        if (show === (row.dataset.visible !== 'false')) return;
+        row.dataset.visible = String(show);
         if (!motion) { row.hidden = !show; return; }
+        gsap.killTweensOf(row);
         if (show) {
           row.hidden = false;
           gsap.fromTo(row, { autoAlpha: 0, x: -16 }, { autoAlpha: 1, x: 0, duration: 0.5, ease: 'power3.out' });
@@ -39,6 +42,8 @@
       btn.setAttribute('aria-expanded', String(open));
       row.classList.toggle('is-open', open);
       if (!motion) { panel.hidden = !open; return; }
+      // A pending close must not hide the panel after it has been reopened
+      gsap.killTweensOf(panel);
       if (open) {
         panel.hidden = false;
         gsap.fromTo(panel, { height: 0, autoAlpha: 0 }, { height: 'auto', autoAlpha: 1, duration: 0.6, ease: 'expo.out', onComplete: refresh });
