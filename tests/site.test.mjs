@@ -130,3 +130,27 @@ test('standalone pipeline.svg is dark, animates itself and respects reduced moti
   assert.match(svg, /#C6F432/i);
   assert.match(svg, /#0B0B0B/i);
 });
+
+test('content fixes are applied', () => {
+  assert.ok(!/827/.test(src), 'found 827');
+  assert.ok(!/CCPA/.test(src), 'found CCPA');
+  assert.match(src, /CGPA 6\.6/);
+  assert.match(src, /Aventus Informatics/);
+  assert.match(src, /Mobatia Technology/);
+});
+
+test('work rows, flags and accordions are wired consistently', () => {
+  const filters = [...src.matchAll(/data-filter="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(filters, ['all', 'healthcare', 'enterprise', 'commerce']);
+  const chunks = src.split('<li class="work-row"').slice(1);
+  assert.equal(chunks.length, 6);
+  for (const chunk of chunks) {
+    const cats = chunk.match(/data-category="([^"]+)"/)[1];
+    for (const c of cats.split(' ')) assert.ok(filters.includes(c), `unknown category ${c}`);
+    const toggle = chunk.match(/<button class="work-row__toggle"[^>]*>/)[0];
+    assert.equal(attr(toggle, 'aria-expanded'), 'false');
+    const panelId = attr(toggle, 'aria-controls');
+    assert.match(chunk, new RegExp(`id="${panelId}"[^>]*hidden`));
+    assert.match(chunk, /class="cover cover--\w+"/);
+  }
+});

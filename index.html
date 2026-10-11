@@ -215,8 +215,217 @@
         </div>
       </div>
     </section>
-    <section id="experience"></section>
-    <section id="work"></section>
+    <section id="experience" class="section experience">
+      <div class="container">
+        <p class="section-label"><span>03</span> // experience</p>
+        <h2 class="display section-title" data-anim="lines">Leading teams that <span class="hl">ship.</span></h2>
+        <p class="mono muted gitlog__cmd"><span class="lime">$</span> git log --graph --career</p>
+        <ol class="timeline">
+          <li class="timeline__rail" aria-hidden="true"><span class="timeline__progress"></span></li>
+          <li class="timeline__item commit">
+            <p class="commit__meta mono"><span class="commit__hash">a7f3e21</span> <span class="lime">(HEAD → main)</span> 2022 — now</p>
+            <h3 class="commit__subject">feat(aventus): software engineer — lead / technical head</h3>
+            <p class="mono muted">Aventus Informatics</p>
+            <p class="commit__body">Leading architecture, development and enhancement of enterprise healthcare systems — owning product scalability, HIPAA compliance, client-customisation frameworks and technical team leadership.</p>
+          </li>
+          <li class="timeline__item commit">
+            <p class="commit__meta mono"><span class="commit__hash">4c9b0d2</span> dec 2019 — 2022</p>
+            <h3 class="commit__subject">feat(mobatia): software engineer</h3>
+            <p class="mono muted">Mobatia Technology Pvt Ltd</p>
+            <p class="commit__body">Managed multiple Laravel and Django projects, built REST APIs for mobile apps, integrated payment gateways, delivered CMS-based enterprise applications and supported live production systems.</p>
+          </li>
+          <li class="timeline__item commit commit--root">
+            <p class="commit__meta mono"><span class="commit__hash">0000001</span> root commit</p>
+            <h3 class="commit__subject">init: bsc computer science</h3>
+            <p class="mono muted">University of Kerala · CGPA 6.6</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="work" class="section work">
+      <div class="container">
+        <p class="section-label"><span>04</span> // projects</p>
+        <div class="work__head">
+          <h2 class="display section-title" data-anim="lines">Platforms I've <span class="hl">shipped.</span></h2>
+          <div class="work__meta">
+            <div class="work__cmd mono">
+              <span><span class="lime">$</span> ls -la ~/projects</span>
+              <span class="work__flags" role="group" aria-label="Filter projects">
+                <button class="flag" type="button" data-filter="all" aria-pressed="true">--all</button>
+                <button class="flag" type="button" data-filter="healthcare" aria-pressed="false">--healthcare</button>
+                <button class="flag" type="button" data-filter="enterprise" aria-pressed="false">--enterprise</button>
+                <button class="flag" type="button" data-filter="commerce" aria-pressed="false">--commerce</button>
+              </span>
+            </div>
+            <p class="work__count mono muted" aria-live="polite">total 6</p>
+          </div>
+        </div>
+        <div class="work__cols mono" aria-hidden="true"><span>perm</span><span>type</span><span>name</span><span>stack</span><span></span></div>
+        <ol class="work__list">
+          <li class="work-row" data-category="healthcare" data-cursor="view" data-cursor-label="[open]">
+            <button class="work-row__toggle" type="button" aria-expanded="false" aria-controls="work-1">
+              <span class="work-row__perm mono">drwxr-xr-x</span>
+              <span class="work-row__type mono">healthcare</span>
+              <span class="work-row__title">edi-engine/ <span class="muted">edi processing platform</span></span>
+              <span class="work-row__tags mono">python · django</span>
+              <span class="work-row__icon mono" aria-hidden="true">+</span>
+            </button>
+            <div class="work-row__panel" id="work-1" hidden>
+              <div class="work-row__body">
+                <div class="md">
+                  <p class="mono muted"><span class="lime">$</span> cat edi-engine/README.md</p>
+                  <ul class="md__list">
+                    <li>Designed the architecture for processing EOB, 837, self-pay and many other EOB file formats.</li>
+                    <li>Built an automated file-splitting engine with index-based schema validation.</li>
+                    <li>Created a customisable output engine supporting 835, CSV, TXT and client-specific formats.</li>
+                  </ul>
+                </div>
+                <svg class="cover cover--files" viewBox="0 0 320 240" aria-hidden="true">
+                  <path class="cv-stroke cv-fan cv-fan--a" d="M118 52h62l22 22v112h-84z"/>
+                  <path class="cv-stroke cv-fan cv-fan--b" d="M118 52h62l22 22v112h-84z"/>
+                  <g class="cv-front"><path class="cv-panel" d="M118 52h62l22 22v112h-84z"/><path class="cv-stroke" d="M180 52v22h22"/><rect class="cv-dim" x="132" y="96" width="44" height="5"/><rect class="cv-dim" x="132" y="110" width="56" height="5"/><rect class="cv-dim" x="132" y="124" width="36" height="5"/><text class="cv-txt" x="132" y="166">835</text></g>
+                  <rect class="cv-lime cv-scan" x="104" y="60" width="112" height="3"/>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="work-row" data-category="healthcare" data-cursor="view" data-cursor-label="[open]">
+            <button class="work-row__toggle" type="button" aria-expanded="false" aria-controls="work-2">
+              <span class="work-row__perm mono">drwxr-xr-x</span>
+              <span class="work-row__type mono">healthcare</span>
+              <span class="work-row__title">client-portal/ <span class="muted">client operations system</span></span>
+              <span class="work-row__tags mono">data sync · dashboards</span>
+              <span class="work-row__icon mono" aria-hidden="true">+</span>
+            </button>
+            <div class="work-row__panel" id="work-2" hidden>
+              <div class="work-row__body">
+                <div class="md">
+                  <p class="mono muted"><span class="lime">$</span> cat client-portal/README.md</p>
+                  <ul class="md__list">
+                    <li>Real-time data synchronisation from EDI ENGINE to Client Portal.</li>
+                    <li>Client dashboards for processed records, output management and file tracking.</li>
+                    <li>Client-level access control and operational reporting.</li>
+                  </ul>
+                </div>
+                <svg class="cover cover--bars" viewBox="0 0 320 240" aria-hidden="true">
+                  <path class="cv-stroke" d="M60 190H264M60 190V50"/>
+                  <rect class="cv-lime cv-bar" x="80" y="110" width="26" height="80"/>
+                  <rect class="cv-lime cv-bar" x="116" y="80" width="26" height="110"/>
+                  <rect class="cv-lime cv-bar" x="152" y="126" width="26" height="64"/>
+                  <rect class="cv-lime cv-bar" x="188" y="66" width="26" height="124"/>
+                  <rect class="cv-lime cv-bar" x="224" y="96" width="26" height="94"/>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="work-row" data-category="enterprise" data-cursor="view" data-cursor-label="[open]">
+            <button class="work-row__toggle" type="button" aria-expanded="false" aria-controls="work-3">
+              <span class="work-row__perm mono">drwxr-xr-x</span>
+              <span class="work-row__type mono">enterprise</span>
+              <span class="work-row__title">ticketing/ <span class="muted">sla and analytics</span></span>
+              <span class="work-row__tags mono">sla · bi</span>
+              <span class="work-row__icon mono" aria-hidden="true">+</span>
+            </button>
+            <div class="work-row__panel" id="work-3" hidden>
+              <div class="work-row__body">
+                <div class="md">
+                  <p class="mono muted"><span class="lime">$</span> cat ticketing/README.md</p>
+                  <ul class="md__list">
+                    <li>Client and provider ticketing with SLA tracking and status workflows.</li>
+                    <li>Report-generation engine and dynamic analytics dashboards.</li>
+                    <li>Role-based access, resolution tracking and audit logs.</li>
+                  </ul>
+                </div>
+                <svg class="cover cover--ring" viewBox="0 0 320 240" aria-hidden="true">
+                  <circle class="cv-track" cx="160" cy="120" r="70"/>
+                  <circle class="cv-arc" cx="160" cy="120" r="70" pathLength="100" transform="rotate(-90 160 120)"/>
+                  <line class="cv-stroke cv-hand" x1="160" y1="120" x2="160" y2="70"/>
+                  <rect class="cv-lime" x="155" y="115" width="10" height="10"/>
+                  <text class="cv-txt" x="160" y="222" text-anchor="middle">SLA 80%</text>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="work-row" data-category="enterprise" data-cursor="view" data-cursor-label="[open]">
+            <button class="work-row__toggle" type="button" aria-expanded="false" aria-controls="work-4">
+              <span class="work-row__perm mono">drwxr-xr-x</span>
+              <span class="work-row__type mono">enterprise</span>
+              <span class="work-row__title">schools/ <span class="muted">management systems</span></span>
+              <span class="work-row__tags mono">laravel · payments</span>
+              <span class="work-row__icon mono" aria-hidden="true">+</span>
+            </button>
+            <div class="work-row__panel" id="work-4" hidden>
+              <div class="work-row__body">
+                <div class="md">
+                  <p class="mono muted"><span class="lime">$</span> cat schools/README.md</p>
+                  <ul class="md__list">
+                    <li>BISAD — school management system for BIS Abu Dhabi.</li>
+                    <li>NAIS Dubai, Al Khor and Manila — school CMS and payment portal.</li>
+                  </ul>
+                </div>
+                <svg class="cover cover--grid" viewBox="0 0 320 240" aria-hidden="true">
+                  <rect class="cv-tile" x="64" y="48" width="40" height="40"/><rect class="cv-tile" x="114" y="48" width="40" height="40"/><rect class="cv-tile" x="164" y="48" width="40" height="40"/><rect class="cv-tile" x="214" y="48" width="40" height="40"/>
+                  <rect class="cv-tile" x="64" y="98" width="40" height="40"/><rect class="cv-tile" x="114" y="98" width="40" height="40"/><rect class="cv-tile" x="164" y="98" width="40" height="40"/><rect class="cv-tile" x="214" y="98" width="40" height="40"/>
+                  <rect class="cv-tile" x="64" y="148" width="40" height="40"/><rect class="cv-tile" x="114" y="148" width="40" height="40"/><rect class="cv-tile" x="164" y="148" width="40" height="40"/><rect class="cv-tile" x="214" y="148" width="40" height="40"/>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="work-row" data-category="commerce" data-cursor="view" data-cursor-label="[open]">
+            <button class="work-row__toggle" type="button" aria-expanded="false" aria-controls="work-5">
+              <span class="work-row__perm mono">drwxr-xr-x</span>
+              <span class="work-row__type mono">commerce</span>
+              <span class="work-row__title">vlurb/ <span class="muted">social and e-commerce</span></span>
+              <span class="work-row__tags mono">social · commerce</span>
+              <span class="work-row__icon mono" aria-hidden="true">+</span>
+            </button>
+            <div class="work-row__panel" id="work-5" hidden>
+              <div class="work-row__body">
+                <div class="md">
+                  <p class="mono muted"><span class="lime">$</span> cat vlurb/README.md</p>
+                  <ul class="md__list">
+                    <li>VLURB — a voice-based social media platform.</li>
+                    <li>Tasveek — e-commerce platform.</li>
+                    <li>Desert Motors — auto-parts e-commerce.</li>
+                  </ul>
+                </div>
+                <svg class="cover cover--wave" viewBox="0 0 320 240" aria-hidden="true">
+                  <path class="cv-stroke" d="M40 120H72M248 120H280"/>
+                  <rect class="cv-lime cv-wv" x="80" y="90" width="12" height="60"/><rect class="cv-lime cv-wv" x="100" y="70" width="12" height="100"/><rect class="cv-lime cv-wv" x="120" y="96" width="12" height="48"/>
+                  <rect class="cv-lime cv-wv" x="140" y="60" width="12" height="120"/><rect class="cv-lime cv-wv" x="160" y="80" width="12" height="80"/><rect class="cv-lime cv-wv" x="180" y="66" width="12" height="108"/>
+                  <rect class="cv-lime cv-wv" x="200" y="94" width="12" height="52"/><rect class="cv-lime cv-wv" x="220" y="76" width="12" height="88"/><rect class="cv-lime cv-wv" x="236" y="100" width="8" height="40"/>
+                </svg>
+              </div>
+            </div>
+          </li>
+          <li class="work-row" data-category="healthcare enterprise" data-cursor="view" data-cursor-label="[open]">
+            <button class="work-row__toggle" type="button" aria-expanded="false" aria-controls="work-6">
+              <span class="work-row__perm mono">drwxr-xr-x</span>
+              <span class="work-row__type mono">healthcare</span>
+              <span class="work-row__title">clinic/ <span class="muted">clinic and project management</span></span>
+              <span class="work-row__tags mono">hospital · tasks</span>
+              <span class="work-row__icon mono" aria-hidden="true">+</span>
+            </button>
+            <div class="work-row__panel" id="work-6" hidden>
+              <div class="work-row__body">
+                <div class="md">
+                  <p class="mono muted"><span class="lime">$</span> cat clinic/README.md</p>
+                  <ul class="md__list">
+                    <li>RAM Clinics — hospital management system.</li>
+                    <li>Task tracking with module-based project segmentation and team performance.</li>
+                  </ul>
+                </div>
+                <svg class="cover cover--pulse" viewBox="0 0 320 240" aria-hidden="true">
+                  <path class="cv-track" d="M30 120H290"/>
+                  <path class="cv-ecg" pathLength="1" d="M30 120H110L124 92L138 160L156 48L174 150L186 120H290"/>
+                </svg>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
     <section id="toolkit"></section>
     <section id="beyond"></section>
     <section id="contact"></section>
@@ -235,5 +444,6 @@
   <script defer src="js/main.js"></script>
   <script defer src="js/motion.js"></script>
   <script defer src="js/pipeline.js"></script>
+  <script defer src="js/work.js"></script>
 </body>
 </html>

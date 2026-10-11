@@ -158,3 +158,107 @@
   }
   .pipeline__step { min-width: 72vw; scroll-snap-align: start; }
 }
+
+/* ---------- Experience: git log ---------- */
+.gitlog__cmd { margin: -1.5rem 0 3rem; font-size: var(--step--1); }
+.timeline { position: relative; display: grid; gap: 3.5rem; }
+.timeline__rail { position: absolute; left: 5px; top: .4rem; bottom: 0; width: 2px; background: var(--line); }
+.timeline__progress { position: absolute; inset: 0; background: var(--lime); transform-origin: top; }
+.commit { position: relative; padding-left: 2.75rem; max-width: 62rem; }
+.commit::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .3rem;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--lime);
+  background: var(--bg);
+  transition: background-color .3s;
+}
+.commit.is-active::before { background: var(--lime); }
+.commit__meta { font-size: var(--step--1); color: var(--muted); }
+.commit__hash { color: var(--warn); }
+.commit__subject { font: 800 var(--step-2)/1.05 var(--font-display); text-transform: uppercase; margin: .5rem 0 .4rem; }
+.commit__body { margin-top: .9rem; max-width: 60ch; color: var(--muted); }
+.commit--root .commit__subject { color: var(--muted); }
+
+/* ---------- Projects: ls -la ---------- */
+.work__head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.75rem; margin-bottom: 2rem; }
+.work__head .section-title { margin-bottom: 0; }
+.work__meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .75rem 2rem; }
+.work__cmd { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .75rem 1.25rem; align-items: center; font-size: 13px; }
+.work__flags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.flag { font: 500 13px var(--font-mono); color: var(--muted); padding: .35rem .6rem; border: 1px solid var(--line); transition: color .2s, border-color .2s, background-color .2s; }
+.flag:hover { color: var(--lime); border-color: var(--lime); }
+.flag[aria-pressed="true"] { background: var(--lime); color: var(--on-lime); border-color: var(--lime); }
+.work__count { font-size: 12px; }
+.work__cols, .work-row__toggle {
+  display: grid;
+  grid-template-columns: 8.5rem 7.5rem minmax(0, 1fr) 12rem 2rem;
+  gap: 1rem;
+  align-items: center;
+}
+.work__cols { font-size: 11px; color: var(--muted); padding: 0 1rem .6rem; border-bottom: 1px solid var(--line); }
+.work-row { border-bottom: 1px solid var(--line); }
+.work-row[hidden] { display: none; }
+.work-row__toggle { width: 100%; text-align: left; padding: 1.4rem 1rem; transition: background-color .2s; }
+.work-row__toggle:hover { background: var(--bg-3); }
+.work-row__perm, .work-row__type, .work-row__tags { font-size: 12px; color: var(--muted); }
+.work-row__title { font: 800 var(--step-1)/1.1 var(--font-display); text-transform: uppercase; transition: color .2s; }
+.work-row__title .muted { font: 400 var(--step--1) var(--font-mono); text-transform: none; margin-left: .5rem; }
+.work-row__toggle:hover .work-row__title { color: var(--lime); }
+.work-row__icon { color: var(--lime); font-size: 22px; justify-self: end; transition: rotate .3s var(--ease-out); }
+.work-row__toggle[aria-expanded="true"] .work-row__icon { rotate: 45deg; }
+.work-row__panel { overflow: hidden; }
+.work-row__body { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 2rem; padding: .5rem 1rem 2rem; }
+.work-row__body .md p:first-child { margin-bottom: .9rem; font-size: 13px; }
+
+/* Animated line-art covers: paused until visible in an open row or the hover preview */
+.cover { width: 100%; height: auto; background: var(--bg-2); border: 1px solid var(--line); }
+.cover * { animation-play-state: paused; }
+.work-row.is-open .cover *, .work-preview .cover * { animation-play-state: running; }
+.work-preview .cover { border: 0; }
+.cv-stroke { fill: none; stroke: var(--text); stroke-width: 2; }
+.cv-panel { fill: var(--bg-2); stroke: var(--text); stroke-width: 2; }
+.cv-dim { fill: var(--line-strong); }
+.cv-lime { fill: var(--lime); }
+.cv-txt { font: 700 16px var(--font-mono); fill: var(--lime); }
+.cv-track { fill: none; stroke: var(--line-strong); stroke-width: 6; }
+.cv-fan { transform-box: fill-box; transform-origin: 50% 100%; }
+.cv-fan--a { animation: fan-a 3s var(--ease-in-out) infinite alternate; }
+.cv-fan--b { animation: fan-b 3s var(--ease-in-out) infinite alternate; }
+.cv-scan { animation: scan-doc 2.4s linear infinite; }
+@keyframes fan-a { to { transform: translate(-40px, 6px) rotate(-10deg); } }
+@keyframes fan-b { to { transform: translate(40px, 6px) rotate(10deg); } }
+@keyframes scan-doc { 0% { transform: translateY(0); opacity: 0; } 10%, 90% { opacity: 1; } 100% { transform: translateY(124px); opacity: 0; } }
+.cv-bar { transform-box: fill-box; transform-origin: 50% 100%; animation: bar-pulse 2.4s var(--ease-in-out) infinite alternate; }
+.cv-bar:nth-of-type(2) { animation-delay: -.4s; }
+.cv-bar:nth-of-type(3) { animation-delay: -.8s; }
+.cv-bar:nth-of-type(4) { animation-delay: -1.2s; }
+.cv-bar:nth-of-type(5) { animation-delay: -1.6s; }
+@keyframes bar-pulse { from { transform: scaleY(.25); } to { transform: scaleY(1); } }
+.cv-arc { fill: none; stroke: var(--lime); stroke-width: 6; stroke-dasharray: 100; stroke-dashoffset: 100; animation: arc-fill 3.2s var(--ease-out) infinite; }
+@keyframes arc-fill { 0% { stroke-dashoffset: 100; } 60%, 100% { stroke-dashoffset: 20; } }
+.cv-hand { transform-origin: 160px 120px; animation: spin-hand 3.2s steps(12) infinite; }
+@keyframes spin-hand { to { transform: rotate(360deg); } }
+.cv-tile { fill: var(--bg-3); stroke: var(--line-strong); stroke-width: 2; animation: tile-on 3.6s steps(1) infinite; }
+.cv-tile:nth-of-type(3n+1) { animation-delay: -.3s; }
+.cv-tile:nth-of-type(3n+2) { animation-delay: -1.2s; }
+.cv-tile:nth-of-type(4n) { animation-delay: -2.1s; }
+.cv-tile:nth-of-type(5n) { animation-delay: -2.7s; }
+@keyframes tile-on { 0%, 70% { fill: var(--bg-3); stroke: var(--line-strong); } 72%, 100% { fill: var(--lime); stroke: var(--lime); } }
+.cv-wv { transform-box: fill-box; transform-origin: center; animation: wave 1.1s var(--ease-in-out) infinite alternate; }
+.cv-wv:nth-of-type(odd) { animation-delay: -.35s; }
+.cv-wv:nth-of-type(3n) { animation-delay: -.7s; }
+@keyframes wave { from { transform: scaleY(.3); } to { transform: scaleY(1); } }
+.cv-ecg { fill: none; stroke: var(--lime); stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 1; animation: ecg 2.2s linear infinite; }
+@keyframes ecg { 0% { stroke-dashoffset: 1; } 60% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -1; } }
+
+@media (max-width: 899px) {
+  .work__cols { display: none; }
+  .work-row__toggle { grid-template-columns: minmax(0, 1fr) 2rem; padding: 1.2rem .25rem; }
+  .work-row__perm, .work-row__type, .work-row__tags { display: none; }
+  .work-row__title .muted { display: block; margin: .35rem 0 0; }
+  .work-row__body { grid-template-columns: minmax(0, 1fr); padding-inline: .25rem; }
+}
