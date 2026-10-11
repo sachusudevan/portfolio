@@ -208,3 +208,14 @@ test('confidential project names never appear in published files', () => {
 test('site does not advertise job-seeking status', () => {
   assert.ok(!/open to (new )?(opportunities|work)|hire me|looking for (new )?(opportunities|a job)/i.test(src), 'job-seeking wording found');
 });
+
+test('contact offers WhatsApp: link, optional phone field and a WhatsApp send button', () => {
+  assert.match(src, /href="https:\/\/wa\.me\/918157864536"/);
+  const form = src.match(/<form class="contact-form[^"]*"[\s\S]*?<\/form>/)[0];
+  assert.match(form, /<label[^>]*for="phone"/);
+  assert.match(form, /id="phone"[^>]*name="phone"[^>]*type="tel"/);
+  assert.match(form, /aria-describedby="phone-error"/);
+  assert.match(form, /id="phone-error"/);
+  assert.match(form, /<button[^>]*type="submit"[^>]*data-channel="whatsapp"/);
+  assert.match(form, /<button[^>]*type="submit"[^>]*data-channel="email"/);
+});

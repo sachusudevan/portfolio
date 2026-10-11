@@ -61,3 +61,26 @@ test('createSafeStorage never throws when storage access or methods throw', () =
   assert.equal(broken.get('theme'), null);
   assert.equal(broken.set('theme', 'dark'), false);
 });
+
+test('buildWhatsApp builds a wa.me click-to-chat link with the enquiry prefilled', () => {
+  const url = lib.buildWhatsApp('918157864536', { name: 'Ana & Co', email: 'ana@co.io', phone: '+91 98765 43210', subject: 'Hi #1?', message: 'Line 1\nLine 2' });
+  assert.ok(url.startsWith('https://wa.me/918157864536?text='));
+  assert.ok(!/\s/.test(url), 'no raw whitespace');
+  const text = new URLSearchParams(url.slice(url.indexOf('?') + 1)).get('text');
+  assert.equal(text, 'New website enquiry\n\nName: Ana & Co\nEmail: ana@co.io\nPhone: +91 98765 43210\nSubject: Hi #1?\nMessage:\nLine 1\nLine 2');
+});
+
+test('buildWhatsApp leaves out optional fields that are empty', () => {
+  const url = lib.buildWhatsApp('918157864536', { name: 'Ana', email: 'a@b.co', phone: ' ', subject: '', message: 'Hello there friend' });
+  const text = new URLSearchParams(url.slice(url.indexOf('?') + 1)).get('text');
+  assert.equal(text, 'New website enquiry\n\nName: Ana\nEmail: a@b.co\nMessage:\nHello there friend');
+});
+
+test('validateContact accepts an empty phone but rejects a malformed one', () => {
+  const base = { name: 'Ana', email: 'a@b.co', subject: '', message: 'Hello there friend' };
+  assert.equal(lib.validateContact({ ...base, phone: '' }).valid, true);
+  assert.equal(lib.validateContact({ ...base, phone: '+91 81578-64536' }).valid, true);
+  const bad = lib.validateContact({ ...base, phone: 'call me' });
+  assert.equal(bad.valid, false);
+  assert.ok(bad.errors.phone);
+});

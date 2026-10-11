@@ -524,6 +524,7 @@
               <dl class="term__body yml">
                 <div><dt>email:</dt><dd><a href="mailto:sachusudeve8690@gmail.com">sachusudeve8690@gmail.com</a> <button class="copy-btn mono" type="button" data-copy="sachusudeve8690@gmail.com" aria-label="Copy email address">[copy]</button></dd></div>
                 <div><dt>phone:</dt><dd><a href="tel:+918157864536">+91 81578 64536</a></dd></div>
+                <div><dt>whatsapp:</dt><dd><a href="https://wa.me/918157864536" target="_blank" rel="noopener" data-magnetic="0.3">chat on whatsapp ↗</a></dd></div>
                 <div><dt>location:</dt><dd>kerala, in · IST <span data-clock>--:--:--</span></dd></div>
                 <div><dt>linkedin:</dt><dd><a href="https://linkedin.com/in/sachu-s-705813179" target="_blank" rel="noopener" data-magnetic="0.3">/in/sachu-s ↗</a></dd></div>
                 <div><dt>github:</dt><dd><a href="https://github.com/sachusudevan" target="_blank" rel="noopener" data-magnetic="0.3">@sachusudevan ↗</a></dd></div>
@@ -536,9 +537,13 @@
             <div class="term__body">
               <div class="field"><label for="name"><span class="lime">&gt;</span> name</label><input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error" /><span class="field__error" id="name-error"></span></div>
               <div class="field"><label for="email"><span class="lime">&gt;</span> email</label><input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error" /><span class="field__error" id="email-error"></span></div>
+              <div class="field"><label for="phone"><span class="lime">&gt;</span> phone <span class="muted">(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" aria-describedby="phone-error" /><span class="field__error" id="phone-error"></span></div>
               <div class="field"><label for="subject"><span class="lime">&gt;</span> subject <span class="muted">(optional)</span></label><input id="subject" name="subject" type="text" /></div>
               <div class="field"><label for="message"><span class="lime">&gt;</span> message</label><textarea id="message" name="message" rows="5" required aria-describedby="message-error"></textarea><span class="field__error" id="message-error"></span></div>
-              <button class="btn btn--lime" type="submit" data-magnetic="0.3">[ send ↵ ]</button>
+              <div class="contact-form__actions">
+                <button class="btn btn--lime" type="submit" data-channel="whatsapp" data-magnetic="0.3">[ send via whatsapp ↵ ]</button>
+                <button class="btn" type="submit" data-channel="email" data-magnetic="0.3">[ email instead ]</button>
+              </div>
               <p class="contact-form__status mono" role="status"></p>
             </div>
           </form>

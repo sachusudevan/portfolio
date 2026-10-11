@@ -3,6 +3,7 @@
   'use strict';
   var lib = window.PortfolioLib;
   var EMAIL = 'sachusudeve8690@gmail.com';
+  var WHATSAPP = '918157864536';
   var toastEl = document.querySelector('.toast'), toastTimer;
 
   function toast(message) {
@@ -17,9 +18,10 @@
   if (form) form.addEventListener('submit', function (e) {
     e.preventDefault();
     var get = function (n) { return form.elements.namedItem(n).value; };
-    var fields = { name: get('name'), email: get('email'), subject: get('subject'), message: get('message') };
+    var fields = { name: get('name'), email: get('email'), phone: get('phone'), subject: get('subject'), message: get('message') };
+    var channel = (e.submitter && e.submitter.dataset.channel) || 'whatsapp';
     var result = lib.validateContact(fields);
-    ['name', 'email', 'message'].forEach(function (key) {
+    ['name', 'email', 'phone', 'message'].forEach(function (key) {
       var msg = result.errors[key] || '';
       document.getElementById(key + '-error').textContent = msg ? '! ' + msg : '';
       form.elements.namedItem(key).setAttribute('aria-invalid', String(!!msg));
@@ -30,8 +32,14 @@
       form.elements.namedItem(Object.keys(result.errors)[0]).focus();
       return;
     }
-    status.textContent = '> opening your mail client … ok';
-    window.location.href = lib.buildMailto(EMAIL, fields);
+    if (channel === 'email') {
+      status.textContent = '> opening your mail client … ok';
+      window.location.href = lib.buildMailto(EMAIL, fields);
+      return;
+    }
+    // Click-to-chat: WhatsApp opens with the enquiry prefilled; the visitor presses Send
+    status.textContent = '> opening whatsapp … press send to deliver';
+    window.open(lib.buildWhatsApp(WHATSAPP, fields), '_blank', 'noopener');
   });
 
   document.querySelectorAll('[data-copy]').forEach(function (btn) {
