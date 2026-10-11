@@ -4,7 +4,7 @@
 
 Personal site of **Sachu S**, Technical Lead & Software Engineer building HIPAA-compliant healthcare data platforms (EDI 835/837, EOB processing) with Python, Django and FastAPI.
 
-![EDI ENGINE claims pipeline animation](assets/pipeline.gif)
+![EDI claims pipeline animation](assets/pipeline.gif)
 
 **Live:** [sachusudevan.github.io/portfolio](https://sachusudevan.github.io/portfolio/)
 
@@ -19,7 +19,7 @@ Personal site of **Sachu S**, Technical Lead & Software Engineer building HIPAA-
 
 - Boot loader that types its startup log and splits open (once per session).
 - Headlines rise line by line and their highlight word decodes (GSAP SplitText + ScrambleText).
-- **Signature pipeline**: a pinned, scroll-scrubbed SVG of EOB/837/self-pay files flowing through EDI ENGINE into 835/CSV/TXT and Client Portal, with a terminal log that types each step.
+- **Signature pipeline**: a pinned, scroll-scrubbed SVG of EOB/837/self-pay files flowing through the EDI engine into 835/CSV/TXT and Client Portal, with a terminal log that types each step.
 - Tape marquee driven by scroll velocity, image wipes, parallax, count-up stats, a `git log` graph that draws as you scroll, and a horizontal photo strip.
 - Filterable project list with animated line-art covers and a cursor-following preview, a block cursor and magnetic buttons.
 - Smooth scrolling with Lenis. Everything respects `prefers-reduced-motion` (or add `?motion=off` to the URL).

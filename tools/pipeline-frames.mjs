@@ -32,7 +32,7 @@ export function renderFrame(i) {
   const caretOn = Math.floor(phase * 8) % 2 === 0;
   const parts = [`<rect width="${WIDTH}" height="${HEIGHT}" fill="${C.bg}"/>`, grid()];
   parts.push(`<text x="24" y="30" font-family="${MONO}" font-size="13" fill="${C.muted}"><tspan fill="${C.lime}">$</tspan> ./edi-engine --in eob,837,self-pay --out 835</text>`);
-  if (caretOn) parts.push(`<rect x="330" y="19" width="8" height="14" fill="${C.lime}"/>`);
+  if (caretOn) parts.push(`<rect x="362" y="19" width="8" height="14" fill="${C.lime}"/>`);
 
   DOCS.forEach((d, k) => {
     parts.push(`<g transform="translate(40 ${d.y})"><rect width="110" height="44" fill="${C.bg2}" stroke="${C.text}" stroke-width="1.5"/>`
@@ -49,7 +49,7 @@ export function renderFrame(i) {
   const pulse = (1 + 0.04 * Math.sin(phase * Math.PI * 4)).toFixed(4);
   parts.push(`<g transform="translate(${CORE.x} ${CORE.y})"><circle r="78" fill="none" stroke="${C.lime}" stroke-opacity=".6" stroke-width="2" stroke-dasharray="6 10" transform="rotate(${angle})"/>`
     + `<rect x="-56" y="-56" width="112" height="112" fill="${C.lime}" transform="scale(${pulse})"/>`
-    + `<text y="7" text-anchor="middle" font-family="${MONO}" font-weight="bold" font-size="18" fill="${C.onLime}">EDI ENGINE</text></g>`);
+    + `<text y="7" text-anchor="middle" font-family="${MONO}" font-weight="bold" font-size="14" fill="${C.onLime}">EDI ENGINE</text></g>`);
 
   OUTS.forEach((o, k) => {
     const w = outWire(o.y);

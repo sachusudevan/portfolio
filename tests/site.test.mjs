@@ -196,3 +196,10 @@ test('keyframe animations avoid full-repaint properties like background-position
     assert.ok(!/background-position/.test(body), `@keyframes ${name} animates background-position`);
   }
 });
+
+test('confidential project name never appears in published files', () => {
+  const files = ['index.html', 'README.md', 'assets/svg/pipeline.svg', 'tools/pipeline-frames.mjs', 'docs/superpowers/specs/2026-10-11-portfolio-redesign-design.md', 'docs/superpowers/plans/2026-10-11-portfolio-redesign.md'];
+  // the name itself is base64-encoded so it never appears in the repo either
+  const banned = new RegExp(Buffer.from('eHRyYWN0', 'base64').toString(), 'i');
+  for (const f of files) assert.ok(!banned.test(read(f)), f + ' mentions the confidential project name');
+});

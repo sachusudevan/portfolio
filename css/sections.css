@@ -139,7 +139,7 @@
 .pl-check-ring { fill: var(--lime); }
 .pl-check-mark { fill: none; stroke: var(--on-lime); stroke-width: 2.5; stroke-linecap: square; }
 .pl-core__box { fill: var(--lime); }
-.pl-core__text { fill: var(--on-lime); font: 700 22px var(--font-mono); letter-spacing: .04em; }
+.pl-core__text { fill: var(--on-lime); font: 700 18px var(--font-mono); letter-spacing: .04em; }
 .pl-core-ring { fill: none; stroke: var(--lime); stroke-opacity: .6; stroke-width: 1.5; stroke-dasharray: 6 10; }
 .pl-packet { fill: var(--lime); }
 .pl-bar { fill: var(--lime); }

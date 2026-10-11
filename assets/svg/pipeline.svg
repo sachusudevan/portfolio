@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 560" width="1100" height="560" role="img" aria-labelledby="t d">
-  <title id="t">The EDI ENGINE claims pipeline</title>
-  <desc id="d">EOB, 837 and self-pay files are ingested, split into pages, validated, transformed by EDI ENGINE, output as 835, CSV and TXT, and synced to a Client Portal dashboard.</desc>
+  <title id="t">The EDI claims pipeline</title>
+  <desc id="d">EOB, 837 and self-pay files are ingested, split into pages, validated, transformed by the EDI engine, output as 835, CSV and TXT, and synced to a Client Portal dashboard.</desc>
   <defs>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#2A2A2A" stroke-opacity=".6"/></pattern>
   </defs>
@@ -17,7 +17,7 @@
     .mark { fill: none; stroke: #0B0B0B; stroke-width: 2.5; stroke-dasharray: 20; stroke-dashoffset: 0; }
     .core { transform-box: fill-box; transform-origin: center; }
     .core-box { fill: #C6F432; }
-    .core-txt { fill: #0B0B0B; font-size: 22px; font-weight: 700; letter-spacing: .04em; }
+    .core-txt { fill: #0B0B0B; font-size: 18px; font-weight: 700; letter-spacing: .04em; }
     .core-ring { fill: none; stroke: #C6F432; stroke-opacity: .6; stroke-width: 1.5; stroke-dasharray: 6 10; transform-origin: 580px 280px; animation: spin 14s linear infinite; }
     .bar { fill: #C6F432; transform-box: fill-box; transform-origin: bottom; }
     .pk { fill: #C6F432; }

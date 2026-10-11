@@ -1171,14 +1171,14 @@ test('standalone pipeline.svg is dark, animates itself and respects reduced moti
         <li class="pipeline__step" data-step="ingest"><span class="mono">01</span><h3>Ingest</h3><p>EOBs, 837 claims and self-pay documents arrive in every shape a client can produce.</p></li>
         <li class="pipeline__step" data-step="split"><span class="mono">02</span><h3>Split</h3><p>An automated splitting engine breaks huge batches into indexed, traceable pages.</p></li>
         <li class="pipeline__step" data-step="validate"><span class="mono">03</span><h3>Validate</h3><p>Index-based schema validation catches bad data before anyone downstream sees it.</p></li>
-        <li class="pipeline__step" data-step="transform"><span class="mono">04</span><h3>Transform</h3><p>EDI ENGINE maps every record into one consistent, HIPAA-compliant model.</p></li>
+        <li class="pipeline__step" data-step="transform"><span class="mono">04</span><h3>Transform</h3><p>The EDI engine maps every record into one consistent, HIPAA-compliant model.</p></li>
         <li class="pipeline__step" data-step="deliver"><span class="mono">05</span><h3>Deliver &amp; sync</h3><p>A customisable output engine writes 835, CSV or TXT and syncs results live into Client Portal.</p></li>
       </ol>
     </div>
     <div class="pipeline__stage">
       <svg class="pipeline__svg" viewBox="0 0 1100 560" role="img" aria-labelledby="pl-title pl-desc">
-        <title id="pl-title">The EDI ENGINE claims pipeline</title>
-        <desc id="pl-desc">EOB, 837 and self-pay files are ingested, split into pages, validated, transformed by EDI ENGINE, output as 835, CSV and TXT, and synced to a Client Portal dashboard.</desc>
+        <title id="pl-title">The EDI claims pipeline</title>
+        <desc id="pl-desc">EOB, 837 and self-pay files are ingested, split into pages, validated, transformed by the EDI engine, output as 835, CSV and TXT, and synced to a Client Portal dashboard.</desc>
         <!-- geometry to author as real elements (no comments in the file): -->
         <!-- Docs: three <g class="pl-doc" transform="translate(40,{y})"> at y = 100, 248, 396: rect 100×64 + folded-corner path + 3 text-line rects + <text class="pl-label">EOB|837|SELF-PAY</text> -->
         <!-- Pages: six <rect class="pl-page"> 34×44: two per doc at (200,y-6) and (214,y+14) -->
@@ -1198,7 +1198,7 @@ test('standalone pipeline.svg is dark, animates itself and respects reduced moti
           <li data-log="ingest"><span class="lime">[ingest]</span> <span class="pl-log__msg">3 files received (EOB, 837, SELF-PAY)</span></li>
           <li data-log="split"><span class="lime">[split]</span> <span class="pl-log__msg">3 → 12 pages, indexed</span></li>
           <li data-log="validate"><span class="lime">[validate]</span> <span class="pl-log__msg">schema ok ✓ 12/12</span></li>
-          <li data-log="transform"><span class="lime">[transform]</span> <span class="pl-log__msg">edi-engine → canonical model</span></li>
+          <li data-log="transform"><span class="lime">[transform]</span> <span class="pl-log__msg">engine → canonical model</span></li>
           <li data-log="deliver"><span class="lime">[deliver]</span> <span class="pl-log__msg">835 · csv · txt → client-portal ✓ synced</span></li>
         </ol>
       </div>
@@ -1435,7 +1435,7 @@ Rows 2–6 (same structure; ids `work-2`…`work-6`; perm `drwxr-xr-x`; type col
 
 | # | category | name / *muted* | stack | bullets | cover |
 |---|---|---|---|---|---|
-| 02 | `healthcare` | client-portal/ *client operations system* | data sync · dashboards | Real-time data sync from EDI ENGINE to Client Portal. / Client dashboards for processed records, output management and file tracking. / Client-level access control and operational reporting. | `cover--bars` (outlined bars rising/falling, staggered) |
+| 02 | `healthcare` | client-portal/ *client operations system* | data sync · dashboards | Real-time data sync from the EDI engine to Client Portal. / Client dashboards for processed records, output management and file tracking. / Client-level access control and operational reporting. | `cover--bars` (outlined bars rising/falling, staggered) |
 | 03 | `enterprise` | ticketing/ *sla & analytics* | sla · bi | Client and provider ticketing with SLA tracking and status workflows. / Report-generation engine and dynamic analytics dashboards. / Role-based access, resolution tracking and audit logs. | `cover--ring` (SLA ring stroke filling 0→80%, ticking hand) |
 | 04 | `enterprise` | schools/ *management systems* | laravel · payments | BISAD — school management system for BIS Abu Dhabi. / NAIS Dubai, Al Khor and Manila — school CMS and payment portal. | `cover--grid` (4×3 outlined tiles lighting lime in sequence) |
 | 05 | `commerce` | vlurb/ *social & e-commerce* | social · commerce | VLURB — a voice-based social media platform. / Tasveek — e-commerce platform. / Desert Motors — auto-parts e-commerce. | `cover--wave` (9 bars of a sound wave oscillating) |
@@ -2029,7 +2029,7 @@ git rm -r -q images
 }
 ```
 
-`README.md` sections: `assets/svg/logo.svg` header image, one-line pitch, `![EDI ENGINE pipeline](assets/pipeline.gif)`, live link, "Design" (Neo Terminal: palette, Syne/Geist/JetBrains Mono, sharp edges), "Motion" (bullet list of animations), "Structure" (file map), "Develop" (`npm install`, `npm run serve`, `npm test`, `npm run images|gif|og`), "Deploy" (GitHub Pages from `main`, root), "Accessibility" (reduced motion, `?motion=off`, keyboard), author links.
+`README.md` sections: `assets/svg/logo.svg` header image, one-line pitch, `![EDI claims pipeline](assets/pipeline.gif)`, live link, "Design" (Neo Terminal: palette, Syne/Geist/JetBrains Mono, sharp edges), "Motion" (bullet list of animations), "Structure" (file map), "Develop" (`npm install`, `npm run serve`, `npm test`, `npm run images|gif|og`), "Deploy" (GitHub Pages from `main`, root), "Accessibility" (reduced motion, `?motion=off`, keyboard), author links.
 
 Run: `npm test` — Expected: all PASS.
 

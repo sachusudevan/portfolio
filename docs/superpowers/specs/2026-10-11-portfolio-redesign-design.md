@@ -13,7 +13,7 @@ not a template.
 
 Two assets carry the design:
 
-1. **The engineering story** — healthcare claim files (EOB, 837, self-pay) flowing through EDI ENGINE
+1. **The engineering story** — healthcare claim files (EOB, 837, self-pay) flowing through the EDI engine
    and emerging as 835 / CSV / TXT, synced into Client Portal. This becomes the signature animation.
 2. **Professional photography** — shown monochrome by default (fits the black/lime palette) and
    revealing colour on hover.
@@ -186,7 +186,7 @@ black on lime for buttons.
    1. **Ingest** — EOB, 837, SELF-PAY files slide in. Log: `[ingest] 3 files received (EOB, 837, SELF-PAY)`
    2. **Split** — files split into indexed pages. Log: `[split] 3 → 12 pages, indexed`
    3. **Validate** — gate draws, checks tick. Log: `[validate] schema ok ✓ 12/12`
-   4. **Transform** — wires draw, EDI ENGINE core spins, packets travel. Log: `[transform] edi-engine → canonical model`
+   4. **Transform** — wires draw, EDI ENGINE core spins, packets travel. Log: `[transform] engine → canonical model`
    5. **Deliver & sync** — 835/CSV/TXT chips appear, sync line to Client Portal dashboard, bars grow.
       Log: `[deliver] 835 · csv · txt → client-portal ✓ synced`
    Step list on the left highlights the active step (lime). Mobile: no pin; same SVG + log loop
