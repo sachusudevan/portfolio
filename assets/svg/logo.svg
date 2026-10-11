@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" width="360" height="96" role="img" aria-labelledby="t">
+  <title id="t">~/sachu — Sachu S</title>
+  <style>
+    .bg { fill: #0B0B0B; }
+    .txt { font: 700 40px "JetBrains Mono", Consolas, monospace; fill: #EDEDED; }
+    .tilde { fill: #C6F432; }
+    .caret { fill: #C6F432; animation: blink 1s steps(1) infinite; }
+    .brk { fill: none; stroke: #C6F432; stroke-width: 3; stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw 3.2s cubic-bezier(.7,0,.3,1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes draw { 0% { stroke-dashoffset: 60; } 30%, 80% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -60; } }
+    @media (prefers-reduced-motion: reduce) { .caret, .brk { animation: none; stroke-dashoffset: 0; } }
+  </style>
+  <rect class="bg" width="360" height="96"/>
+  <path class="brk" d="M30 18 H14 V78 H30"/>
+  <path class="brk" d="M330 18 H346 V78 H330"/>
+  <text class="txt" x="40" y="62"><tspan class="tilde">~/</tspan>sachu</text>
+  <rect class="caret" x="282" y="30" width="22" height="38"/>
+</svg>
