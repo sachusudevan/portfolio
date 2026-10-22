@@ -10,8 +10,9 @@ import { renderOg } from '../tools/render-og.mjs';
 test('pipeline frames are valid dark SVG, animated, and loop seamlessly', () => {
   const first = renderFrame(0);
   assert.match(first, /^<svg[^>]+viewBox="0 0 720 360"/);
-  assert.match(first, /#0B0B0B/);
-  assert.match(first, /#C6F432/);
+  assert.match(first, /#121212/);
+  assert.match(first, /#D72638/);
+  assert.ok(!/#C6F432/.test(first), 'old lime accent');
   assert.notEqual(first, renderFrame(Math.floor(FRAMES / 3)));
   assert.equal(first, renderFrame(FRAMES));
 });

@@ -1,137 +1,119 @@
-/* Generic scroll/entrance motion. Section-specific timelines live in their own files. */
+/* Motion layer: scroll reveals, in-view toggles, count-ups, parallax, timeline progress, principle focus, card glow. */
 (function () {
   'use strict';
-  var P = window.Portfolio;
-  if (!P || !P.motion) return;
-  var mm = gsap.matchMedia();
-  var each = function (sel, fn) { gsap.utils.toArray(sel).forEach(fn); };
-  var fontsReady = Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 1500); })]);
+  var w = window, d = document, root = d.documentElement;
+  var lib = w.PortfolioLib;
+  var motion = root.classList.contains('motion');
+  var hasIO = 'IntersectionObserver' in w;
 
-  /* Typing helper shared with pipeline.js — the final text stays in data-text */
-  P.typeText = function (el, opts) {
-    var text = el.dataset.text || el.textContent;
-    el.dataset.text = text;
-    var o = { n: 0 };
-    return gsap.to(o, {
-      n: text.length, duration: Math.min(text.length * 0.025, 1.4), ease: 'none', delay: (opts && opts.delay) || 0,
-      onStart: function () { el.textContent = ''; },
-      onUpdate: function () { el.textContent = text.slice(0, Math.round(o.n)); }
-    });
-  };
-
-  function scrambleHighlights(container, tl, at) {
-    container.querySelectorAll('.hl').forEach(function (hl, i) {
-      tl.to(hl, { duration: 0.8, scrambleText: { text: hl.textContent, chars: 'upperCase', speed: 0.6 } }, at + i * 0.1);
-    });
+  /* ---------- Reveal once ---------- */
+  var reveals = d.querySelectorAll('.reveal');
+  if (motion && hasIO) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-in');
+        revealObserver.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    reveals.forEach(function (el) { revealObserver.observe(el); });
+  } else {
+    reveals.forEach(function (el) { el.classList.add('is-in'); });
   }
 
-  /* Hero entrance, after the boot loader */
-  Promise.all([P.introDone, fontsReady]).then(function () {
-    var title = document.querySelector('[data-anim="hero-title"]');
-    if (!title) return;
-    gsap.set(title, { visibility: 'visible' });
-    var split = SplitText.create(title, { type: 'lines', mask: 'lines' });
-    var tl = gsap.timeline({ defaults: { ease: 'expo.out' } })
-      .from(split.lines, { yPercent: 110, duration: 1.2, stagger: 0.1 })
-      .to('[data-anim="hero-media"]', { clipPath: 'inset(0% 0 0 0)', duration: 1.5, ease: 'expo.inOut' }, 0)
-      .from('[data-anim="hero-media"] img', { scale: 1.3, duration: 2.2 }, 0.1)
-      .to('[data-anim="hero-fade"]', { opacity: 1, y: 0, duration: 1, stagger: 0.07, ease: 'power3.out' }, 0.3);
-    scrambleHighlights(title, tl, 0.7);
-    var whoami = document.querySelector('.hero [data-type]');
-    if (whoami) tl.add(P.typeText(whoami), 0.45);
-  });
+  /* ---------- In-view toggle: looping illustrations only run while visible ---------- */
+  var loopers = d.querySelectorAll('.project, .marquee, .approach__art, .contact');
+  if (hasIO) {
+    var viewObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.classList.toggle('in-view', e.isIntersecting); });
+    }, { rootMargin: '10% 0px' });
+    loopers.forEach(function (el) { viewObserver.observe(el); });
+  }
 
-  /* Split-line headings, highlight word decodes after the lines land */
-  fontsReady.then(function () {
-    each('[data-anim="lines"]', function (el) {
-      SplitText.create(el, {
-        type: 'lines', mask: 'lines', autoSplit: true,
-        onSplit: function (self) {
-          var tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
-          tl.from(self.lines, { yPercent: 105, duration: 1.1, ease: 'expo.out', stagger: 0.08 });
-          scrambleHighlights(el, tl, 0.5);
-          return tl;
-        }
-      });
-    });
-  });
-
-  /* Hover scramble on mono labels (text is restored to the original) */
-  each('[data-scramble]', function (el) {
-    var text = el.textContent;
-    el.addEventListener('pointerenter', function () {
-      gsap.to(el, { duration: 0.5, scrambleText: { text: text, chars: '01<>/_[]', speed: 0.9 }, overwrite: true });
-    });
-  });
-
-  each('[data-anim="fade"]', function (el) {
-    gsap.from(el, { y: 40, autoAlpha: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
-  });
-
-  each('[data-anim="stagger"]', function (el) {
-    gsap.from(el.children, { y: 24, autoAlpha: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
-  });
-
-  each('[data-anim="wipe"]', function (el) {
-    var img = el.querySelector('img');
-    var tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
-    tl.fromTo(el, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'expo.inOut' });
-    if (img) tl.fromTo(img, { scale: 1.25 }, { scale: 1, duration: 1.8, ease: 'expo.out' }, 0);
-  });
-
-  each('[data-speed]', function (el) {
-    gsap.to(el, { yPercent: -parseFloat(el.dataset.speed) * 10, ease: 'none',
-      scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
-  });
-
-  each('[data-count]', function (el) {
-    var end = parseFloat(el.dataset.count), suffix = el.dataset.suffix || '', n = { v: 0 };
-    el.textContent = '0' + suffix;
-    gsap.to(n, { v: end, duration: 2, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true },
-      onUpdate: function () { el.textContent = Math.round(n.v) + suffix; } });
-  });
-
-  /* Tape marquee: constant drift, boosted and reversed by scroll velocity */
-  var loops = gsap.utils.toArray('.marquee__row').map(function (row, i) {
-    var track = row.querySelector('.marquee__track');
-    return i % 2
-      ? gsap.fromTo(track, { xPercent: -50 }, { xPercent: 0, duration: 40, ease: 'none', repeat: -1 })
-      : gsap.fromTo(track, { xPercent: 0 }, { xPercent: -50, duration: 40, ease: 'none', repeat: -1 });
-  });
-  if (loops.length) ScrollTrigger.create({
-    trigger: '.marquee', start: 'top bottom', end: 'bottom top',
-    onUpdate: function (self) {
-      var boost = 1 + Math.min(Math.abs(self.getVelocity()) / 300, 5);
-      loops.forEach(function (loop) {
-        gsap.to(loop, { timeScale: self.direction * boost, duration: 0.2, overwrite: true,
-          onComplete: function () { gsap.to(loop, { timeScale: self.direction, duration: 1.2 }); } });
-      });
+  /* ---------- Count-up numbers (real value is already in the markup) ---------- */
+  var counters = d.querySelectorAll('[data-count]');
+  function countUp(el) {
+    var target = Number(el.getAttribute('data-count'));
+    var start = null, duration = 1600;
+    function step(ts) {
+      if (start === null) start = ts;
+      var t = Math.min(1, (ts - start) / duration);
+      el.textContent = String(Math.round(target * lib.easeOutExpo(t)));
+      if (t < 1) w.requestAnimationFrame(step);
     }
-  });
+    w.requestAnimationFrame(step);
+  }
+  if (motion && hasIO) {
+    var countObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        countUp(e.target);
+        countObserver.unobserve(e.target);
+      });
+    }, { threshold: 0.6 });
+    counters.forEach(function (el) { el.textContent = '0'; countObserver.observe(el); });
+  }
 
-  /* git-log experience graph */
-  var progress = document.querySelector('.timeline__progress');
-  if (progress) gsap.fromTo(progress, { scaleY: 0 }, { scaleY: 1, ease: 'none',
-    scrollTrigger: { trigger: '.timeline', start: 'top 70%', end: 'bottom 60%', scrub: true } });
-  each('.timeline__item', function (item) {
-    gsap.from(item, { x: 40, autoAlpha: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: item, start: 'top 82%', once: true } });
-    ScrollTrigger.create({ trigger: item, start: 'top 60%', end: 'bottom 60%', toggleClass: 'is-active' });
-  });
+  /* ---------- Principles: highlight the one crossing the middle of the viewport ---------- */
+  var principles = d.querySelectorAll('.principle');
+  if (hasIO) {
+    var principleObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.classList.toggle('is-active', e.isIntersecting); });
+    }, { rootMargin: '-49% 0px -50% 0px' });
+    principles.forEach(function (el) { principleObserver.observe(el); });
+  } else {
+    principles.forEach(function (el) { el.classList.add('is-active'); });
+  }
 
-  /* Desktop: horizontal "offline" strip */
-  mm.add('(min-width: 900px)', function () {
-    var section = document.querySelector('.beyond');
-    var track = section && section.querySelector('.beyond__track');
-    if (!track) return;
-    var distance = function () { return Math.max(0, track.scrollWidth - window.innerWidth); };
-    gsap.to(track, { x: function () { return -distance(); }, ease: 'none',
-      scrollTrigger: { trigger: section, start: 'top top', end: function () { return '+=' + distance(); }, pin: true, scrub: 1, invalidateOnRefresh: true, refreshPriority: 1 } });
-  });
+  /* ---------- Scroll-linked: hero depth, parallax, timeline fill ---------- */
+  var hero = d.querySelector('.hero');
+  var timeline = d.querySelector('[data-timeline]');
+  var parallaxEls = Array.prototype.slice.call(d.querySelectorAll('[data-parallax], .project .viz'));
+  var desktop = w.matchMedia('(min-width: 900px)');
+  var scheduled = false;
 
-  /* Mobile: photos turn to colour while centred (no hover on touch) */
-  mm.add('(max-width: 899px)', function () {
-    each('.photo', function (photo) {
-      ScrollTrigger.create({ trigger: photo, start: 'top 65%', end: 'bottom 35%', toggleClass: 'is-color' });
+  function update() {
+    scheduled = false;
+    var vh = w.innerHeight;
+    if (hero) {
+      var p = lib.clamp(w.scrollY / (hero.offsetHeight || vh), 0, 1);
+      hero.style.setProperty('--hero-p', motion && desktop.matches ? p.toFixed(4) : 0);
+    }
+    if (timeline) {
+      var r = timeline.getBoundingClientRect();
+      timeline.style.setProperty('--progress', lib.scrollProgress(r.top, r.height, vh, 0.6).toFixed(4));
+    }
+    if (!motion || !desktop.matches) return;
+    for (var i = 0; i < parallaxEls.length; i++) {
+      var el = parallaxEls[i];
+      var rect = el.getBoundingClientRect();
+      if (rect.bottom < -200 || rect.top > vh + 200) continue;
+      var speed = Number(el.getAttribute('data-parallax') || 0.04);
+      var offset = (rect.top + rect.height / 2 - vh / 2) * -speed;
+      el.style.setProperty('--py', offset.toFixed(1) + 'px');
+    }
+  }
+  function schedule() {
+    if (scheduled) return;
+    scheduled = true;
+    w.requestAnimationFrame(update);
+  }
+  w.addEventListener('scroll', schedule, { passive: true });
+  w.addEventListener('resize', schedule);
+  desktop.addEventListener('change', function () {
+    if (!desktop.matches) parallaxEls.forEach(function (el) { el.style.removeProperty('--py'); });
+    schedule();
+  });
+  update();
+
+  /* ---------- Project cards: pointer-following glow ---------- */
+  if (w.matchMedia('(hover: hover)').matches) {
+    d.querySelectorAll('.project').forEach(function (card) {
+      card.addEventListener('pointermove', function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
     });
-  });
+  }
 })();

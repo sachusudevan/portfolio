@@ -1,62 +1,79 @@
-<p align="center"><img src="assets/svg/logo.svg" alt="~/sachu" width="300" /></p>
+<p align="center"><img src="assets/svg/logo.svg" alt="SACHU" width="300" /></p>
 
 # Sachu S — Portfolio
 
-Personal site of **Sachu S**, Technical Lead & Software Engineer building HIPAA-compliant healthcare data platforms (EDI 835/837, EOB processing) with Python, Django and FastAPI.
+Personal site of **Sachu S**, Software Engineer & Technical Lead building scalable applications and reliable backend systems — including HIPAA-compliant healthcare data platforms (EDI 835/837, EOB processing) — with Python, Django and FastAPI.
 
 ![EDI claims pipeline animation](assets/pipeline.gif)
 
 **Live:** [sachusudevan.github.io/portfolio](https://sachusudevan.github.io/portfolio/)
 
-## Design — "Neo Terminal"
+## Design
 
-- Near-black canvas `#0B0B0B`, a single lime accent `#C6F432`, sharp edges everywhere.
-- **Syne** for uppercase display type, **JetBrains Mono** for labels and UI, **Geist** for body copy.
-- Terminal motifs throughout: boot loader, `$ whoami` prompt, `README.md` about panel, `git log` experience, `ls -la` projects, `contact.yml` and a one-tap WhatsApp connect.
-- Photography shown monochrome with lime corner brackets, colour on hover.
+- Dark, editorial and minimal, with one restrained crimson accent.
+- Palette (CSS custom properties in `css/tokens.css`):
+
+  | Token | Colour | Use |
+  | --- | --- | --- |
+  | `--c-bg` | Matte Black `#121212` | page background |
+  | `--c-surface` | Charcoal Gray `#242424` | cards, panels |
+  | `--c-accent` | Crimson Red `#D72638` | buttons, active states, highlights |
+  | `--c-text` | Soft White `#F5F5F5` | primary text |
+  | `--c-text-2` | Silver Gray `#BFC3C9` | secondary headings |
+  | `--c-text-3` | Muted Gray `#8B9098` | descriptions, metadata |
+
+- **Geist** for everything, **Geist Mono** for small metadata.
+- The hero is built around the introduction video, used as a full-bleed looping background with sound.
 
 ## Motion
 
-- Boot loader that types its startup log and splits open (once per session).
-- Headlines rise line by line and their highlight word decodes (GSAP SplitText + ScrambleText).
-- **Signature pipeline**: a pinned, scroll-scrubbed SVG of EOB/837/self-pay files flowing through the EDI engine into 835/CSV/TXT and the client portal, with a terminal log that types each step.
-- Tape marquee driven by scroll velocity, image wipes, parallax, count-up stats, a `git log` graph that draws as you scroll, and a horizontal photo strip.
-- Filterable project list with animated line-art covers and a cursor-following preview, a block cursor and magnetic buttons.
-- Smooth scrolling with Lenis. Everything respects `prefers-reduced-motion` (or add `?motion=off` to the URL).
+- Hero entrance: staggered rise-and-unblur of the intro, headline, copy and buttons (CSS only).
+- Scroll reveals via `IntersectionObserver`, triggered once, with staggered skills, timeline entries and project cards.
+- Scroll-linked depth: the hero copy lifts and the video eases back as you scroll; subtle parallax on the portrait, glows and project illustrations (desktop only).
+- Experience timeline fills as you scroll; the active engineering principle lights up as it crosses the middle of the screen.
+- Animated SVG illustrations for each project (EDI pipeline, live dashboard, SLA ring, tiles, waveform, ECG) that only run while on screen.
+- Micro-interactions: gliding nav indicator, link underlines, button sheen and arrow nudge, pointer-following glow on project cards, copy-to-clipboard feedback.
+- No animation libraries — plain CSS + a few small vanilla scripts. Everything respects `prefers-reduced-motion` (or add `?motion=off` to the URL).
+
+### Intro video
+
+`assets/videos/Software_engineer_portfolio_intro_1080p_20261022220619.mp4` is the full-bleed hero background. It **loops with sound and has no controls**. Browsers refuse audible autoplay until the visitor interacts with the page, so when that happens the video keeps playing muted behind a welcome screen (name, role and an **Enter** button); one click restarts the video from the top with sound and plays the hero entrance. Browsers that allow audible autoplay skip the welcome screen. Escape dismisses it without sound (a *Tap anywhere for sound* note then appears). The video pauses while the hero is scrolled out of view and resumes on return. If the file fails, the poster (`assets/img/hero-poster.webp`, the video's last frame) stays in place.
+
+Layout: on landscape desktops the video covers the whole hero and the copy overlays its darker left side; on portrait screens the video fills the top of the screen and fades into the page, with the copy below so the face is never covered.
 
 ## Structure
 
 ```
-index.html            # the whole page (content + inline SVG)
-css/tokens.css        # colours, fonts, type scale
-css/base.css          # reset, chrome (nav, menu, loader, cursor, buttons, terminal panes)
-css/sections.css      # hero → footer layouts and SVG animations
+index.html            # the whole page (content, inline SVG icons + illustrations)
+css/tokens.css        # palette, type scale, spacing, motion tokens
+css/base.css          # reset, typography, buttons, nav, mobile menu, reveal system, toast
+css/sections.css      # hero → footer layouts and illustration animations
 js/lib.js             # pure helpers shared with the tests
-js/main.js            # boot, smooth scroll, nav, menu, loader
-js/motion.js          # generic scroll/entrance animation
-js/pipeline.js        # the signature pipeline timeline
-js/work.js            # project filters, rows, hover preview
-js/cursor.js          # custom cursor + magnetic elements
+js/main.js            # nav state, active-section indicator, scroll progress, mobile menu, in-page links
+js/motion.js          # reveals, count-ups, parallax, timeline progress, principles, card glow
+js/video.js           # hero video controller
+js/work.js            # project filters
 js/contact.js         # copy email, toast, live IST clock
-assets/img/           # optimised photos (WebP + JPEG)
+assets/videos/        # intro video
+assets/img/           # hero poster + optimised photos (WebP + JPEG)
 assets/svg/           # logo.svg and pipeline.svg (self-animating)
 assets/pipeline.gif   # generated animation for this README
 assets/og-image.png   # generated social share card
-tools/                # scripts that generate the images/GIF/share card
+tools/                # scripts that generate the poster, GIF and share card
 tests/                # node:test suites
 ```
 
-No build step: the site is plain HTML, CSS and JavaScript, with GSAP and Lenis loaded from a CDN. `index.html` also works when opened straight from disk.
+No build step: the site is plain HTML, CSS and JavaScript with no runtime dependencies (fonts from Google Fonts). `index.html` also works when opened straight from disk.
 
 ## Develop
 
 ```bash
-npm install        # dev tools only (tests, image + GIF generation, local server)
-npm run serve      # http://localhost:5173
-npm test           # structure, content, helper and media tests
-npm run images     # re-optimise photos into assets/img
-npm run gif        # regenerate assets/pipeline.gif
-npm run og         # regenerate assets/og-image.png
+npm install                              # dev tools only (tests, image + GIF generation, local server)
+npm run serve                            # http://localhost:5173
+npm test                                 # structure, content, helper and media tests
+node tools/make-poster.mjs frame.png     # rebuild the hero poster from a 1920×1080 video frame
+npm run gif                              # regenerate assets/pipeline.gif
+npm run og                               # regenerate assets/og-image.png (uses the hero poster)
 ```
 
 ## Deploy
@@ -65,7 +82,7 @@ GitHub Pages → **Settings › Pages** → deploy from the `main` branch, root 
 
 ## Accessibility
 
-Semantic landmarks, a skip link, visible focus rings, keyboard-operable menu, filters and project rows, and real text behind every scramble/typing effect. Content stays fully visible if the animation scripts fail to load.
+Semantic landmarks and headings, a skip link, visible focus rings, a keyboard-operable mobile menu with focus trap and Escape-to-close, labelled video controls, `aria-pressed` filters with a live result count, and real text behind every animated number. Content stays fully visible if the scripts fail to load.
 
 ## Author
 

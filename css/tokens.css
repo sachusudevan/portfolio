@@ -1,23 +1,69 @@
-/* Design tokens — Neo Terminal (single dark theme). */
+/* Design tokens — matte black, charcoal and a single crimson accent. */
 :root {
-  --bg: #0B0B0B; --bg-2: #121212; --bg-3: #1A1A1A;
-  --line: #2A2A2A; --line-strong: #3A3A3A; --grid: rgb(42 42 42 / .35);
-  --text: #EDEDED; --muted: #8A8A8A;
-  --lime: #C6F432; --lime-dim: #9DC21F; --on-lime: #0B0B0B;
-  --danger: #FF5F56; --warn: #FFBD2E;
-  --font-display: "Syne", "Arial Black", Impact, sans-serif;
-  --font-body: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
-  --step--1: clamp(.78rem, .76rem + .1vw, .85rem);
-  --step-0: clamp(1rem, .96rem + .2vw, 1.0625rem);
-  --step-1: clamp(1.2rem, 1.05rem + .6vw, 1.5rem);
-  --step-2: clamp(1.6rem, 1.2rem + 1.6vw, 2.5rem);
-  --step-3: clamp(1.9rem, 1rem + 4vw, 4.8rem);
-  --step-4: clamp(2.2rem, .6rem + 7vw, 8rem);
-  --space-section: clamp(6rem, 4rem + 8vw, 10rem);
-  --gutter: clamp(1rem, .5rem + 2.5vw, 3rem);
-  --max: 1360px;
-  --ease-out: cubic-bezier(.16, 1, .3, 1);
-  --ease-in-out: cubic-bezier(.7, 0, .3, 1);
-  color-scheme: dark;
+  /* Palette */
+  --c-bg: #121212;          /* Matte Black — primary background */
+  --c-surface: #242424;     /* Charcoal Gray — cards, panels, secondary surfaces */
+  --c-accent: #D72638;      /* Crimson Red — accent, active states, buttons */
+  --c-text: #F5F5F5;        /* Soft White — primary text */
+  --c-text-2: #BFC3C9;      /* Silver Gray — secondary headings, supporting copy */
+  --c-text-3: #8B9098;      /* Muted Gray — descriptions, metadata */
+
+  /* Derived from the palette (tints only, no new hues) */
+  --c-surface-soft: rgb(36 36 36 / 0.55);
+  --c-line: rgb(245 245 245 / 0.08);
+  --c-line-strong: rgb(245 245 245 / 0.16);
+  --c-accent-soft: rgb(215 38 56 / 0.14);
+  --c-accent-line: rgb(215 38 56 / 0.45);
+  --c-accent-glow: rgb(215 38 56 / 0.32);
+  --c-accent-hover: #E23446;
+
+  /* Type */
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fs-hero: clamp(2.375rem, 1.35rem + 3.6vw, 5rem);
+  --fs-h2: clamp(2rem, 1.35rem + 2.5vw, 3.75rem);
+  --fs-h3: clamp(1.25rem, 1.1rem + 0.55vw, 1.625rem);
+  --fs-lead: clamp(1.0625rem, 0.98rem + 0.35vw, 1.3125rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.9375rem;
+  --fs-xs: 0.8125rem;
+  --fs-2xs: 0.75rem;
+  --lh-tight: 1.04;
+  --lh-snug: 1.2;
+  --lh-body: 1.65;
+  --tracking-tight: -0.035em;
+
+  /* Space & layout */
+  --container: 1240px;
+  --gutter: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
+  --space-section: clamp(5.5rem, 3rem + 8vw, 10rem);
+  --nav-h: 72px;
+
+  /* Shape */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --r-pill: 999px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur: 320ms;
+  --dur-slow: 900ms;
+  --reveal-y: 28px;
+  --stagger: 80ms;
+
+  /* Depth */
+  --shadow-lg: 0 30px 60px -20px rgb(0 0 0 / 0.6);
+  --shadow-accent: 0 12px 32px -10px var(--c-accent-glow);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --nav-h: 64px;
+    --reveal-y: 18px;
+    --stagger: 60ms;
+  }
 }

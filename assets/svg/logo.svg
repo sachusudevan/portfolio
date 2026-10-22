@@ -1,18 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" width="360" height="96" role="img" aria-labelledby="t">
-  <title id="t">~/sachu — Sachu S</title>
+  <title id="t">SACHU — Software Engineer &amp; Technical Lead</title>
   <style>
-    .bg { fill: #0B0B0B; }
-    .txt { font: 700 40px "JetBrains Mono", Consolas, monospace; fill: #EDEDED; }
-    .tilde { fill: #C6F432; }
-    .caret { fill: #C6F432; animation: blink 1s steps(1) infinite; }
-    .brk { fill: none; stroke: #C6F432; stroke-width: 3; stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw 3.2s cubic-bezier(.7,0,.3,1) infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
-    @keyframes draw { 0% { stroke-dashoffset: 60; } 30%, 80% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -60; } }
-    @media (prefers-reduced-motion: reduce) { .caret, .brk { animation: none; stroke-dashoffset: 0; } }
+    .bg { fill: #121212; }
+    .txt { font: 800 44px "Geist", "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 6px; fill: #F5F5F5; }
+    .dot { fill: #D72638; transform-box: fill-box; transform-origin: center; animation: pulse 2.4s ease-in-out infinite; }
+    .line { fill: none; stroke: #D72638; stroke-width: 2; stroke-dasharray: 200; stroke-dashoffset: 200; animation: draw 3.6s cubic-bezier(.65,0,.35,1) infinite; }
+    @keyframes pulse { 50% { transform: scale(.7); opacity: .6; } }
+    @keyframes draw { 0% { stroke-dashoffset: 200; } 35%, 75% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -200; } }
+    @media (prefers-reduced-motion: reduce) { .dot, .line { animation: none; stroke-dashoffset: 0; } }
   </style>
-  <rect class="bg" width="360" height="96"/>
-  <path class="brk" d="M30 18 H14 V78 H30"/>
-  <path class="brk" d="M330 18 H346 V78 H330"/>
-  <text class="txt" x="40" y="62"><tspan class="tilde">~/</tspan>sachu</text>
-  <rect class="caret" x="282" y="30" width="22" height="38"/>
+  <rect class="bg" width="360" height="96" rx="12"/>
+  <text class="txt" x="40" y="62">SACHU</text>
+  <rect class="dot" x="236" y="50" width="12" height="12" rx="2"/>
+  <path class="line" d="M42 76 H242"/>
 </svg>
