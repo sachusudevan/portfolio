@@ -136,8 +136,8 @@
       <!-- Full-bleed background video: loops, plays with sound once the browser allows it -->
       <div class="hero__media" data-hero-video>
         <div class="hero__stage">
-        <video class="hero__video" muted loop playsinline controls preload="metadata" poster="assets/img/hero-poster.webp" aria-label="Introduction video: Sachu walks into a dark, red-lit developer workspace and speaks to the camera" width="1920" height="1080">
-          <source src="assets/videos/Software_engineer_portfolio_intro_1080p_20261022220619.mp4" type="video/mp4" />
+        <video class="hero__video" muted loop playsinline controls preload="metadata" poster="assets/img/hero-poster.webp" aria-label="Introduction video: Sachu walks into a red-lit developer workspace, sits down and says hello to the camera in front of a screen reading Welcome to my portfolio" width="1920" height="1080">
+          <source src="assets/videos/Software_engineer_portfolio_intro_1080p_20261023093003.mp4" type="video/mp4" />
         </video>
         <!-- Animated seal, pinned by js/video.js over the corner mark baked into the video frames -->
         <span class="wm-badge" data-wm-badge aria-hidden="true">
@@ -155,15 +155,15 @@
       <p class="sound-hint" data-sound-hint hidden><svg class="icon" aria-hidden="true"><use href="#i-sound-on" /></svg>Tap anywhere for sound</p>
 
       <div class="hero__content container">
-        <div class="hero__copy">
-          <p class="hero__intro" data-enter style="--i:0"><span class="status-dot" aria-hidden="true"></span>Hi, I'm <strong>Sachu</strong></p>
-          <p class="hero__role" data-enter style="--i:1">Software Engineer &amp; Technical Lead</p>
+        <div class="hero__copy" data-hero-sync>
+          <p class="hero__intro" data-cue="0.3" style="--i:0"><span class="status-dot" aria-hidden="true"></span>Hi, I'm <strong>Sachu</strong></p>
+          <p class="hero__role" data-cue="1.2" style="--i:1">Software Engineer &amp; Technical Lead</p>
           <h1 id="hero-title" class="hero__title">
-            <span class="line" data-enter style="--i:2">Building Scalable Software.</span>
-            <span class="line accent" data-enter style="--i:3">Solving Complex Problems.</span>
+            <span class="line" data-cue="3.5" data-words style="--i:2">Building Scalable Software.</span>
+            <span class="line accent" data-cue="5.0" data-words style="--i:3">Solving Complex Problems.</span>
           </h1>
-          <p class="hero__lede" data-enter style="--i:4">I build reliable applications and backend systems with a focus on clean architecture, performance, and practical engineering solutions.</p>
-          <div class="hero__actions" data-enter style="--i:5">
+          <p class="hero__lede" data-cue="7.3" style="--i:4">I build reliable applications and backend systems with a focus on clean architecture, performance, and practical engineering solutions.</p>
+          <div class="hero__actions" data-cue="7.8" style="--i:5">
             <a class="btn btn--primary" href="#projects">Explore My Work <svg class="icon btn__arrow"><use href="#i-arrow-right" /></svg></a>
             <a class="btn btn--ghost" href="#contact">Get In Touch</a>
           </div>
@@ -571,59 +571,137 @@
           <p class="section-intro reveal" style="--i:2">From building REST APIs and payment integrations to leading the architecture of enterprise healthcare platforms.</p>
         </header>
 
-        <div class="timeline" data-timeline>
-          <span class="timeline__rail" aria-hidden="true"><span class="timeline__fill"></span></span>
-          <ol class="timeline__list">
+        <div class="exp" data-timeline>
+          <!-- Sticky career log: mirrors the role being read and rewinds from now to 2019 as you scroll -->
+          <aside class="exp__aside" aria-hidden="true">
+            <div class="exp__panel reveal">
+              <p class="kicker"><span class="kicker__dot"></span>Career log</p>
+              <div class="exp__now" data-exp-now>
+                <p class="exp__year" data-exp-year>2022 — Now</p>
+                <p class="exp__role" data-exp-role>Lead / Technical Head</p>
+                <p class="exp__org" data-exp-org>Aventus Informatics</p>
+              </div>
+              <div class="exp__ruler">
+                <span class="exp__end">Now</span>
+                <span class="exp__track">
+                  <i style="--t:0"></i><i style="--t:1"></i><i style="--t:2"></i><i style="--t:3"></i><i style="--t:4"></i><i style="--t:5"></i><i style="--t:6"></i><i style="--t:7"></i>
+                  <span class="exp__fill"></span>
+                  <span class="exp__thumb"></span>
+                </span>
+                <span class="exp__end">2019</span>
+              </div>
+              <p class="exp__hint"><span class="exp__hint-arrow"></span>Scroll to rewind</p>
+              <dl class="exp__facts">
+                <div><dt>Companies</dt><dd>2</dd></div>
+                <div><dt>Years</dt><dd>6<span class="accent">+</span></dd></div>
+                <div><dt>Domains</dt><dd>3</dd></div>
+              </dl>
+            </div>
+          </aside>
 
-          <li class="timeline__item reveal">
-            <span class="timeline__node" aria-hidden="true"></span>
-            <div class="timeline__when"><time datetime="2022">2022</time> — Present<span class="badge">Current</span></div>
-            <article class="timeline__card">
-              <header>
-                <h3 class="timeline__role">Software Engineer — Lead / Technical Head</h3>
-                <p class="timeline__org">Aventus Informatics</p>
-              </header>
-              <p>Leading the architecture, development and enhancement of enterprise healthcare systems — owning product scalability, HIPAA compliance, client-customisation frameworks and technical team leadership.</p>
-              <ul class="timeline__points">
-                <li>Designed the architecture for processing EOB, 837, self-pay and many other EOB file formats.</li>
-                <li>Built an automated file-splitting engine with <strong>index-based schema validation</strong>.</li>
-                <li>Created a customisable output engine supporting 835, CSV, TXT and client-specific formats.</li>
-                <li>Delivered real-time data synchronisation from the processing engine into the client portal.</li>
-                <li>Lead and mentor the engineering team through architecture, reviews and delivery.</li>
-              </ul>
-              <ul class="tags" aria-label="Technologies"><li>Python</li><li>Django</li><li>FastAPI</li><li>PostgreSQL</li><li>HIPAA</li><li>EDI 835/837</li></ul>
-            </article>
-          </li>
+          <div class="timeline">
+            <span class="timeline__rail" aria-hidden="true"><span class="timeline__fill"></span></span>
+            <ol class="timeline__list">
 
-          <li class="timeline__item reveal">
-            <span class="timeline__node" aria-hidden="true"></span>
-            <div class="timeline__when"><time datetime="2019-12">Dec 2019</time> — <time datetime="2022">2022</time></div>
-            <article class="timeline__card">
-              <header>
-                <h3 class="timeline__role">Software Engineer</h3>
-                <p class="timeline__org">Mobatia Technology Pvt Ltd</p>
-              </header>
-              <p>Managed multiple Laravel and Django projects across education, healthcare and e-commerce clients.</p>
-              <ul class="timeline__points">
-                <li>Built REST APIs powering mobile applications.</li>
-                <li>Integrated payment gateways into school and commerce platforms.</li>
-                <li>Delivered CMS-based enterprise applications and supported live production systems.</li>
-              </ul>
-              <ul class="tags" aria-label="Technologies"><li>Laravel</li><li>Django</li><li>PHP</li><li>Python</li><li>REST APIs</li><li>Payment gateways</li></ul>
-            </article>
-          </li>
+            <li class="timeline__item reveal" data-exp-item data-period="2022 — Now" data-title="Lead / Technical Head" data-company="Aventus Informatics">
+              <span class="timeline__node" aria-hidden="true"></span>
+              <article class="timeline__card">
+                <header class="timeline__head">
+                  <span class="timeline__logo" aria-hidden="true">A</span>
+                  <div class="timeline__titles">
+                    <h3 class="timeline__role">Software Engineer — Lead / Technical Head</h3>
+                    <p class="timeline__org">Aventus Informatics</p>
+                  </div>
+                  <p class="timeline__when"><span><time datetime="2022">2022</time> — Present</span><span class="badge">Current</span></p>
+                </header>
+                <p class="timeline__summary">Leading the architecture, development and enhancement of enterprise healthcare systems — owning product scalability, HIPAA compliance, client-customisation frameworks and technical team leadership.</p>
+                <div class="timeline__body">
+                  <ul class="timeline__points">
+                    <li style="--p:0"><svg class="timeline__tick" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M3.5 8.5l3 3 6-7" /></svg>Designed the architecture for processing EOB, 837, self-pay and many other EOB file formats.</li>
+                    <li style="--p:1"><svg class="timeline__tick" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M3.5 8.5l3 3 6-7" /></svg>Built an automated file-splitting engine with <strong>index-based schema validation</strong>.</li>
+                    <li style="--p:2"><svg class="timeline__tick" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M3.5 8.5l3 3 6-7" /></svg>Created a customisable output engine supporting 835, CSV, TXT and client-specific formats.</li>
+                    <li style="--p:3"><svg class="timeline__tick" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M3.5 8.5l3 3 6-7" /></svg>Delivered real-time data synchronisation from the processing engine into the client portal.</li>
+                    <li style="--p:4"><svg class="timeline__tick" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M3.5 8.5l3 3 6-7" /></svg>Lead and mentor the engineering team through architecture, reviews and delivery.</li>
+                  </ul>
+                  <figure class="timeline__art" aria-hidden="true">
+                    <svg class="orbit" viewBox="0 0 260 220">
+                      <circle class="orbit__ring" cx="130" cy="110" r="78" />
+                      <circle class="orbit__ring orbit__ring--inner" cx="130" cy="110" r="46" />
+                      <g class="orbit__spin">
+                        <path class="orbit__spoke" d="M130 86V32" /><path class="orbit__spoke" d="M154 110H208" /><path class="orbit__spoke" d="M130 134V188" /><path class="orbit__spoke" d="M106 110H52" />
+                        <g transform="translate(130 32)"><g class="orbit__sat"><rect x="-42" y="-12" width="84" height="24" rx="12" /><text y="3.5" text-anchor="middle">ARCHITECTURE</text></g></g>
+                        <g transform="translate(208 110)"><g class="orbit__sat"><rect x="-34" y="-12" width="68" height="24" rx="12" /><text y="3.5" text-anchor="middle">REVIEWS</text></g></g>
+                        <g transform="translate(130 188)"><g class="orbit__sat"><rect x="-38" y="-12" width="76" height="24" rx="12" /><text y="3.5" text-anchor="middle">MENTORING</text></g></g>
+                        <g transform="translate(52 110)"><g class="orbit__sat"><rect x="-36" y="-12" width="72" height="24" rx="12" /><text y="3.5" text-anchor="middle">DELIVERY</text></g></g>
+                      </g>
+                      <circle class="orbit__glow" cx="130" cy="110" r="30" />
+                      <circle class="orbit__core" cx="130" cy="110" r="24" />
+                      <text class="orbit__core-text" x="130" y="113.5" text-anchor="middle">LEAD</text>
+                    </svg>
+                  </figure>
+                </div>
+                <ul class="tags" aria-label="Technologies"><li>Python</li><li>Django</li><li>FastAPI</li><li>PostgreSQL</li><li>HIPAA</li><li>EDI 835/837</li></ul>
+              </article>
+            </li>
 
-          <li class="timeline__item timeline__item--edu reveal">
-            <span class="timeline__node" aria-hidden="true"></span>
-            <div class="timeline__when">Education</div>
-            <article class="timeline__card">
-              <header>
-                <h3 class="timeline__role">BSc Computer Science</h3>
-                <p class="timeline__org">University of Kerala · CGPA 6.6</p>
-              </header>
-            </article>
-          </li>
-          </ol>
+            <li class="timeline__item reveal" data-exp-item data-period="2019 — 2022" data-title="Software Engineer" data-company="Mobatia Technology">
+              <span class="timeline__node" aria-hidden="true"></span>
+              <article class="timeline__card">
+                <header class="timeline__head">
+                  <span class="timeline__logo" aria-hidden="true">M</span>
+                  <div class="timeline__titles">
+                    <h3 class="timeline__role">Software Engineer</h3>
+                    <p class="timeline__org">Mobatia Technology Pvt Ltd</p>
+                  </div>
+                  <p class="timeline__when"><span><time datetime="2019-12">Dec 2019</time> — <time datetime="2022">2022</time></span></p>
+                </header>
+                <p class="timeline__summary">Managed multiple Laravel and Django projects across education, healthcare and e-commerce clients.</p>
+                <div class="timeline__body">
+                  <ul class="timeline__points">
+                    <li style="--p:0"><svg class="timeline__tick" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M3.5 8.5l3 3 6-7" /></svg>Built REST APIs powering mobile applications.</li>
+                    <li style="--p:1"><svg class="timeline__tick" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M3.5 8.5l3 3 6-7" /></svg>Integrated payment gateways into school and commerce platforms.</li>
+                    <li style="--p:2"><svg class="timeline__tick" viewBox="0 0 16 16" aria-hidden="true"><path pathLength="1" d="M3.5 8.5l3 3 6-7" /></svg>Delivered CMS-based enterprise applications and supported live production systems.</li>
+                  </ul>
+                  <figure class="timeline__art" aria-hidden="true">
+                    <svg class="mobile-viz" viewBox="0 0 260 220">
+                      <rect class="mv-phone" x="22" y="22" width="88" height="176" rx="18" />
+                      <rect class="mv-notch" x="52" y="31" width="28" height="5" rx="2.5" />
+                      <rect class="mv-hero" x="34" y="48" width="64" height="40" rx="8" />
+                      <rect class="mv-skel" x="34" y="100" width="48" height="6" rx="3" />
+                      <rect class="mv-skel" x="34" y="113" width="60" height="6" rx="3" />
+                      <rect class="mv-skel" x="34" y="126" width="40" height="6" rx="3" />
+                      <rect class="mv-btn" x="34" y="164" width="64" height="22" rx="11" />
+                      <text class="mv-btn__text" x="66" y="178.5" text-anchor="middle">PAY NOW</text>
+                      <path class="mv-wire" d="M110 68C138 68 138 64 160 64" />
+                      <path class="mv-wire" d="M110 175C138 175 138 152 160 152" />
+                      <path class="mv-flow" d="M110 68C138 68 138 64 160 64" />
+                      <path class="mv-flow mv-flow--pay" d="M110 175C138 175 138 152 160 152" />
+                      <g transform="translate(160 42)"><rect class="mv-box" width="84" height="44" rx="10" /><text class="mv-title" x="42" y="20" text-anchor="middle">REST API</text><text class="mv-sub" x="42" y="33" text-anchor="middle">200 OK</text></g>
+                      <g transform="translate(160 130)"><rect class="mv-box" width="84" height="44" rx="10" /><text class="mv-title" x="34" y="20" text-anchor="middle">GATEWAY</text><text class="mv-sub" x="34" y="33" text-anchor="middle">payment</text><circle class="mv-ok" cx="68" cy="22" r="8" /><path class="mv-check" pathLength="1" d="M64.5 22.3l2.4 2.4 4.6-5" /></g>
+                      <text class="mv-caption" x="202" y="112" text-anchor="middle">CMS · LIVE OPS</text>
+                    </svg>
+                  </figure>
+                </div>
+                <ul class="tags" aria-label="Technologies"><li>Laravel</li><li>Django</li><li>PHP</li><li>Python</li><li>REST APIs</li><li>Payment gateways</li></ul>
+              </article>
+            </li>
+
+            <li class="timeline__item timeline__item--edu reveal" data-exp-item data-period="Education" data-title="BSc Computer Science" data-company="University of Kerala">
+              <span class="timeline__node" aria-hidden="true"></span>
+              <article class="timeline__card">
+                <header class="timeline__head">
+                  <span class="timeline__logo timeline__logo--edu" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M2 9.5 12 5l10 4.5-10 4.5L2 9.5z" /><path d="M6 11.5v4.5c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.5M22 9.5v5" /></svg></span>
+                  <div class="timeline__titles">
+                    <h3 class="timeline__role">BSc Computer Science</h3>
+                    <p class="timeline__org">University of Kerala · CGPA 6.6</p>
+                  </div>
+                  <p class="timeline__when">Education</p>
+                </header>
+                <p class="timeline__summary">Where it started — the computer-science foundations behind everything above.</p>
+              </article>
+            </li>
+            </ol>
+          </div>
         </div>
       </div>
     </section>
@@ -637,19 +715,29 @@
             <h2 id="projects-title" class="section-title reveal" style="--i:1">Platforms I've <span class="accent">shipped.</span></h2>
           </div>
           <div class="projects__tools reveal" style="--i:2">
-            <div class="filters" role="group" aria-label="Filter projects by category">
-              <button class="filter" type="button" data-filter="all" aria-pressed="true">All</button>
-              <button class="filter" type="button" data-filter="healthcare" aria-pressed="false">Healthcare</button>
-              <button class="filter" type="button" data-filter="enterprise" aria-pressed="false">Enterprise</button>
-              <button class="filter" type="button" data-filter="commerce" aria-pressed="false">Commerce</button>
+            <p class="section-intro">Six platforms across healthcare, enterprise and commerce. Scroll through them — or narrow it down.</p>
+            <div class="filters" role="group" aria-label="Filter projects by category" data-filter-group>
+              <span class="filters__pill" aria-hidden="true"></span>
+              <button class="filter" type="button" data-filter="all" aria-pressed="true">All <span class="filter__n">6</span></button>
+              <button class="filter" type="button" data-filter="healthcare" aria-pressed="false">Healthcare <span class="filter__n">3</span></button>
+              <button class="filter" type="button" data-filter="enterprise" aria-pressed="false">Enterprise <span class="filter__n">3</span></button>
+              <button class="filter" type="button" data-filter="commerce" aria-pressed="false">Commerce <span class="filter__n">1</span></button>
             </div>
             <p class="projects__count" aria-live="polite">Showing 6 projects</p>
           </div>
         </header>
 
-        <div class="project-grid">
-          <!-- Featured 1 -->
-          <article class="project project--featured reveal" data-category="healthcare" aria-labelledby="p1-title">
+        <div class="work" data-work>
+          <div class="work__list">
+          <article class="project reveal" data-category="healthcare" data-slug="edi-processing-platform" aria-labelledby="p1-title">
+            <header class="project__head">
+              <span class="project__num" aria-hidden="true">01</span>
+              <div class="project__titles">
+                <p class="project__meta"><span class="project__cat">Healthcare</span><span class="project__private"><svg class="icon"><use href="#i-lock" /></svg>Private client work</span></p>
+                <h3 id="p1-title" class="project__title">EDI Processing Platform</h3>
+              </div>
+              <span class="project__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-up-right" /></svg></span>
+            </header>
             <div class="project__visual" aria-hidden="true">
               <svg class="viz viz--pipeline" viewBox="0 0 560 320">
                 <g class="vp-docs">
@@ -682,8 +770,6 @@
               </svg>
             </div>
             <div class="project__body">
-              <p class="project__meta"><span>Healthcare</span><span class="project__private"><svg class="icon"><use href="#i-lock" /></svg>Private client work</span></p>
-              <h3 id="p1-title" class="project__title">EDI Processing Platform</h3>
               <p class="project__desc">A HIPAA-compliant engine that ingests EOBs, 837 claims and self-pay documents and turns them into one consistent data model.</p>
               <ul class="project__points">
                 <li>Architecture for EOB, 837, self-pay and many other EOB file formats.</li>
@@ -695,8 +781,15 @@
             </div>
           </article>
 
-          <!-- Featured 2 -->
-          <article class="project project--featured project--flip reveal" data-category="healthcare" aria-labelledby="p2-title">
+          <article class="project reveal" data-category="healthcare" data-slug="client-operations-portal" aria-labelledby="p2-title">
+            <header class="project__head">
+              <span class="project__num" aria-hidden="true">02</span>
+              <div class="project__titles">
+                <p class="project__meta"><span class="project__cat">Healthcare</span><span class="project__private"><svg class="icon"><use href="#i-lock" /></svg>Private client work</span></p>
+                <h3 id="p2-title" class="project__title">Client Operations Portal</h3>
+              </div>
+              <span class="project__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-up-right" /></svg></span>
+            </header>
             <div class="project__visual" aria-hidden="true">
               <svg class="viz viz--portal" viewBox="0 0 560 320">
                 <rect class="vd-window" x="24" y="20" width="512" height="280" rx="16" />
@@ -719,8 +812,6 @@
               </svg>
             </div>
             <div class="project__body">
-              <p class="project__meta"><span>Healthcare</span><span class="project__private"><svg class="icon"><use href="#i-lock" /></svg>Private client work</span></p>
-              <h3 id="p2-title" class="project__title">Client Operations Portal</h3>
               <p class="project__desc">The client-facing side of the processing platform — processed records, outputs and file tracking, kept in sync in real time.</p>
               <ul class="project__points">
                 <li>Real-time data synchronisation from the EDI engine to the client portal.</li>
@@ -731,73 +822,153 @@
             </div>
           </article>
 
-          <!-- Compact cards -->
-          <article class="project project--compact reveal" style="--i:0" data-category="enterprise" aria-labelledby="p3-title">
+          <article class="project reveal" data-category="enterprise" data-slug="ticketing-sla-analytics" aria-labelledby="p3-title">
+            <header class="project__head">
+              <span class="project__num" aria-hidden="true">03</span>
+              <div class="project__titles">
+                <p class="project__meta"><span class="project__cat">Enterprise</span></p>
+                <h3 id="p3-title" class="project__title">Ticketing, SLA &amp; Analytics</h3>
+              </div>
+              <span class="project__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-up-right" /></svg></span>
+            </header>
             <div class="project__visual" aria-hidden="true">
-              <svg class="viz viz--ring" viewBox="0 0 320 180">
-                <circle class="vz-track" cx="160" cy="90" r="56" />
-                <circle class="vz-arc" cx="160" cy="90" r="56" pathLength="100" transform="rotate(-90 160 90)" />
-                <line class="vz-hand" x1="160" y1="90" x2="160" y2="50" />
-                <circle class="vz-hub" cx="160" cy="90" r="5" />
+              <svg class="viz viz--tickets" viewBox="0 0 560 320">
+                <rect class="vd-window" x="24" y="20" width="512" height="280" rx="16" />
+                <path class="vd-sep" d="M24 56H536" />
+                <circle class="vd-dot" cx="48" cy="38" r="5" /><circle class="vd-dot" cx="66" cy="38" r="5" /><circle class="vd-dot" cx="84" cy="38" r="5" />
+                <text class="vx-label" x="512" y="42" text-anchor="end">TICKETS</text>
+                <g class="vt-sla"><circle class="vt-sla__track" cx="420" cy="38" r="8" /><circle class="vt-sla__arc" cx="420" cy="38" r="8" pathLength="100" transform="rotate(-90 420 38)" /><text x="404" y="42" text-anchor="end">SLA</text></g>
+                <g class="vt-cols"><rect x="40" y="72" width="152" height="212" rx="10" /><rect x="204" y="72" width="152" height="212" rx="10" /><rect x="368" y="72" width="152" height="212" rx="10" /></g>
+                <g class="vt-heads"><text x="54" y="94">OPEN</text><text x="218" y="94">IN PROGRESS</text><text x="382" y="94">RESOLVED</text></g>
+                <g transform="translate(52 160)"><rect class="vt-card" width="128" height="40" rx="8" /><rect class="vd-skel" x="12" y="12" width="74" height="6" rx="3" /><rect class="vd-skel" x="12" y="24" width="46" height="6" rx="3" /></g><g transform="translate(52 212)"><rect class="vt-card" width="128" height="40" rx="8" /><rect class="vd-skel" x="12" y="12" width="74" height="6" rx="3" /><rect class="vd-skel" x="12" y="24" width="46" height="6" rx="3" /></g>
+                <g transform="translate(216 108)"><rect class="vt-card" width="128" height="40" rx="8" /><rect class="vd-skel" x="12" y="12" width="74" height="6" rx="3" /><rect class="vd-skel" x="12" y="24" width="46" height="6" rx="3" /></g><g transform="translate(216 160)"><rect class="vt-card" width="128" height="40" rx="8" /><rect class="vd-skel" x="12" y="12" width="74" height="6" rx="3" /><rect class="vd-skel" x="12" y="24" width="46" height="6" rx="3" /></g>
+                <g transform="translate(380 108)"><rect class="vt-card" width="128" height="40" rx="8" /><rect class="vd-skel" x="12" y="12" width="74" height="6" rx="3" /><rect class="vd-skel" x="12" y="24" width="46" height="6" rx="3" /><circle class="vt-done" cx="112" cy="20" r="6" /></g><g transform="translate(380 160)"><rect class="vt-card" width="128" height="40" rx="8" /><rect class="vd-skel" x="12" y="12" width="74" height="6" rx="3" /><rect class="vd-skel" x="12" y="24" width="46" height="6" rx="3" /><circle class="vt-done" cx="112" cy="20" r="6" /></g>
+                <g transform="translate(52 108)"><g class="vt-move"><rect class="vt-card vt-card--hot" width="128" height="40" rx="8" /><rect class="vd-skel vd-skel--on" x="12" y="12" width="74" height="6" rx="3" /><rect class="vd-skel" x="12" y="24" width="46" height="6" rx="3" /><circle class="vt-move__ok" cx="112" cy="20" r="6" /></g></g>
               </svg>
             </div>
             <div class="project__body">
-              <p class="project__meta"><span>Enterprise</span></p>
-              <h3 id="p3-title" class="project__title">Ticketing, SLA &amp; Analytics</h3>
               <p class="project__desc">Client and provider ticketing with SLA tracking, status workflows, a report-generation engine and dynamic analytics dashboards — with role-based access and audit logs.</p>
               <ul class="tags" aria-label="Technologies"><li>SLA workflows</li><li>Reporting</li><li>RBAC</li></ul>
             </div>
           </article>
 
-          <article class="project project--compact reveal" style="--i:1" data-category="enterprise" aria-labelledby="p4-title">
+          <article class="project reveal" data-category="enterprise" data-slug="school-management-systems" aria-labelledby="p4-title">
+            <header class="project__head">
+              <span class="project__num" aria-hidden="true">04</span>
+              <div class="project__titles">
+                <p class="project__meta"><span class="project__cat">Enterprise · Education</span></p>
+                <h3 id="p4-title" class="project__title">School Management Systems</h3>
+              </div>
+              <span class="project__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-up-right" /></svg></span>
+            </header>
             <div class="project__visual" aria-hidden="true">
-              <svg class="viz viz--grid" viewBox="0 0 320 180">
-                <g class="vz-tiles">
-                  <rect x="88" y="30" width="30" height="30" rx="6" /><rect x="126" y="30" width="30" height="30" rx="6" /><rect x="164" y="30" width="30" height="30" rx="6" /><rect x="202" y="30" width="30" height="30" rx="6" />
-                  <rect x="88" y="68" width="30" height="30" rx="6" /><rect x="126" y="68" width="30" height="30" rx="6" /><rect x="164" y="68" width="30" height="30" rx="6" /><rect x="202" y="68" width="30" height="30" rx="6" />
-                  <rect x="88" y="106" width="30" height="30" rx="6" /><rect x="126" y="106" width="30" height="30" rx="6" /><rect x="164" y="106" width="30" height="30" rx="6" /><rect x="202" y="106" width="30" height="30" rx="6" />
+              <svg class="viz viz--school" viewBox="0 0 560 320">
+                <rect class="vd-window" x="24" y="20" width="512" height="280" rx="16" />
+                <path class="vd-sep" d="M24 56H536" />
+                <circle class="vd-dot" cx="48" cy="38" r="5" /><circle class="vd-dot" cx="66" cy="38" r="5" /><circle class="vd-dot" cx="84" cy="38" r="5" />
+                <text class="vx-label" x="512" y="42" text-anchor="end">SCHOOL PORTAL</text>
+                <rect class="vd-panel" x="40" y="72" width="236" height="212" rx="10" />
+                <text class="vx-label" x="56" y="94">TERM CALENDAR</text>
+                <g class="vs-days"><rect x="56" y="108" width="22" height="22" rx="5" style="--d:0.00s" /><rect x="86" y="108" width="22" height="22" rx="5" style="--d:0.14s" /><rect x="116" y="108" width="22" height="22" rx="5" style="--d:0.28s" /><rect class="is-event" x="146" y="108" width="22" height="22" rx="5" style="--d:0.42s" /><rect x="176" y="108" width="22" height="22" rx="5" style="--d:0.56s" /><rect x="206" y="108" width="22" height="22" rx="5" style="--d:0.70s" /><rect x="236" y="108" width="22" height="22" rx="5" style="--d:0.84s" /><rect x="56" y="142" width="22" height="22" rx="5" style="--d:0.98s" /><rect x="86" y="142" width="22" height="22" rx="5" style="--d:1.12s" /><rect class="is-event" x="116" y="142" width="22" height="22" rx="5" style="--d:1.26s" /><rect x="146" y="142" width="22" height="22" rx="5" style="--d:1.40s" /><rect x="176" y="142" width="22" height="22" rx="5" style="--d:1.54s" /><rect class="is-event" x="206" y="142" width="22" height="22" rx="5" style="--d:1.68s" /><rect x="236" y="142" width="22" height="22" rx="5" style="--d:1.82s" /><rect x="56" y="176" width="22" height="22" rx="5" style="--d:1.96s" /><rect x="86" y="176" width="22" height="22" rx="5" style="--d:2.10s" /><rect x="116" y="176" width="22" height="22" rx="5" style="--d:2.24s" /><rect class="is-event" x="146" y="176" width="22" height="22" rx="5" style="--d:2.38s" /><rect x="176" y="176" width="22" height="22" rx="5" style="--d:2.52s" /><rect x="206" y="176" width="22" height="22" rx="5" style="--d:2.66s" /><rect x="236" y="176" width="22" height="22" rx="5" style="--d:2.80s" /><rect x="56" y="210" width="22" height="22" rx="5" style="--d:2.94s" /><rect class="is-event" x="86" y="210" width="22" height="22" rx="5" style="--d:3.08s" /><rect x="116" y="210" width="22" height="22" rx="5" style="--d:3.22s" /><rect x="146" y="210" width="22" height="22" rx="5" style="--d:3.36s" /><rect x="176" y="210" width="22" height="22" rx="5" style="--d:3.50s" /><rect class="is-event" x="206" y="210" width="22" height="22" rx="5" style="--d:3.64s" /><rect x="236" y="210" width="22" height="22" rx="5" style="--d:3.78s" /><rect x="56" y="244" width="22" height="22" rx="5" style="--d:3.92s" /><rect x="86" y="244" width="22" height="22" rx="5" style="--d:4.06s" /><rect x="116" y="244" width="22" height="22" rx="5" style="--d:4.20s" /><rect class="is-event" x="146" y="244" width="22" height="22" rx="5" style="--d:4.34s" /><rect x="176" y="244" width="22" height="22" rx="5" style="--d:4.48s" /><rect x="206" y="244" width="22" height="22" rx="5" style="--d:4.62s" /><rect x="236" y="244" width="22" height="22" rx="5" style="--d:4.76s" /></g>
+                <rect class="vd-panel" x="292" y="72" width="228" height="112" rx="10" />
+                <text class="vx-label" x="308" y="94">FEE PAYMENT</text>
+                <rect class="vd-num" x="308" y="108" width="96" height="14" rx="4" /><rect class="vd-skel" x="308" y="132" width="140" height="6" rx="3" />
+                <rect class="vs-pay" x="308" y="150" width="92" height="22" rx="11" /><text class="vs-pay__text" x="354" y="165" text-anchor="middle">PAY</text>
+                <circle class="vs-ok" cx="494" cy="114" r="12" /><path class="vs-check" pathLength="1" d="M488.5 114.5l3.8 3.8 7.2-7.8" />
+                <rect class="vd-panel" x="292" y="196" width="228" height="88" rx="10" />
+                <g class="vs-rows">
+                  <g><circle cx="314" cy="216" r="8" /><rect x="330" y="211" width="96" height="6" rx="3" /><rect x="438" y="211" width="56" height="6" rx="3" /></g>
+                  <g><circle cx="314" cy="240" r="8" /><rect x="330" y="235" width="76" height="6" rx="3" /><rect x="438" y="235" width="56" height="6" rx="3" /></g>
+                  <g><circle cx="314" cy="264" r="8" /><rect x="330" y="259" width="88" height="6" rx="3" /><rect x="438" y="259" width="56" height="6" rx="3" /></g>
                 </g>
               </svg>
             </div>
             <div class="project__body">
-              <p class="project__meta"><span>Enterprise · Education</span></p>
-              <h3 id="p4-title" class="project__title">School Management Systems</h3>
               <p class="project__desc">BISAD — a school management system for BIS Abu Dhabi — plus school CMS and payment portals for NAIS Dubai, Al Khor and Manila.</p>
               <ul class="tags" aria-label="Technologies"><li>Laravel</li><li>CMS</li><li>Payments</li></ul>
             </div>
           </article>
 
-          <article class="project project--compact reveal" style="--i:2" data-category="commerce" aria-labelledby="p5-title">
+          <article class="project reveal" data-category="commerce" data-slug="social-ecommerce-platforms" aria-labelledby="p5-title">
+            <header class="project__head">
+              <span class="project__num" aria-hidden="true">05</span>
+              <div class="project__titles">
+                <p class="project__meta"><span class="project__cat">Commerce · Social</span></p>
+                <h3 id="p5-title" class="project__title">Social &amp; E-commerce Platforms</h3>
+              </div>
+              <span class="project__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-up-right" /></svg></span>
+            </header>
             <div class="project__visual" aria-hidden="true">
-              <svg class="viz viz--wave" viewBox="0 0 320 180">
-                <path class="vz-base" d="M40 90H76M244 90H280" />
-                <g class="vz-bars">
-                  <rect x="84" y="62" width="10" height="56" rx="5" /><rect x="102" y="44" width="10" height="92" rx="5" /><rect x="120" y="68" width="10" height="44" rx="5" /><rect x="138" y="34" width="10" height="112" rx="5" /><rect x="156" y="54" width="10" height="72" rx="5" /><rect x="174" y="40" width="10" height="100" rx="5" /><rect x="192" y="66" width="10" height="48" rx="5" /><rect x="210" y="50" width="10" height="80" rx="5" /><rect x="228" y="70" width="10" height="40" rx="5" />
-                </g>
+              <svg class="viz viz--social" viewBox="0 0 560 320">
+                <rect class="vd-window" x="40" y="28" width="228" height="264" rx="16" />
+                <circle class="vc-avatar" cx="70" cy="62" r="14" /><rect class="vd-skel" x="92" y="54" width="80" height="6" rx="3" /><rect class="vd-skel" x="92" y="66" width="50" height="6" rx="3" />
+                <text class="vx-label" x="248" y="66" text-anchor="end">VOICE</text>
+                <g class="vc-wave"><rect x="62" y="151" width="6" height="18" rx="3" style="--d:0.00s" /><rect x="74" y="143" width="6" height="34" rx="3" style="--d:-0.13s" /><rect x="86" y="134" width="6" height="52" rx="3" style="--d:-0.26s" /><rect x="98" y="145" width="6" height="30" rx="3" style="--d:-0.39s" /><rect x="110" y="128" width="6" height="64" rx="3" style="--d:-0.52s" /><rect x="122" y="139" width="6" height="42" rx="3" style="--d:-0.65s" /><rect x="134" y="122" width="6" height="76" rx="3" style="--d:-0.78s" /><rect x="146" y="135" width="6" height="50" rx="3" style="--d:-0.91s" /><rect x="158" y="146" width="6" height="28" rx="3" style="--d:-1.04s" /><rect x="170" y="130" width="6" height="60" rx="3" style="--d:-1.17s" /><rect x="182" y="141" width="6" height="38" rx="3" style="--d:-1.30s" /><rect x="194" y="125" width="6" height="70" rx="3" style="--d:-1.43s" /><rect x="206" y="137" width="6" height="46" rx="3" style="--d:-1.56s" /><rect x="218" y="148" width="6" height="24" rx="3" style="--d:-1.69s" /><rect x="230" y="140" width="6" height="40" rx="3" style="--d:-1.82s" /><rect x="242" y="150" width="6" height="20" rx="3" style="--d:-1.95s" /></g>
+                <circle class="vc-play" cx="72" cy="252" r="16" /><path class="vc-play__icon" d="M67 245v14l12-7z" />
+                <path class="vc-track" d="M100 252H248" /><circle class="vc-head" cx="100" cy="252" r="5" />
+                <g transform="translate(292 64)"><rect class="vc-card" width="106" height="104" rx="10" /><rect class="vc-img" x="8" y="8" width="90" height="52" rx="6" /><rect class="vd-skel" x="10" y="70" width="60" height="6" rx="3" /><rect class="vc-price vc-price--hot" x="10" y="84" width="34" height="10" rx="5" /></g><g transform="translate(410 64)"><rect class="vc-card" width="106" height="104" rx="10" /><rect class="vc-img" x="8" y="8" width="90" height="52" rx="6" /><rect class="vd-skel" x="10" y="70" width="60" height="6" rx="3" /><rect class="vc-price" x="10" y="84" width="34" height="10" rx="5" /></g><g transform="translate(292 182)"><rect class="vc-card" width="106" height="104" rx="10" /><rect class="vc-img" x="8" y="8" width="90" height="52" rx="6" /><rect class="vd-skel" x="10" y="70" width="60" height="6" rx="3" /><rect class="vc-price" x="10" y="84" width="34" height="10" rx="5" /></g><g transform="translate(410 182)"><rect class="vc-card" width="106" height="104" rx="10" /><rect class="vc-img" x="8" y="8" width="90" height="52" rx="6" /><rect class="vd-skel" x="10" y="70" width="60" height="6" rx="3" /><rect class="vc-price" x="10" y="84" width="34" height="10" rx="5" /></g>
+                <circle class="vc-fly" cx="320" cy="152" r="5" />
+                <g class="vc-cart"><circle cx="500" cy="34" r="16" /><path d="M492 28h3l3 10h9l2-7h-12" /><circle cx="499" cy="41.5" r="1.5" /><circle cx="506" cy="41.5" r="1.5" /></g>
+                <g class="vc-badge"><circle cx="512" cy="22" r="7" /><text x="512" y="25.5" text-anchor="middle">1</text></g>
               </svg>
             </div>
             <div class="project__body">
-              <p class="project__meta"><span>Commerce · Social</span></p>
-              <h3 id="p5-title" class="project__title">Social &amp; E-commerce Platforms</h3>
               <p class="project__desc">VLURB, a voice-based social media platform; Tasveek, an e-commerce platform; and Desert Motors, auto-parts e-commerce.</p>
               <ul class="tags" aria-label="Technologies"><li>REST APIs</li><li>Mobile backends</li><li>Payments</li></ul>
             </div>
           </article>
 
-          <article class="project project--compact reveal" style="--i:3" data-category="healthcare enterprise" aria-labelledby="p6-title">
+          <article class="project reveal" data-category="healthcare enterprise" data-slug="clinic-project-management" aria-labelledby="p6-title">
+            <header class="project__head">
+              <span class="project__num" aria-hidden="true">06</span>
+              <div class="project__titles">
+                <p class="project__meta"><span class="project__cat">Healthcare · Enterprise</span></p>
+                <h3 id="p6-title" class="project__title">Clinic &amp; Project Management</h3>
+              </div>
+              <span class="project__arrow" aria-hidden="true"><svg class="icon"><use href="#i-arrow-up-right" /></svg></span>
+            </header>
             <div class="project__visual" aria-hidden="true">
-              <svg class="viz viz--pulse" viewBox="0 0 320 180">
-                <path class="vz-base" d="M24 90H296" />
-                <path class="vz-ecg" pathLength="1" d="M24 90H112L126 62L140 130L158 30L176 120L188 90H296" />
+              <svg class="viz viz--clinic" viewBox="0 0 560 320">
+                <rect class="vd-panel" x="40" y="28" width="480" height="112" rx="12" />
+                <text class="vx-label" x="58" y="52">VITALS</text><circle class="vd-pulse" cx="498" cy="48" r="4" />
+                <path class="vz-base" d="M58 98H502" />
+                <path class="vz-ecg" pathLength="1" d="M58 98H190L204 72L218 128L236 58L254 116L266 98H330L340 86L350 108L360 98H502" />
+                <rect class="vd-panel" x="40" y="156" width="228" height="136" rx="12" />
+                <text class="vx-label" x="58" y="180">APPOINTMENTS</text>
+                <rect class="vk-slot" x="52" y="190" width="204" height="22" rx="6" />
+                <g class="vk-times"><text x="62" y="205">09:00</text><text x="62" y="229">09:30</text><text x="62" y="253">10:00</text><text x="62" y="277">10:30</text></g>
+                <g class="vk-rows"><rect x="112" y="199" width="110" height="6" rx="3" /><rect x="112" y="223" width="84" height="6" rx="3" /><rect x="112" y="247" width="120" height="6" rx="3" /><rect x="112" y="271" width="70" height="6" rx="3" /></g>
+                <rect class="vd-panel" x="284" y="156" width="236" height="136" rx="12" />
+                <text class="vx-label" x="302" y="180">MODULES</text>
+                <g class="vk-bars">
+                  <text x="302" y="210">API</text><rect class="vk-track" x="340" y="203" width="160" height="8" rx="4" /><rect class="vk-fill" x="340" y="203" width="160" height="8" rx="4" style="--to:0.86;--d:0s" />
+                  <text x="302" y="240">UI</text><rect class="vk-track" x="340" y="233" width="160" height="8" rx="4" /><rect class="vk-fill" x="340" y="233" width="160" height="8" rx="4" style="--to:0.64;--d:0.3s" />
+                  <text x="302" y="270">QA</text><rect class="vk-track" x="340" y="263" width="160" height="8" rx="4" /><rect class="vk-fill" x="340" y="263" width="160" height="8" rx="4" style="--to:0.42;--d:0.6s" />
+                </g>
               </svg>
             </div>
             <div class="project__body">
-              <p class="project__meta"><span>Healthcare · Enterprise</span></p>
-              <h3 id="p6-title" class="project__title">Clinic &amp; Project Management</h3>
               <p class="project__desc">RAM Clinics hospital management system, and task tracking with module-based project segmentation and team-performance insights.</p>
               <ul class="tags" aria-label="Technologies"><li>Hospital systems</li><li>Task tracking</li><li>Reporting</li></ul>
             </div>
           </article>
+          </div>
+
+          <!-- Desktop showcase: a sticky "case study" window that plays the active project's illustration (js/projects.js) -->
+          <div class="work__stage" aria-hidden="true">
+            <div class="stage">
+              <div class="stage__bar">
+                <span class="stage__dots"><i></i><i></i><i></i></span>
+                <span class="stage__url"><svg class="icon"><use href="#i-lock" /></svg><span data-stage-url>case-study/edi-processing-platform</span></span>
+                <span class="stage__count"><b data-stage-index>01</b> / <span data-stage-total>06</span></span>
+              </div>
+              <div class="stage__screen" data-stage-screen></div>
+              <div class="stage__foot">
+                <span class="stage__cat" data-stage-cat>Healthcare</span>
+                <span class="stage__progress" data-stage-progress></span>
+              </div>
+            </div>
+          </div>
         </div>
         <p class="projects__note reveal"><svg class="icon"><use href="#i-lock" /></svg>These are client projects, so source code and live systems are private. More of my public code is on <a href="https://github.com/sachusudevan" target="_blank" rel="noopener">GitHub</a>.</p>
       </div>
@@ -810,34 +981,99 @@
           <p class="eyebrow reveal"><span class="eyebrow__index" aria-hidden="true">05</span><span class="eyebrow__line" aria-hidden="true"></span>Engineering approach</p>
           <h2 id="approach-title" class="section-title reveal" style="--i:1">How I <span class="accent">build</span> software.</h2>
           <p class="section-intro reveal" style="--i:2">Five principles I bring to every codebase and every team.</p>
-          <svg class="approach__art" viewBox="0 0 200 200" aria-hidden="true">
-            <circle class="aa-ring aa-ring--1" cx="100" cy="100" r="88" />
-            <circle class="aa-ring aa-ring--2" cx="100" cy="100" r="62" />
-            <circle class="aa-ring aa-ring--3" cx="100" cy="100" r="36" />
-            <circle class="aa-core" cx="100" cy="100" r="8" />
-            <circle class="aa-orbit" cx="100" cy="12" r="4" />
-          </svg>
+
+          <!-- Dial: the principle being read lights its segment; the core plays a small motion study of it (js/approach.js) -->
+          <figure class="dial reveal reveal--scale" style="--i:3" aria-hidden="true" data-dial>
+            <svg class="dial__svg" viewBox="0 0 360 360">
+              <circle class="dial__halo" cx="180" cy="180" r="150" />
+              <g class="dial__ticks"><path class="is-major" d="M180.0 62.0L180.0 54.0" /><path d="M192.6 59.7L193.2 54.7" /><path d="M205.2 61.6L206.2 56.8" /><path d="M217.4 64.9L218.9 60.2" /><path d="M229.2 69.5L231.2 64.9" /><path d="M240.5 75.2L243.0 70.9" /><path d="M251.1 82.1L254.1 78.1" /><path d="M261.0 90.1L264.3 86.4" /><path d="M269.9 99.0L273.6 95.7" /><path d="M277.9 108.9L281.9 105.9" /><path d="M284.8 119.5L289.1 117.0" /><path d="M290.5 130.8L295.1 128.8" /><path class="is-major" d="M292.2 143.5L299.8 141.1" /><path d="M298.4 154.8L303.2 153.8" /><path d="M300.3 167.4L305.3 166.8" /><path d="M301.0 180.0L306.0 180.0" /><path d="M300.3 192.6L305.3 193.2" /><path d="M298.4 205.2L303.2 206.2" /><path d="M295.1 217.4L299.8 218.9" /><path d="M290.5 229.2L295.1 231.2" /><path d="M284.8 240.5L289.1 243.0" /><path d="M277.9 251.1L281.9 254.1" /><path d="M269.9 261.0L273.6 264.3" /><path d="M261.0 269.9L264.3 273.6" /><path class="is-major" d="M249.4 275.5L254.1 281.9" /><path d="M240.5 284.8L243.0 289.1" /><path d="M229.2 290.5L231.2 295.1" /><path d="M217.4 295.1L218.9 299.8" /><path d="M205.2 298.4L206.2 303.2" /><path d="M192.6 300.3L193.2 305.3" /><path d="M180.0 301.0L180.0 306.0" /><path d="M167.4 300.3L166.8 305.3" /><path d="M154.8 298.4L153.8 303.2" /><path d="M142.6 295.1L141.1 299.8" /><path d="M130.8 290.5L128.8 295.1" /><path d="M119.5 284.8L117.0 289.1" /><path class="is-major" d="M110.6 275.5L105.9 281.9" /><path d="M99.0 269.9L95.7 273.6" /><path d="M90.1 261.0L86.4 264.3" /><path d="M82.1 251.1L78.1 254.1" /><path d="M75.2 240.5L70.9 243.0" /><path d="M69.5 229.2L64.9 231.2" /><path d="M64.9 217.4L60.2 218.9" /><path d="M61.6 205.2L56.8 206.2" /><path d="M59.7 192.6L54.7 193.2" /><path d="M59.0 180.0L54.0 180.0" /><path d="M59.7 167.4L54.7 166.8" /><path d="M61.6 154.8L56.8 153.8" /><path class="is-major" d="M67.8 143.5L60.2 141.1" /><path d="M69.5 130.8L64.9 128.8" /><path d="M75.2 119.5L70.9 117.0" /><path d="M82.1 108.9L78.1 105.9" /><path d="M90.1 99.0L86.4 95.7" /><path d="M99.0 90.1L95.7 86.4" /><path d="M108.9 82.1L105.9 78.1" /><path d="M119.5 75.2L117.0 70.9" /><path d="M130.8 69.5L128.8 64.9" /><path d="M142.6 64.9L141.1 60.2" /><path d="M154.8 61.6L153.8 56.8" /><path d="M167.4 59.7L166.8 54.7" /></g>
+              <g class="dial__segs"><path class="dial__seg is-on" data-dial-seg d="M105.8 61.3A140 140 0 0 1 254.2 61.3" /><path class="dial__seg" data-dial-seg d="M270.0 72.8A140 140 0 0 1 315.8 213.9" /><path class="dial__seg" data-dial-seg d="M309.8 232.4A140 140 0 0 1 189.8 319.7" /><path class="dial__seg" data-dial-seg d="M170.2 319.7A140 140 0 0 1 50.2 232.4" /><path class="dial__seg" data-dial-seg d="M44.2 213.9A140 140 0 0 1 90.0 72.8" /></g>
+              <g class="dial__labels"><text class="dial__label is-on" data-dial-label x="180.0" y="17.5" text-anchor="middle">01</text><text class="dial__label" data-dial-label x="337.9" y="132.2" text-anchor="middle">02</text><text class="dial__label" data-dial-label x="277.6" y="317.8" text-anchor="middle">03</text><text class="dial__label" data-dial-label x="82.4" y="317.8" text-anchor="middle">04</text><text class="dial__label" data-dial-label x="22.1" y="132.2" text-anchor="middle">05</text></g>
+              <g class="dial__pointer"><path d="M180 64V40" /><path class="dial__tip" d="M174 46l6-12 6 12z" /></g>
+              <circle class="dial__core" cx="180" cy="180" r="104" />
+              <circle class="dial__core-ring" cx="180" cy="180" r="92" />
+              
+              <g class="dial__glyph is-on" data-dial-glyph>
+                <g class="g-code"><rect class="is-hot" x="128" y="150" width="70" height="7" rx="3.5" style="--dx:14px;--d:0.00s" /><rect x="140" y="166" width="54" height="7" rx="3.5" style="--dx:-10px;--d:0.12s" /><rect x="140" y="182" width="88" height="7" rx="3.5" style="--dx:18px;--d:0.24s" /><rect class="is-hot" x="152" y="198" width="40" height="7" rx="3.5" style="--dx:-14px;--d:0.36s" /><rect x="128" y="214" width="64" height="7" rx="3.5" style="--dx:8px;--d:0.48s" /></g>
+              </g>
+              <g class="dial__glyph" data-dial-glyph>
+                <g class="g-tree">
+                  <path d="M180 148L150 182M180 148L210 182M150 182L135 214M150 182L165 214M210 182L195 214M210 182L225 214" pathLength="1" />
+                  <circle cx="180" cy="148" r="7" style="--d:0s" /><circle cx="150" cy="182" r="6" style="--d:0.25s" /><circle cx="210" cy="182" r="6" style="--d:0.25s" />
+                  <circle cx="135" cy="214" r="5" style="--d:0.5s" /><circle cx="165" cy="214" r="5" style="--d:0.5s" /><circle cx="195" cy="214" r="5" style="--d:0.5s" /><circle cx="225" cy="214" r="5" style="--d:0.5s" />
+                </g>
+              </g>
+              <g class="dial__glyph" data-dial-glyph>
+                <g class="g-perf">
+                  <rect x="128" y="150" width="104" height="9" rx="4.5" style="--to:0.32;--d:0s" /><rect x="128" y="170" width="104" height="9" rx="4.5" style="--to:0.46;--d:0.15s" />
+                  <rect x="128" y="190" width="104" height="9" rx="4.5" style="--to:0.28;--d:0.3s" /><rect x="128" y="210" width="104" height="9" rx="4.5" style="--to:0.4;--d:0.45s" />
+                </g>
+              </g>
+              <g class="dial__glyph" data-dial-glyph>
+                <g class="g-shield">
+                  <path class="g-shield__body" d="M180 146L210 158V186C210 206 196 220 180 228C164 220 150 206 150 186V158Z" />
+                  <path class="g-shield__check" pathLength="1" d="M167 188l9 9 17-19" />
+                  <rect class="g-shield__bad" x="118" y="182" width="12" height="12" rx="3" />
+                </g>
+              </g>
+              <g class="dial__glyph" data-dial-glyph>
+                <g class="g-steps">
+                  <rect x="132" y="212" width="14" height="14" rx="3" style="--d:0.00s" /><rect x="152" y="202" width="14" height="24" rx="3" style="--d:0.15s" /><rect x="172" y="192" width="14" height="34" rx="3" style="--d:0.30s" /><rect x="192" y="182" width="14" height="44" rx="3" style="--d:0.45s" /><rect x="212" y="170" width="14" height="56" rx="3" style="--d:0.60s" />
+                  <path class="g-steps__arrow" pathLength="1" d="M128 204L226 152M212 150l14 2-4 13" />
+                </g>
+              </g>
+            </svg>
+            <figcaption class="dial__caption">
+              <span class="dial__count"><b data-dial-index>01</b> / 05</span>
+              <span class="dial__name" data-dial-name>Clean, maintainable code</span>
+            </figcaption>
+          </figure>
         </header>
         <ol class="principles" data-principles>
-          <li class="principle reveal">
+          <li class="principle reveal" data-principle="0" style="--i:0">
             <span class="principle__num" aria-hidden="true">01</span>
-            <div><h3 class="principle__title">Clean, maintainable code</h3><p>Readable code, clear boundaries and honest naming — so the next engineer can change it safely and quickly.</p></div>
+            <div class="principle__body">
+              <h3 class="principle__title">Clean, maintainable code</h3>
+              <p>Readable code, clear boundaries and honest naming — so the next engineer can change it safely and quickly.</p>
+              <ul class="principle__tags" aria-label="In practice"><li>Readable</li><li>Clear boundaries</li><li>Honest naming</li></ul>
+            </div>
+            <span class="principle__bar" aria-hidden="true"></span>
           </li>
-          <li class="principle reveal">
+          <li class="principle reveal" data-principle="1" style="--i:1">
             <span class="principle__num" aria-hidden="true">02</span>
-            <div><h3 class="principle__title">Scalable architecture</h3><p>Systems designed around how the data actually flows, so new clients, formats and volume don't mean a rewrite.</p></div>
+            <div class="principle__body">
+              <h3 class="principle__title">Scalable architecture</h3>
+              <p>Systems designed around how the data actually flows, so new clients, formats and volume don't mean a rewrite.</p>
+              <ul class="principle__tags" aria-label="In practice"><li>Data-flow first</li><li>New formats</li><li>Volume-ready</li></ul>
+            </div>
+            <span class="principle__bar" aria-hidden="true"></span>
           </li>
-          <li class="principle reveal">
+          <li class="principle reveal" data-principle="2" style="--i:2">
             <span class="principle__num" aria-hidden="true">03</span>
-            <div><h3 class="principle__title">Performance optimisation</h3><p>Measure first, then fix — queries, batching and caching tuned for the workloads that matter, like very large files.</p></div>
+            <div class="principle__body">
+              <h3 class="principle__title">Performance optimisation</h3>
+              <p>Measure first, then fix — queries, batching and caching tuned for the workloads that matter, like very large files.</p>
+              <ul class="principle__tags" aria-label="In practice"><li>Measure first</li><li>Batching</li><li>Caching</li></ul>
+            </div>
+            <span class="principle__bar" aria-hidden="true"></span>
           </li>
-          <li class="principle reveal">
+          <li class="principle reveal" data-principle="3" style="--i:3">
             <span class="principle__num" aria-hidden="true">04</span>
-            <div><h3 class="principle__title">Reliable backend systems</h3><p>Validation at the edges, traceable processing and predictable failure handling — bad data is caught before anyone downstream sees it.</p></div>
+            <div class="principle__body">
+              <h3 class="principle__title">Reliable backend systems</h3>
+              <p>Validation at the edges, traceable processing and predictable failure handling — bad data is caught before anyone downstream sees it.</p>
+              <ul class="principle__tags" aria-label="In practice"><li>Validation</li><li>Traceability</li><li>Failure handling</li></ul>
+            </div>
+            <span class="principle__bar" aria-hidden="true"></span>
           </li>
-          <li class="principle reveal">
+          <li class="principle reveal" data-principle="4" style="--i:4">
             <span class="principle__num" aria-hidden="true">05</span>
-            <div><h3 class="principle__title">Continuous improvement</h3><p>Small, steady improvements to code, process and people — through reviews, mentoring and leaving every module better than I found it.</p></div>
+            <div class="principle__body">
+              <h3 class="principle__title">Continuous improvement</h3>
+              <p>Small, steady improvements to code, process and people — through reviews, mentoring and leaving every module better than I found it.</p>
+              <ul class="principle__tags" aria-label="In practice"><li>Reviews</li><li>Mentoring</li><li>Steady refactors</li></ul>
+            </div>
+            <span class="principle__bar" aria-hidden="true"></span>
           </li>
         </ol>
       </div>
@@ -847,32 +1083,56 @@
     <section id="contact" class="section contact" aria-labelledby="contact-title" data-nav-section="contact">
       <div class="contact__ambient" aria-hidden="true">
         <span class="glow glow--c" data-parallax="0.1"></span>
-        <span class="contact__rings"><i></i><i></i><i></i></span>
+        <span class="contact__grid"></span>
       </div>
       <div class="container">
         <div class="contact__panel">
-          <p class="eyebrow reveal"><span class="eyebrow__index" aria-hidden="true">06</span><span class="eyebrow__line" aria-hidden="true"></span>Contact</p>
-          <h2 id="contact-title" class="contact__title reveal" style="--i:1">Let's build something <span class="accent">reliable.</span></h2>
-          <p class="contact__lede reveal" style="--i:2">Have a project, a system that needs to scale, or just want to talk engineering? I'm one message away.</p>
-          <div class="contact__actions reveal" style="--i:3">
-            <a class="btn btn--primary btn--lg wa-cta" href="https://wa.me/918157864536?text=Hi%20Sachu%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect.%20Could%20we%20have%20a%20quick%20chat%3F" target="_blank" rel="noopener" aria-label="Chat with Sachu on WhatsApp (opens WhatsApp with an enquiry message ready to send)">
-              <svg class="icon wa-cta__icon"><use href="#i-whatsapp" /></svg>Start a conversation<svg class="icon btn__arrow btn__arrow--diag"><use href="#i-arrow-up-right" /></svg>
-            </a>
-            <div class="email-copy">
-              <a class="btn btn--ghost btn--lg" href="mailto:sachusudeve8690@gmail.com"><svg class="icon"><use href="#i-mail" /></svg>sachusudeve8690@gmail.com</a>
-              <button class="copy-btn" type="button" data-copy="sachusudeve8690@gmail.com" aria-label="Copy email address">
-                <svg class="icon copy-btn__copy"><use href="#i-copy" /></svg>
-                <svg class="icon copy-btn__done"><use href="#i-check" /></svg>
-                <span class="copy-btn__label">Copy</span>
-              </button>
+          <div class="contact__copy">
+            <p class="eyebrow reveal"><span class="eyebrow__index" aria-hidden="true">06</span><span class="eyebrow__line" aria-hidden="true"></span>Contact</p>
+            <h2 id="contact-title" class="contact__title reveal" style="--i:1">Let's build something <span class="contact__word">reliable.<svg class="contact__scribble" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M4 15C60 7 120 5 176 9S262 18 296 9" /></svg></span></h2>
+            <p class="contact__lede reveal" style="--i:2">Have a project, a system that needs to scale, or just want to talk engineering? I'm one message away.</p>
+            <div class="contact__actions reveal" style="--i:3">
+              <a class="btn btn--primary btn--lg wa-cta" href="https://wa.me/918157864536?text=Hi%20Sachu%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect.%20Could%20we%20have%20a%20quick%20chat%3F" target="_blank" rel="noopener" aria-label="Chat with Sachu on WhatsApp (opens WhatsApp with an enquiry message ready to send)">
+                <svg class="icon wa-cta__icon"><use href="#i-whatsapp" /></svg>Start a conversation<svg class="icon btn__arrow btn__arrow--diag"><use href="#i-arrow-up-right" /></svg>
+              </a>
+              <div class="email-copy">
+                <a class="btn btn--ghost btn--lg" href="mailto:sachusudeve8690@gmail.com"><svg class="icon"><use href="#i-mail" /></svg>sachusudeve8690@gmail.com</a>
+                <button class="copy-btn" type="button" data-copy="sachusudeve8690@gmail.com" aria-label="Copy email address">
+                  <svg class="icon copy-btn__copy"><use href="#i-copy" /></svg>
+                  <svg class="icon copy-btn__done"><use href="#i-check" /></svg>
+                  <span class="copy-btn__label">Copy</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Motion graphic: a WhatsApp-style chat that plays out in a loop -->
+          <div class="chat-stage reveal reveal--scale" style="--i:2" aria-hidden="true">
+            <span class="chat-stage__rings"><i></i><i></i><i></i></span>
+            <div class="chat">
+              <div class="chat__head">
+                <span class="chat__avatar">S</span>
+                <span class="chat__who"><b>Sachu</b><small><i class="chat__online"></i>online</small></span>
+                <svg class="icon chat__brand"><use href="#i-whatsapp" /></svg>
+              </div>
+              <div class="chat__body">
+                <p class="chat__day">Today</p>
+                <p class="bubble bubble--out chat__b1">Hi Sachu 👋</p>
+                <p class="bubble bubble--out chat__b2">We're scaling a data platform. Got time to talk architecture?<span class="bubble__ticks">✓✓</span></p>
+                <div class="chat__reply">
+                  <p class="bubble bubble--in bubble--typing chat__b3"><i></i><i></i><i></i></p>
+                  <p class="bubble bubble--in chat__b4">Happy to help. Let's talk!</p>
+                </div>
+              </div>
+              <div class="chat__input"><span>Type a message</span><span class="chat__send"><svg class="icon"><use href="#i-arrow-right" /></svg></span></div>
             </div>
           </div>
 
           <ul class="contact__links">
-            <li class="reveal" style="--i:0"><a class="contact-link" href="https://linkedin.com/in/sachu-s-705813179" target="_blank" rel="noopener"><svg class="icon"><use href="#i-linkedin" /></svg><span><small>LinkedIn</small>/in/sachu-s</span><svg class="icon contact-link__arrow"><use href="#i-arrow-up-right" /></svg></a></li>
-            <li class="reveal" style="--i:1"><a class="contact-link" href="https://github.com/sachusudevan" target="_blank" rel="noopener"><svg class="icon"><use href="#i-github" /></svg><span><small>GitHub</small>@sachusudevan</span><svg class="icon contact-link__arrow"><use href="#i-arrow-up-right" /></svg></a></li>
-            <li class="reveal" style="--i:2"><a class="contact-link" href="tel:+918157864536"><svg class="icon"><use href="#i-phone" /></svg><span><small>Phone</small>+91 81578 64536</span><svg class="icon contact-link__arrow"><use href="#i-arrow-up-right" /></svg></a></li>
-            <li class="reveal" style="--i:3"><div class="contact-link contact-link--static"><svg class="icon"><use href="#i-pin" /></svg><span><small>Location</small><span>Kerala, India · <span data-clock>--:--</span> IST</span></span></div></li>
+            <li class="reveal" style="--i:0"><a class="contact-link" href="https://linkedin.com/in/sachu-s-705813179" target="_blank" rel="noopener"><span class="contact-link__icon"><svg class="icon"><use href="#i-linkedin" /></svg></span><span class="contact-link__text"><small>LinkedIn</small>/in/sachu-s</span><svg class="icon contact-link__arrow"><use href="#i-arrow-up-right" /></svg></a></li>
+            <li class="reveal" style="--i:1"><a class="contact-link" href="https://github.com/sachusudevan" target="_blank" rel="noopener"><span class="contact-link__icon"><svg class="icon"><use href="#i-github" /></svg></span><span class="contact-link__text"><small>GitHub</small>@sachusudevan</span><svg class="icon contact-link__arrow"><use href="#i-arrow-up-right" /></svg></a></li>
+            <li class="reveal" style="--i:2"><a class="contact-link" href="tel:+918157864536"><span class="contact-link__icon"><svg class="icon"><use href="#i-phone" /></svg></span><span class="contact-link__text"><small>Phone</small>+91 81578 64536</span><svg class="icon contact-link__arrow"><use href="#i-arrow-up-right" /></svg></a></li>
+            <li class="reveal" style="--i:3"><div class="contact-link contact-link--static"><span class="contact-link__icon contact-link__icon--pin"><svg class="icon"><use href="#i-pin" /></svg><i aria-hidden="true"></i></span><span class="contact-link__text"><small>Location</small><span>Kerala, India · <span data-clock>--:--</span> IST</span></span></div></li>
           </ul>
         </div>
       </div>
@@ -880,24 +1140,45 @@
   </main>
 
   <footer class="footer">
-    <div class="container footer__inner">
+    <div class="container footer__top">
       <div class="footer__brand">
         <a class="wordmark" href="#home" aria-label="Sachu — back to top">SACHU<span class="wordmark__dot" aria-hidden="true"></span></a>
-        <p>Software Engineer &amp; Technical Lead · Kerala, India</p>
+        <p>Software Engineer &amp; Technical Lead building scalable software and reliable backend systems.</p>
+        <p class="footer__status"><span class="status-dot" aria-hidden="true"></span>Kerala, India · <span data-clock>--:--</span> IST</p>
       </div>
-      <nav class="footer__nav" aria-label="Footer">
-        <a href="#about">About</a><a href="#skills">Skills</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#contact">Contact</a>
+      <nav class="footer__col" aria-label="Footer">
+        <p class="footer__label">Navigate</p>
+        <ul class="footer__links footer__links--nav">
+          <li><a href="#about">About<svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+          <li><a href="#skills">Skills<svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+          <li><a href="#experience">Experience<svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+          <li><a href="#projects">Projects<svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+          <li><a href="#contact">Contact<svg class="icon" aria-hidden="true"><use href="#i-arrow-right" /></svg></a></li>
+        </ul>
       </nav>
-      <div class="footer__social">
-        <a href="https://github.com/sachusudevan" target="_blank" rel="noopener" aria-label="GitHub (opens in a new tab)"><svg class="icon"><use href="#i-github" /></svg></a>
-        <a href="https://linkedin.com/in/sachu-s-705813179" target="_blank" rel="noopener" aria-label="LinkedIn (opens in a new tab)"><svg class="icon"><use href="#i-linkedin" /></svg></a>
-        <a href="mailto:sachusudeve8690@gmail.com" aria-label="Email"><svg class="icon"><use href="#i-mail" /></svg></a>
-        <a href="https://wa.me/918157864536" target="_blank" rel="noopener" aria-label="WhatsApp (opens in a new tab)"><svg class="icon"><use href="#i-whatsapp" /></svg></a>
+      <div class="footer__col">
+        <p class="footer__label">Connect</p>
+        <ul class="footer__links footer__links--social">
+          <li><a href="https://github.com/sachusudevan" target="_blank" rel="noopener" aria-label="GitHub (opens in a new tab)"><svg class="icon" aria-hidden="true"><use href="#i-github" /></svg>GitHub</a></li>
+          <li><a href="https://linkedin.com/in/sachu-s-705813179" target="_blank" rel="noopener" aria-label="LinkedIn (opens in a new tab)"><svg class="icon" aria-hidden="true"><use href="#i-linkedin" /></svg>LinkedIn</a></li>
+          <li><a href="https://wa.me/918157864536" target="_blank" rel="noopener" aria-label="WhatsApp (opens in a new tab)"><svg class="icon" aria-hidden="true"><use href="#i-whatsapp" /></svg>WhatsApp</a></li>
+          <li><a href="mailto:sachusudeve8690@gmail.com" aria-label="Email"><svg class="icon" aria-hidden="true"><use href="#i-mail" /></svg>Email</a></li>
+        </ul>
+      </div>
+      <div class="footer__top-btn">
+        <a class="back-to-top" href="#home" data-back-to-top data-scroll-ring aria-label="Back to top">
+          <svg class="back-to-top__ring" viewBox="0 0 64 64" aria-hidden="true"><circle class="back-to-top__track" cx="32" cy="32" r="29" /><circle class="back-to-top__fill" cx="32" cy="32" r="29" pathLength="1" /></svg>
+          <svg class="icon back-to-top__arrow" aria-hidden="true"><use href="#i-arrow-up" /></svg>
+        </a>
+        <span class="footer__label">Back to top</span>
       </div>
     </div>
+
+    <p class="footer__mega reveal" aria-hidden="true"><span style="--i:0">S</span><span style="--i:1">A</span><span style="--i:2">C</span><span style="--i:3">H</span><span style="--i:4">U</span></p>
+
     <div class="container footer__base">
       <p>© <span data-year>2026</span> Sachu S. All rights reserved.</p>
-      <a class="back-to-top" href="#home" data-back-to-top>Back to top <svg class="icon"><use href="#i-arrow-up" /></svg></a>
+      <p class="footer__made">Designed &amp; built in Kerala<span class="footer__heart" aria-hidden="true"></span></p>
     </div>
   </footer>
 
@@ -907,9 +1188,14 @@
   <script defer src="js/main.js"></script>
   <script defer src="js/motion.js"></script>
   <script defer src="js/video.js"></script>
+  <script defer src="js/hero-sync.js"></script>
   <script defer src="js/work.js"></script>
+  <script defer src="js/projects.js"></script>
+  <script defer src="js/approach.js"></script>
+  <script defer src="js/footer.js"></script>
   <script defer src="js/contact.js"></script>
   <script defer src="js/about.js"></script>
   <script defer src="js/skills.js"></script>
+  <script defer src="js/experience.js"></script>
 </body>
 </html>

@@ -122,7 +122,7 @@ test('hero video: existing file, looping full-bleed background, inline, poster, 
   assert.ok(!/\sautoplay\b/.test(video), 'autoplay is handled in JS so reduced-motion/data-saver can opt out');
   assert.match(cssText(), /\.hero__media \{\s*position: absolute;\s*inset: 0 0 auto;/, 'video is positioned as the hero background');
   const source = attr(tags(hero, 'source')[0], 'src');
-  assert.equal(source, 'assets/videos/Software_engineer_portfolio_intro_1080p_20261022220619.mp4');
+  assert.equal(source, 'assets/videos/Software_engineer_portfolio_intro_1080p_20261023093003.mp4');
   assert.ok(exists(source));
   assert.equal((src.match(/<video\b/g) || []).length, 1, 'only one intro video');
   const meta = await sharp(join(root, 'assets/img/hero-poster.webp')).metadata();

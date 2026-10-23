@@ -22,7 +22,7 @@
   }
 
   /* ---------- In-view toggle: looping illustrations only run while visible ---------- */
-  var loopers = d.querySelectorAll('.project, .marquee, .approach__art, .contact, .about, .stackmap, .skill-group');
+  var loopers = d.querySelectorAll('.project, .work__stage, .marquee, .dial, .contact, .about, .stackmap, .skill-group, .timeline__item');
   if (hasIO) {
     var viewObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) { e.target.classList.toggle('in-view', e.isIntersecting); });

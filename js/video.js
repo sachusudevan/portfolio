@@ -117,7 +117,7 @@
   var MARK = { x: 1740 / 1920, y: 900 / 1080, size: 104 / 1920 };
   function placeBadge() {
     if (!badge) return;
-    var W = media.clientWidth, H = media.clientHeight;
+    var W = video.clientWidth, H = video.clientHeight; /* the stage can be wider than the hero (desktop) */
     var vw = video.videoWidth || 1920, vh = video.videoHeight || 1080;
     var s = Math.max(W / vw, H / vh), rw = vw * s, rh = vh * s;
     var pos = getComputedStyle(video).objectPosition.split(' ').map(function (v) { return parseFloat(v) / 100; });
@@ -125,7 +125,8 @@
     var y = (H - rh) * (isNaN(pos[1]) ? 0.5 : pos[1]) + MARK.y * rh;
     var size = Math.max(56, MARK.size * rw);
     var r = (36 / 1920) * rw; /* half the mark's width: show the seal if any part of the mark is visible */
-    var onScreen = x + r > 0 && x - r < W && y + r > 0 && y - r < H;
+    var stage = video.parentElement, sx = x + stage.offsetLeft, sy = y + stage.offsetTop;
+    var onScreen = sx + r > 0 && sx - r < media.clientWidth && sy + r > 0 && sy - r < media.clientHeight;
     badge.style.setProperty('--wm-x', x.toFixed(1) + 'px');
     badge.style.setProperty('--wm-y', y.toFixed(1) + 'px');
     badge.style.setProperty('--wm-size', size.toFixed(1) + 'px');

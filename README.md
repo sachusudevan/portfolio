@@ -37,9 +37,11 @@ Personal site of **Sachu S**, Software Engineer & Technical Lead building scalab
 
 ### Intro video
 
-`assets/videos/Software_engineer_portfolio_intro_1080p_20261022220619.mp4` is the full-bleed hero background. It **loops with sound and has no controls**. Browsers refuse audible autoplay until the visitor interacts with the page, so when that happens the video keeps playing muted behind a welcome screen (name, role and an **Enter** button); one click restarts the video from the top with sound and plays the hero entrance. Browsers that allow audible autoplay skip the welcome screen. Escape dismisses it without sound (a *Tap anywhere for sound* note then appears). The video pauses while the hero is scrolled out of view and resumes on return. If the file fails, the poster (`assets/img/hero-poster.webp`, the video's last frame) stays in place.
+`assets/videos/Software_engineer_portfolio_intro_1080p_20261023093003.mp4` is the full-bleed hero background. It **loops with sound and has no controls**. Browsers refuse audible autoplay until the visitor interacts with the page, so when that happens the video keeps playing muted behind a welcome screen (name, role and an **Enter** button); one click restarts the video from the top with sound and plays the hero entrance. Browsers that allow audible autoplay skip the welcome screen. Escape dismisses it without sound (a *Tap anywhere for sound* note then appears). The video pauses while the hero is scrolled out of view and resumes on return. If the file fails, the poster (`assets/img/hero-poster.webp`, the video's last frame) stays in place.
 
-Layout: on landscape desktops the video covers the whole hero and the copy overlays its darker left side; on portrait screens the video fills the top of the screen and fades into the page, with the copy below so the face is never covered.
+Layout: on wide desktops (3:2 and wider) the video covers the hero, slid 12% left so the face and the in-video "Welcome to my portfolio" screen stay clear, and the copy overlays the darkened right side; on narrower and portrait screens the video fills the top of the screen and fades into the page, with the copy below so the face is never covered.
+
+The copy is choreographed to the video (`js/hero-sync.js`): the name pill and role appear during the walk-in (0–3.5s), the headline rises word by word at the 3.5s cut and its red line lands at 5s, and the lede and buttons arrive with the push-in on the welcome screen (7.3s+). After the first loop the text stays put and only the accents replay on the cuts. If the video can't start within 2.5s the copy falls back to a timed entrance; with reduced motion it is simply shown.
 
 ## Structure
 

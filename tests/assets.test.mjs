@@ -31,7 +31,7 @@ test('hero poster exists as webp + jpg at 16:9, ≤1600px wide and lightweight',
 });
 
 test('intro video exists and stays under 8MB', () => {
-  const rel = 'assets/videos/Software_engineer_portfolio_intro_1080p_20261022220619.mp4';
+  const rel = 'assets/videos/Software_engineer_portfolio_intro_1080p_20261023093003.mp4';
   assert.ok(exists(rel));
   assert.ok(statSync(join(root, rel)).size < 8 * 1024 * 1024);
 });
