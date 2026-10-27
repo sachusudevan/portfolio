@@ -1,6 +1,7 @@
 /* Hero copy choreographed to the intro video.
-   Scenes in the video: 0–3.5s walking into the studio · 3.5–7.3s seated, saying hello · 7.3s→end push-in on
-   the "Welcome to my portfolio" screen. Each [data-cue] element appears when the video reaches its time on the
+   Beats in the video (one continuous shot): 0–2.4s walking into the studio · 2.6–5s facing the camera, saying
+   hello · 5.4s turns to the code on the monitor · ~8s his name and role type on lower-left · 9.5s fade to black.
+   Each [data-cue] element appears when the video reaches its time on the
    first play-through; on later loops the text stays put and only the accents replay at the cuts.
    If the video never starts (error, blocked, slow), everything falls back to a timed entrance. */
 (function () {
@@ -64,7 +65,7 @@
   }
   function frame() {
     var t = video.currentTime;
-    /* While the welcome screen covers the page, hold the copy: "Watch my intro" restarts the video from 0 */
+    /* While the welcome gate covers the page, hold the copy: "Watch my intro" restarts the video from 0 */
     if (root.classList.contains('gate-open')) { lastT = 0; return; }
     var looped = t < lastT - 1;
     if (looped && firstPass) settle();

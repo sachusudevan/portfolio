@@ -13,8 +13,8 @@
 
 /* ===================== HERO ===================== */
 /* The intro video is the hero background. Portrait screens: video fills the top and fades into the page,
-   copy sits below. Landscape desktop: the frame slides left (keeping the face and the "Welcome" screen in view)
-   and the copy overlays the darkened right side. */
+   copy sits below. Landscape desktop: the whole 16:9 frame stays in view (his name types on lower-left near the
+   end) and the copy overlays the darkened right edge, clear of him as he moves right of centre. */
 .hero {
   position: relative;
   isolation: isolate;
@@ -32,7 +32,7 @@
   height: 72svh;
   z-index: -1;
   overflow: hidden;
-  background: var(--c-bg) url("../assets/img/hero-poster.webp") 50% 40% / cover no-repeat;
+  background: var(--c-bg) url("../assets/img/hero-poster.webp") 58% 40% / cover no-repeat;
 }
 .hero__media::after { /* seals the fractional-pixel clip edge so no sliver of video shows below the fade */
   content: "";
@@ -53,7 +53,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 40%;
+  object-position: 58% 40%; /* he finishes right of centre */
 }
 .wm-badge { /* positioned and sized in px by js/video.js (--wm-x, --wm-y, --wm-size) */
   position: absolute;
@@ -230,31 +230,43 @@
   .hero__actions .btn { flex: 1 1 auto; }
 }
 
-/* Landscape desktop: the video stage runs past the left edge (right edge pinned to the screen, so no gap),
-   which puts him left of centre and keeps the "Welcome" screen in view; copy on the darkened right */
+/* Landscape desktop: the video fills the whole hero, edge to edge, and the copy sits in the part of the frame he
+   never enters after the walk-in: the upper-left, over the figure shelves. The 16:9 stage covers the screen (sized by
+   whichever of width or height needs it) and is anchored so the name the video types on lower-left near the end
+   lines up with the copy's left edge (the gutter); the copy ends above it, so page text and video title read as one
+   stack. Very wide screens crop mostly from the bottom so his head stays in. */
 @media (min-width: 1024px) and (min-aspect-ratio: 3/2) {
-  .hero { align-items: center; }
-  .hero__media { inset: 0; height: auto; background: var(--c-bg); }
-  .hero__stage { inset: 0 0 0 -13.6%; transform-origin: 70% 40%; }
-  .hero__video { object-position: 100% 40%; }
-  .hero__veil {
-    background:
-      linear-gradient(270deg, rgb(18 18 18 / 0.96) 0%, rgb(18 18 18 / 0.88) 18%, rgb(18 18 18 / 0.66) 34%, rgb(18 18 18 / 0.25) 46%, rgb(18 18 18 / 0) 56%),
-      linear-gradient(180deg, rgb(18 18 18 / 0.6) 0%, rgb(18 18 18 / 0) 16%, rgb(18 18 18 / 0) 72%, var(--c-bg) 100%);
+  .hero { align-items: start; }
+  .hero__media { inset: 0; height: auto; background: var(--c-bg); container-type: size; }
+  .hero__stage {
+    --stage-h: max(100cqh, 59.625cqw); /* covers: 100% tall, or 106% wide at 16:9 */
+    inset: auto;
+    top: min(0px, (100cqh - var(--stage-h)) * 0.15);
+    /* the name starts 9.2% into the frame; less the 1.02 base scale about 60% → 8.18% of the stage width */
+    left: calc(var(--gutter) - var(--stage-h) * 0.1454);
+    height: var(--stage-h);
+    aspect-ratio: 16 / 9;
+    transform-origin: 60% 45%;
   }
-  .hero__content { padding-block: 4rem 6rem; }
-  .hero__copy { max-width: min(28rem, 32vw); margin-left: auto; }
-  .hero__title { font-size: clamp(2.125rem, 0.5rem + 2.45vw, 3.5rem); }
-  .sound-hint { top: auto; bottom: clamp(1.5rem, 4vh, 2.5rem); }
+  .hero__video { object-position: 50% 50%; }
+  .hero__veil { /* shade behind the copy (upper-left only, so the video's name below stays bright), nav shade, page fade */
+    background:
+      radial-gradient(ellipse 48% 62% at 0% 34%, rgb(18 18 18 / 0.86) 0%, rgb(18 18 18 / 0.7) 45%, rgb(18 18 18 / 0) 100%),
+      linear-gradient(180deg, rgb(18 18 18 / 0.6) 0%, rgb(18 18 18 / 0) 16%, rgb(18 18 18 / 0) 86%, var(--c-bg) 100%);
+  }
+  .hero__content.container { max-width: none; }
+  .hero__content { padding-block: clamp(1.5rem, 7vh, 5rem) 6rem; }
+  .hero__copy { max-width: min(27rem, max(26vw, 21.5rem)); } /* 21.5rem keeps both buttons on one row */
+  .hero__title { font-size: clamp(2rem, 0.4rem + 2vw, 3.25rem); }
+  .hero__lede { font-size: 1rem; }
   .scroll-cue { display: inline-flex; }
 }
-@media (min-width: 1024px) and (min-aspect-ratio: 2/1) { /* ultra-wide: let the copy sit further right, clear of the face */
-  .hero__content.container { max-width: none; }
-}
-@media (min-width: 1024px) and (min-aspect-ratio: 3/2) and (max-height: 760px) {
-  .hero__content { padding-block: 2rem 5rem; }
-  .hero__lede { margin-top: 1rem; }
-  .hero__actions { margin-top: 1.5rem; }
+@media (min-width: 1024px) and (min-aspect-ratio: 3/2) and (max-height: 860px) { /* keep the copy above the video's name */
+  .hero__content { padding-block: 1rem 5rem; }
+  .hero__role { margin-bottom: 0.75rem; }
+  .hero__title { font-size: clamp(1.75rem, 0.2rem + 2vw, 2.5rem); }
+  .hero__lede { margin-top: 0.875rem; font-size: 0.9375rem; line-height: 1.55; }
+  .hero__actions { margin-top: 1.25rem; flex-wrap: nowrap; }
 }
 
 

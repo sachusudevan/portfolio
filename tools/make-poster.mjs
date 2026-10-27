@@ -1,6 +1,6 @@
 // Turns a full-size PNG frame grabbed from the intro video into the hero poster (WebP + JPEG).
 // Usage: node tools/make-poster.mjs path/to/frame.png
-// The frame used is the video's last frame (t ≈ 9.95s), captured with headless Chrome.
+// The frame used is t = 6.9s of the intro video (smiling to camera, no on-screen text), captured in Chrome.
 import sharp from 'sharp';
 import { join } from 'node:path';
 

@@ -110,9 +110,9 @@
     }, { threshold: 0.25 }).observe(media);
   }
 
-  /* ---------- Seal over the corner mark baked into the video frames ----------
-     The mark sits at (1740, 900), ~72px wide, in the 1920×1080 frame. Map that point through object-fit: cover
-     and object-position to screen pixels; hide the seal when the crop pushes the mark off-screen (portrait). */
+  /* ---------- Seal pinned to the lower-right corner of the video frame ----------
+     The spot is (1740, 900), ~72px wide, in the 1920×1080 frame. Map that point through object-fit: cover
+     and object-position to screen pixels; hide the seal when the crop pushes the spot off-screen (portrait). */
   var badge = media.querySelector('[data-wm-badge]');
   var MARK = { x: 1740 / 1920, y: 900 / 1080, size: 104 / 1920 };
   function placeBadge() {
