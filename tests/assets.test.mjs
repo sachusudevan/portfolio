@@ -30,8 +30,8 @@ test('hero poster exists as webp + jpg at 16:9, ≤1600px wide and lightweight',
   }
 });
 
-test('intro video exists and stays under 20MB', () => {
+test('intro video exists and stays under 8MB', () => {
   const rel = 'assets/videos/Software_engineer_portfolio_intro_1080p_20261027204659.mp4';
   assert.ok(exists(rel));
-  assert.ok(statSync(join(root, rel)).size < 20 * 1024 * 1024);
+  assert.ok(statSync(join(root, rel)).size < 8 * 1024 * 1024);
 });
